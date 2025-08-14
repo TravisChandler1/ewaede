@@ -1,0 +1,80 @@
+{
+  "name": "ewa-ede-academy",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@chakra-ui/alert": "^2.2.2",
+    "@chakra-ui/avatar": "^2.3.0",
+    "@chakra-ui/color-mode": "^2.2.0",
+    "@chakra-ui/layout": "^2.3.1",
+    "@chakra-ui/progress": "^2.2.0",
+    "@chakra-ui/react": "^3.24.2",
+    "@chakra-ui/system": "^2.6.2",
+    "@chakra-ui/toast": "^7.0.2",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@prisma/client": "^6.13.0",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.6.4",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/jest": "^27.5.2",
+    "@types/node": "^16.18.126",
+    "@types/react": "^19.1.9",
+    "@types/react-dom": "^19.1.7",
+    "@types/react-router-dom": "^5.3.3",
+    "bcryptjs": "^2.4.3",
+    "concurrently": "^8.2.2",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "framer-motion": "^12.23.12",
+    "nodemailer": "^6.9.8",
+    "prisma": "^6.13.0",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "react-icons": "^5.5.0",
+    "react-router-dom": "^7.8.0",
+    "react-scripts": "5.0.1",
+    "typescript": "^5.9.2",
+    "web-vitals": "^2.1.4"
+  },
+  "devDependencies": {
+    "@supabase/supabase-js": "^2.55.0",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/nodemailer": "^6.4.17",
+    "tsx": "^4.7.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "server": "node server/index.js",
+    "dev": "concurrently \"npm run server\" \"npm start\"",
+    "db:generate": "prisma generate",
+    "db:push": "prisma db push",
+    "db:migrate": "prisma migrate dev",
+    "db:studio": "prisma studio",
+    "db:seed": "tsx prisma/seed.ts"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

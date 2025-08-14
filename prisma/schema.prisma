@@ -1,0 +1,235 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum UserRole {
+  STUDENT
+  TEACHER
+  ADMIN
+}
+
+enum LearningLevel {
+  NOVICE
+  BEGINNER
+  ADVANCED
+  PRO
+}
+
+enum TeachingType {
+  INDIVIDUAL
+  GROUP
+}
+
+enum SessionStatus {
+  SCHEDULED
+  ONGOING
+  COMPLETED
+  CANCELLED
+}
+
+enum TeacherStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model User {
+  id          String    @id @default(cuid())
+  email       String    @unique
+  password    String
+  firstName   String
+  lastName    String
+  role        UserRole  @default(STUDENT)
+  avatar      String?
+  teacherStatus TeacherStatus? // Only for teachers
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Student specific fields
+  learningLevel     LearningLevel?
+  teachingType      TeachingType?
+  progress          Progress[]
+  enrolledGroups    GroupMember[]
+  bookClubMemberships BookClubMember[]
+  sessionAttendances SessionAttendance[]
+
+  // Teacher specific fields
+  teacherProfile    TeacherProfile?
+  createdGroups     Group[]
+  createdSessions   LiveSession[]
+
+  @@map("users")
+}
+
+model TeacherProfile {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bio         String?
+  expertise   String[]
+  experience  Int?     // years of experience
+  rating      Float?   @default(0)
+  totalStudents Int    @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("teacher_profiles")
+}
+
+model Progress {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  level       LearningLevel
+  completedLessons Int @default(0)
+  totalLessons     Int @default(0)
+  score       Float?   @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([userId, level])
+  @@map("progress")
+}
+
+model Group {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  teacherId   String
+  teacher     User     @relation(fields: [teacherId], references: [id])
+  level       LearningLevel
+  maxMembers  Int      @default(20)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  members     GroupMember[]
+  sessions    LiveSession[]
+
+  @@map("groups")
+}
+
+model GroupMember {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  groupId   String
+  group     Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  joinedAt  DateTime @default(now())
+
+  @@unique([userId, groupId])
+  @@map("group_members")
+}
+
+model BookClub {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  currentBook String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  members     BookClubMember[]
+
+  @@map("book_clubs")
+}
+
+model BookClubMember {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bookClubId  String
+  bookClub    BookClub @relation(fields: [bookClubId], references: [id], onDelete: Cascade)
+  joinedAt    DateTime @default(now())
+
+  @@unique([userId, bookClubId])
+  @@map("book_club_members")
+}
+
+model ELibraryResource {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  fileUrl     String
+  fileType    String   // pdf, audio, video, etc.
+  level       LearningLevel
+  category    String
+  isPublic    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("elibrary_resources")
+}
+
+model LiveSession {
+  id          String        @id @default(cuid())
+  title       String
+  description String?
+  teacherId   String
+  teacher     User          @relation(fields: [teacherId], references: [id])
+  groupId     String?
+  group       Group?        @relation(fields: [groupId], references: [id])
+  scheduledAt DateTime
+  duration    Int           // in minutes
+  meetingUrl  String?
+  status      SessionStatus @default(SCHEDULED)
+  maxAttendees Int?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  attendances SessionAttendance[]
+
+  @@map("live_sessions")
+}
+
+model SessionAttendance {
+  id        String      @id @default(cuid())
+  userId    String
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sessionId String
+  session   LiveSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  joinedAt  DateTime?
+  leftAt    DateTime?
+  attended  Boolean     @default(false)
+
+  @@unique([userId, sessionId])
+  @@map("session_attendances")
+}
+
+model Newsletter {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  @@map("newsletter_subscriptions")
+}
+
+model PricingPlan {
+  id          String        @id @default(cuid())
+  level       LearningLevel @unique
+  name        String
+  description String?
+  monthlyPrice Float
+  yearlyPrice  Float?
+  features    String[]
+  isActive    Boolean       @default(true)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@map("pricing_plans")
+}
