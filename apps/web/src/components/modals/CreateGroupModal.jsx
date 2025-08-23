@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { X, Users, Globe, Lock } from 'lucide-react';
+import { X, Users, Globe, Lock, Plus, Link as LinkIcon } from 'lucide-react';
 
 export default function CreateGroupModal({ isOpen, onClose }) {
   const [formData, setFormData] = useState({
@@ -8,9 +8,12 @@ export default function CreateGroupModal({ isOpen, onClose }) {
     description: '',
     learning_level: 'beginner',
     is_public: true,
-    max_members: 25
+    max_members: 25,
+    members: [] // New field to store manually added members
   });
   const [errors, setErrors] = useState({});
+  const [memberEmail, setMemberEmail] = useState('');
+  const [inviteLink, setInviteLink] = useState('');
   
   const queryClient = useQueryClient();
 
@@ -25,20 +28,31 @@ export default function CreateGroupModal({ isOpen, onClose }) {
         const error = await response.json();
         throw new Error(error.error || 'Failed to create group');
       }
-      return response.json();
+      const result = await response.json();
+      // Generate and return an invite link
+      return {
+        ...result,
+        inviteLink: `${window.location.origin}/join-group/${result.groupId}`
+      };
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries(['dashboardData']);
       queryClient.invalidateQueries(['groups']);
+      
+      // Set the invite link
+      setInviteLink(data.inviteLink);
+      
       onClose();
       setFormData({
         name: '',
         description: '',
         learning_level: 'beginner',
         is_public: true,
-        max_members: 25
+        max_members: 25,
+        members: []
       });
       setErrors({});
+      setMemberEmail('');
     },
     onError: (error) => {
       setErrors({ submit: error.message });
@@ -70,6 +84,41 @@ export default function CreateGroupModal({ isOpen, onClose }) {
       ...prev,
       [name]: type === 'checkbox' ? checked : value
     }));
+  };
+
+  const handleAddMember = () => {
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(memberEmail)) {
+      setErrors(prev => ({ ...prev, memberEmail: 'Invalid email address' }));
+      return;
+    }
+
+    // Check for duplicate emails
+    if (formData.members.includes(memberEmail)) {
+      setErrors(prev => ({ ...prev, memberEmail: 'Email already added' }));
+      return;
+    }
+
+    // Add member and clear input
+    setFormData(prev => ({
+      ...prev,
+      members: [...prev.members, memberEmail]
+    }));
+    setMemberEmail('');
+    setErrors(prev => ({ ...prev, memberEmail: undefined }));
+  };
+
+  const handleRemoveMember = (emailToRemove) => {
+    setFormData(prev => ({
+      ...prev,
+      members: prev.members.filter(email => email !== emailToRemove)
+    }));
+  };
+
+  const handleCopyInviteLink = () => {
+    navigator.clipboard.writeText(inviteLink);
+    alert('Invite link copied to clipboard!');
   };
 
   if (!isOpen) return null;
@@ -151,6 +200,54 @@ export default function CreateGroupModal({ isOpen, onClose }) {
               {errors.max_members && <p className="text-red-400 text-sm mt-1">{errors.max_members}</p>}
             </div>
 
+            {/* New section for adding members */}
+            <div>
+              <label className="block text-sm font-medium text-[#cbd5e1] mb-2">
+                Add Members
+              </label>
+              <div className="flex gap-2">
+                <input
+                  type="email"
+                  value={memberEmail}
+                  onChange={(e) => setMemberEmail(e.target.value)}
+                  className="flex-1 bg-[#334155] border border-[#475569] rounded-lg px-3 py-2 text-white placeholder-[#94a3b8] focus:outline-none focus:ring-2 focus:ring-[#06b6d4]"
+                  placeholder="Enter member email"
+                />
+                <button
+                  type="button"
+                  onClick={handleAddMember}
+                  className="bg-[#10b981] text-white p-2 rounded-lg hover:bg-[#059669] transition-colors"
+                >
+                  <Plus className="w-5 h-5" />
+                </button>
+              </div>
+              {errors.memberEmail && <p className="text-red-400 text-sm mt-1">{errors.memberEmail}</p>}
+            </div>
+
+            {/* Display added members */}
+            {formData.members.length > 0 && (
+              <div>
+                <h3 className="text-sm font-medium text-[#cbd5e1] mb-2">Added Members</h3>
+                <div className="space-y-2">
+                  {formData.members.map((email) => (
+                    <div 
+                      key={email} 
+                      className="flex justify-between items-center bg-[#334155] rounded-lg px-3 py-2"
+                    >
+                      <span className="text-white">{email}</span>
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveMember(email)}
+                        className="text-red-400 hover:text-red-500"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             <div className="flex items-center gap-3">
               <input
                 type="checkbox"
@@ -165,6 +262,24 @@ export default function CreateGroupModal({ isOpen, onClose }) {
                 {formData.is_public ? 'Public Group' : 'Private Group'}
               </label>
             </div>
+
+            {/* Invite Link Section (shown after group creation) */}
+            {inviteLink && (
+              <div className="bg-[#334155] rounded-lg p-3 mt-4">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-sm font-medium text-[#cbd5e1]">Group Invite Link</h3>
+                  <button
+                    type="button"
+                    onClick={handleCopyInviteLink}
+                    className="text-[#10b981] hover:text-[#059669] flex items-center gap-1"
+                  >
+                    <LinkIcon className="w-4 h-4" />
+                    Copy
+                  </button>
+                </div>
+                <p className="text-white text-sm break-all">{inviteLink}</p>
+              </div>
+            )}
 
             {errors.submit && (
               <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-3">
