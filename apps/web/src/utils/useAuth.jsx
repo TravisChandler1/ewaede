@@ -1,5 +1,4 @@
-import { useCallback, useState, useEffect, createContext, useContext } from 'react';
-import { supabase } from '../lib/supabase';
+import React, { useCallback, useState, useEffect, createContext, useContext } from 'react';
 
 // Supabase auth context
 const AuthContext = createContext({
@@ -15,35 +14,48 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [supabase, setSupabase] = useState(null);
 
   useEffect(() => {
-    // Get initial session
-    const getInitialSession = async () => {
-      try {
-        const { data: { session } } = await supabase.auth.getSession();
-        setUser(session?.user ?? null);
-      } catch (error) {
-        console.error('Error getting initial session:', error);
-        setError(error.message);
-      } finally {
+    // Dynamically import supabase only on client side
+    const initializeSupabase = async () => {
+      if (typeof window !== 'undefined') {
+        try {
+          const { supabase: supabaseClient } = await import('../lib/supabase');
+          setSupabase(supabaseClient);
+          
+          // Get initial session
+          const { data: { session } } = await supabaseClient.auth.getSession();
+          setUser(session?.user ?? null);
+          
+          // Listen for auth changes
+          const { data: { subscription } } = supabaseClient.auth.onAuthStateChange(
+            async (event, session) => {
+              setUser(session?.user ?? null);
+              setLoading(false);
+            }
+          );
+
+          return () => subscription.unsubscribe();
+        } catch (error) {
+          console.error('Error initializing Supabase:', error);
+          setError(error.message);
+        } finally {
+          setLoading(false);
+        }
+      } else {
         setLoading(false);
       }
     };
 
-    getInitialSession();
-
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        setUser(session?.user ?? null);
-        setLoading(false);
-      }
-    );
-
-    return () => subscription.unsubscribe();
+    initializeSupabase();
   }, []);
 
   const signIn = useCallback(async (credentials) => {
+    if (!supabase) {
+      return { success: false, error: 'Authentication not initialized' };
+    }
+    
     setLoading(true);
     setError(null);
     
@@ -111,9 +123,13 @@ export const AuthProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [supabase]);
 
   const signUp = useCallback(async (credentials) => {
+    if (!supabase) {
+      return { success: false, error: 'Authentication not initialized' };
+    }
+    
     setLoading(true);
     setError(null);
     
@@ -183,9 +199,13 @@ export const AuthProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [supabase]);
 
   const signOut = useCallback(async () => {
+    if (!supabase) {
+      return;
+    }
+    
     setLoading(true);
     try {
       const { error } = await supabase.auth.signOut();
@@ -197,7 +217,7 @@ export const AuthProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [supabase]);
 
   return (
     <AuthContext.Provider value={{ 

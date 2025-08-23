@@ -2,8 +2,8 @@ import {
   Links,
   Meta,
   Outlet,
-  Scripts,
   ScrollRestoration,
+  Scripts,
   useAsyncError,
   useLocation,
   useNavigate,
@@ -244,7 +244,7 @@ export function useHmrConnection(): boolean {
     import.meta.hot.on('vite:ws:disconnect', onDisconnect);
     import.meta.hot.on('vite:ws:connect', onConnect);
 
-    // Optional: catch the “about to full‑reload” event as a last resort
+    // Optional: catch the "about to full‑reload" event as a last resort
     const onFullReload = () => setConnected(false);
     import.meta.hot.on('vite:beforeFullReload', onFullReload);
 

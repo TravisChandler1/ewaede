@@ -17,8 +17,6 @@ export default defineConfig({
   // Use VITE_ prefix for environment variables (required for Supabase)
   envPrefix: 'VITE_',
   optimizeDeps: {
-    // Explicitly include fast-glob, since it gets dynamically imported and we
-    // don't want that to cause a re-bundle.
     include: ['fast-glob', 'lucide-react'],
     exclude: [
       'fsevents',
@@ -29,15 +27,11 @@ export default defineConfig({
   plugins: [
     nextPublicProcessEnv(),
     restartEnvFileChange(),
-    // reactRouterHonoServer({
-    //   serverEntryPoint: './__create/index.ts',
-    //   runtime: 'node',
-    // }),
     babel({
-      include: ['src/**/*.{js,jsx,ts,tsx}'], // or RegExp: /src\/.*\.[tj]sx?$/
-      exclude: /node_modules/, // skip everything else
+      include: ['src/**/*.{js,jsx,ts,tsx}'],
+      exclude: /node_modules/,
       babelConfig: {
-        babelrc: false, // don't merge other Babel files
+        babelrc: false,
         configFile: false,
         plugins: ['styled-jsx/babel'],
       },
@@ -89,9 +83,14 @@ export default defineConfig({
     rollupOptions: {
       external: [
         '@neondatabase/serverless',
+        '@supabase/supabase-js',
         'ws',
         'argon2'
       ]
     }
+  },
+  ssr: {
+    external: ['@supabase/supabase-js'],
+    noExternal: []
   }
 });
