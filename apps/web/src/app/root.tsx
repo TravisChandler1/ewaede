@@ -6,38 +6,33 @@ import {
   ScrollRestoration,
   useAsyncError,
   useLocation,
+  useNavigate,
   useRouteError,
 } from 'react-router';
-
 import { useButton } from '@react-aria/button';
+import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-  type ReactNode,
-  type FC,
   Component,
 } from 'react';
 import './global.css';
 
-import fetch from '@/__create/fetch';
-// @ts-ignore
-import { SessionProvider } from '@auth/create/react';
-import { useNavigate } from 'react-router';
+// Production fallbacks for development tools
+const SessionProvider = ({ children }: { children: ReactNode }) => <>{children}</>;
+const HotReloadIndicator = () => null;
+const useSandboxStore = () => ({});
+const useDevServerHeartbeat = () => {};
+
 import { serializeError } from 'serialize-error';
 import { Toaster } from 'sonner';
 // @ts-ignore
 import { LoadFonts } from 'virtual:load-fonts.jsx';
-import { HotReloadIndicator } from '../__create/HotReload';
-import { useSandboxStore } from '../__create/hmr-sandbox-store';
 import type { Route } from './+types/root';
-import { useDevServerHeartbeat } from '../__create/useDevServerHeartbeat';
 
 export const links = () => [];
 
+// Use global fetch in production
 if (globalThis.window && globalThis.window !== undefined) {
-  globalThis.window.fetch = fetch;
+  globalThis.window.fetch = globalThis.fetch;
 }
 
 function SharedErrorBoundary({
@@ -338,7 +333,9 @@ export function Layout({ children }: { children: ReactNode }) {
   useHandshakeParent();
   useCodeGen();
   useRefresh();
-  useDevServerHeartbeat();
+  if (import.meta.env.DEV) {
+    useDevServerHeartbeat();
+  }
   const navigate = useNavigate();
   const location = useLocation();
   const pathname = location?.pathname;
@@ -373,13 +370,17 @@ export function Layout({ children }: { children: ReactNode }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
-        <script type="module" src="/src/__create/dev-error-overlay.js"></script>
-        <link rel="icon" href="/src/__create/favicon.png" />
+        {import.meta.env.DEV && (
+          <>
+            <script type="module" src="/src/__create/dev-error-overlay.js"></script>
+            <link rel="icon" href="/src/__create/favicon.png" />
+          </>
+        )}
         <LoadFonts />
       </head>
       <body>
         <ClientOnly loader={() => children} />
-        <HotReloadIndicator />
+        {import.meta.env.DEV && <HotReloadIndicator />}
         <Toaster position="bottom-right" />
         <ScrollRestoration />
         <Scripts />
