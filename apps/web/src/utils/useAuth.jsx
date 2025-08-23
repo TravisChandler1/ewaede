@@ -204,7 +204,7 @@ export const AuthProvider = ({ children }) => {
       user, 
       signIn, 
       signUp, 
-    signOut,
+      signOut,
       loading, 
       error 
     }}>
