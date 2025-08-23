@@ -3,16 +3,11 @@
   "outputDirectory": "apps/web/build/client",
   "installCommand": "cd apps/web && npm install",
   "devCommand": "cd apps/web && npm run dev",
-  "framework": null,
+  "framework": "react-router",
   "rewrites": [
     {
       "source": "/(.*)",
-      "destination": "/api/index"
+      "destination": "/index.html"
     }
-  ],
-  "functions": {
-    "apps/web/build/server/index.js": {
-      "runtime": "nodejs20.x"
-    }
-  }
+  ]
 }
