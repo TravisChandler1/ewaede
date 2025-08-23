@@ -1,0 +1,471 @@
+import { useState } from 'react';
+import { CheckCircle, Users, BookOpen, Video, Library, MessageCircle, Star, ArrowRight, Menu, X } from 'lucide-react';
+
+export default function HomePage() {
+  const [email, setEmail] = useState('');
+  const [newsletterStatus, setNewsletterStatus] = useState('');
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const handleNewsletterSubmit = async (e) => {
+    e.preventDefault();
+    if (!email) return;
+    
+    try {
+      const response = await fetch('/api/newsletter/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+      
+      if (response.ok) {
+        setNewsletterStatus('success');
+        setEmail('');
+      } else {
+        setNewsletterStatus('error');
+      }
+    } catch (error) {
+      setNewsletterStatus('error');
+    }
+  };
+
+  const learningLevels = [
+    {
+      name: 'Novice',
+      price: '$29',
+      duration: '4 weeks',
+      description: 'Perfect for absolute beginners',
+      features: [
+        'Yoruba alphabet & pronunciation',
+        'Basic greetings & introductions',
+        'Numbers & days of the week',
+        'Access to e-library',
+        'Community support'
+      ],
+      accent: '#10b981'
+    },
+    {
+      name: 'Beginner',
+      price: '$49',
+      duration: '6 weeks',
+      description: 'Build conversational skills',
+      features: [
+        'Everyday conversations',
+        'Family & relationships',
+        'Food & shopping vocabulary',
+        'Live group sessions',
+        'Book club access',
+        'Progress tracking'
+      ],
+      accent: '#3b82f6'
+    },
+    {
+      name: 'Advanced',
+      price: '$79',
+      duration: '8 weeks',
+      description: 'Master complex grammar',
+      features: [
+        'Complex sentence structures',
+        'Business & formal Yoruba',
+        'Cultural contexts',
+        'Individual sessions available',
+        'Study groups',
+        'Teacher guidance'
+      ],
+      accent: '#8b5cf6'
+    },
+    {
+      name: 'Pro',
+      price: '$129',
+      duration: '12 weeks',
+      description: 'Achieve fluency & cultural mastery',
+      features: [
+        'Literature & poetry',
+        'Historical contexts',
+        'Teaching methodology',
+        'Priority support',
+        'All resources included',
+        'Certification pathway'
+      ],
+      accent: '#f59e0b'
+    }
+  ];
+
+  const features = [
+    {
+      icon: <BookOpen className="w-8 h-8" />,
+      title: 'Personalized Dashboard',
+      description: 'Track your learning progress with detailed analytics and milestone achievements'
+    },
+    {
+      icon: <Users className="w-8 h-8" />,
+      title: 'Study Groups',
+      description: 'Join or create study groups with fellow learners at your level'
+    },
+    {
+      icon: <MessageCircle className="w-8 h-8" />,
+      title: 'Book Club',
+      description: 'Explore Yoruba literature with guided reading sessions and discussions'
+    },
+    {
+      icon: <Library className="w-8 h-8" />,
+      title: 'E-Library',
+      description: 'Access thousands of Yoruba books, articles, audio recordings, and videos'
+    },
+    {
+      icon: <Video className="w-8 h-8" />,
+      title: 'Live Sessions',
+      description: 'Interactive sessions with experienced teachers for real-time learning'
+    },
+    {
+      icon: <Star className="w-8 h-8" />,
+      title: 'Expert Teachers',
+      description: 'Learn from qualified instructors with specialized dashboards for monitoring'
+    }
+  ];
+
+  return (
+    <div className="min-h-screen bg-[#0f172a] text-white">
+      {/* Header */}
+      <header className="relative z-50 bg-[#1e293b] border-b border-[#334155]">
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-r from-[#10b981] to-[#06b6d4] flex items-center justify-center">
+                <span className="text-lg font-bold">E</span>
+              </div>
+              <div>
+                <h1 className="text-xl font-bold text-white">Ewa Ede Yoruba</h1>
+                <p className="text-sm text-[#cbd5e1]">Academy</p>
+              </div>
+            </div>
+
+            {/* Desktop Navigation */}
+            <nav className="hidden md:flex items-center gap-8">
+              <a href="#features" className="text-[#cbd5e1] hover:text-white transition-colors">Features</a>
+              <a href="#levels" className="text-[#cbd5e1] hover:text-white transition-colors">Levels</a>
+              <a href="#newsletter" className="text-[#cbd5e1] hover:text-white transition-colors">Newsletter</a>
+              <a href="/account/signin" className="bg-[#06b6d4] hover:bg-[#0891b2] px-6 py-2 rounded-full transition-colors">
+                Sign In
+              </a>
+            </nav>
+
+            {/* Mobile Menu Button */}
+            <button
+              className="md:hidden p-2 text-[#cbd5e1] hover:text-white"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+            >
+              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
+
+          {/* Mobile Navigation */}
+          {isMenuOpen && (
+            <div className="md:hidden mt-4 py-4 border-t border-[#334155]">
+              <nav className="flex flex-col gap-4">
+                <a href="#features" className="text-[#cbd5e1] hover:text-white transition-colors">Features</a>
+                <a href="#levels" className="text-[#cbd5e1] hover:text-white transition-colors">Levels</a>
+                <a href="#newsletter" className="text-[#cbd5e1] hover:text-white transition-colors">Newsletter</a>
+                <a href="/account/signin" className="bg-[#06b6d4] hover:bg-[#0891b2] px-6 py-2 rounded-full transition-colors text-center">
+                  Sign In
+                </a>
+              </nav>
+            </div>
+          )}
+        </div>
+      </header>
+
+      {/* Hero Section */}
+      <section 
+        className="relative py-20 lg:py-32 px-6 overflow-hidden"
+        style={{
+          backgroundImage: 'url(https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=2000&q=80)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center'
+        }}
+      >
+        <div className="absolute inset-0 bg-[#0f172a]/80"></div>
+        <div className="relative max-w-6xl mx-auto">
+          <div className="bg-[#1e293b]/90 backdrop-blur-sm border border-[#334155] rounded-[40px] p-16 md:p-12">
+            <div className="flex items-baseline gap-2 mb-6">
+              <span className="text-2xl">🌍</span>
+              <p className="text-[#cbd5e1] text-base">Kaabo! Welcome to the premier online Yoruba learning experience</p>
+            </div>
+            
+            <h1 className="text-white font-bold leading-tight mb-8" style={{ fontSize: "clamp(36px, 6vw, 68px)" }}>
+              Master the Beautiful
+              <br />
+              Language of Yoruba
+              <br />
+              <span className="text-[#06b6d4]">with Expert Guidance</span>
+            </h1>
+            
+            <p className="text-[#cbd5e1] text-xl mb-8 max-w-2xl">
+              Join thousands of learners worldwide in discovering the rich culture and language of Yoruba through our comprehensive online academy.
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-4">
+              <a 
+                href="/account/signup"
+                className="bg-[#06b6d4] hover:bg-[#0891b2] text-white px-8 py-4 rounded-full font-semibold transition-all transform hover:scale-105 text-center"
+              >
+                Start Learning Today
+              </a>
+              <a 
+                href="#features"
+                className="border border-[#334155] text-white px-8 py-4 rounded-full font-semibold hover:bg-[#334155] transition-all text-center"
+              >
+                Explore Features
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section id="features" className="py-20 px-6 bg-[#1e293b]">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6">
+              Everything You Need to
+              <br />
+              <span className="text-[#06b6d4]">Master Yoruba</span>
+            </h2>
+            <p className="text-[#cbd5e1] text-xl max-w-3xl mx-auto">
+              Our comprehensive platform provides all the tools and resources you need for an effective Yoruba learning journey.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {features.map((feature, index) => (
+              <div
+                key={index}
+                className="bg-[#334155] border border-[#475569] rounded-2xl p-8 hover:transform hover:-translate-y-2 transition-all duration-300 hover:shadow-2xl"
+              >
+                <div className="text-[#06b6d4] mb-4">
+                  {feature.icon}
+                </div>
+                <h3 className="text-xl font-semibold text-white mb-4">{feature.title}</h3>
+                <p className="text-[#cbd5e1]">{feature.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Learning Levels Section */}
+      <section id="levels" className="py-20 px-6 bg-[#0f172a]">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6">
+              Choose Your Learning
+              <br />
+              <span className="text-[#06b6d4]">Journey</span>
+            </h2>
+            <p className="text-[#cbd5e1] text-xl max-w-3xl mx-auto">
+              From complete beginner to fluent speaker, we have the perfect program for your skill level.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {learningLevels.map((level, index) => (
+              <div
+                key={index}
+                className="bg-[#1e293b] border border-[#334155] rounded-2xl p-8 hover:transform hover:-translate-y-2 transition-all duration-300 hover:shadow-2xl relative overflow-hidden"
+              >
+                <div 
+                  className="absolute top-0 left-0 right-0 h-1"
+                  style={{ backgroundColor: level.accent }}
+                ></div>
+                
+                <div className="mb-6">
+                  <h3 className="text-2xl font-bold text-white mb-2">{level.name}</h3>
+                  <p className="text-[#cbd5e1] mb-4">{level.description}</p>
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-3xl font-bold text-white">{level.price}</span>
+                    <span className="text-[#cbd5e1]">/ {level.duration}</span>
+                  </div>
+                </div>
+
+                <ul className="space-y-3 mb-8">
+                  {level.features.map((feature, featureIndex) => (
+                    <li key={featureIndex} className="flex items-start gap-3">
+                      <CheckCircle className="w-5 h-5 text-[#10b981] mt-0.5 flex-shrink-0" />
+                      <span className="text-[#cbd5e1]">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <a
+                  href="/account/signup"
+                  className="block w-full text-center px-6 py-3 rounded-full font-semibold transition-all"
+                  style={{ 
+                    backgroundColor: level.accent,
+                    color: 'white'
+                  }}
+                >
+                  Get Started
+                </a>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-16 text-center">
+            <div className="bg-[#1e293b] border border-[#334155] rounded-2xl p-8 max-w-4xl mx-auto">
+              <h3 className="text-2xl font-bold text-white mb-4">Individual or Group Learning?</h3>
+              <p className="text-[#cbd5e1] mb-6">
+                After selecting your level, choose between personalized one-on-one sessions or collaborative group learning experiences.
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="bg-[#334155] border border-[#475569] rounded-xl p-6">
+                  <h4 className="text-lg font-semibold text-white mb-2">Individual Teaching</h4>
+                  <p className="text-[#cbd5e1]">Personalized attention, flexible scheduling, and customized learning pace</p>
+                </div>
+                <div className="bg-[#334155] border border-[#475569] rounded-xl p-6">
+                  <h4 className="text-lg font-semibold text-white mb-2">Group Teaching</h4>
+                  <p className="text-[#cbd5e1]">Collaborative learning, peer interaction, and shared cultural experiences</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Teacher Dashboard Info Section */}
+      <section className="py-20 px-6 bg-[#1e293b]">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <h2 className="text-4xl font-bold text-white mb-6">
+                Are You a Yoruba
+                <br />
+                <span className="text-[#06b6d4]">Teacher?</span>
+              </h2>
+              <p className="text-[#cbd5e1] text-lg mb-6">
+                Join our network of expert educators and help shape the next generation of Yoruba speakers. Our teacher dashboard provides powerful tools to manage your students and track their progress.
+              </p>
+              <ul className="space-y-3 mb-8">
+                <li className="flex items-start gap-3">
+                  <CheckCircle className="w-5 h-5 text-[#10b981] mt-0.5" />
+                  <span className="text-[#cbd5e1]">Monitor student progress and engagement</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle className="w-5 h-5 text-[#10b981] mt-0.5" />
+                  <span className="text-[#cbd5e1]">Organize and schedule live sessions</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle className="w-5 h-5 text-[#10b981] mt-0.5" />
+                  <span className="text-[#cbd5e1]">Manage study groups and book clubs</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle className="w-5 h-5 text-[#10b981] mt-0.5" />
+                  <span className="text-[#cbd5e1]">Access detailed analytics and reports</span>
+                </li>
+              </ul>
+              <a
+                href="/account/signup"
+                className="bg-[#10b981] hover:bg-[#059669] text-white px-8 py-4 rounded-full font-semibold transition-all inline-flex items-center gap-2"
+              >
+                Become a Teacher
+                <ArrowRight className="w-5 h-5" />
+              </a>
+            </div>
+            <div className="bg-[#334155] rounded-2xl p-8">
+              <img
+                src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=80"
+                alt="Teacher using dashboard"
+                className="w-full h-64 object-cover rounded-xl mb-6"
+              />
+              <h3 className="text-xl font-semibold text-white mb-4">Comprehensive Teacher Tools</h3>
+              <p className="text-[#cbd5e1]">
+                Our teacher dashboard provides everything you need to deliver exceptional Yoruba education online.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Newsletter Section */}
+      <section id="newsletter" className="py-20 px-6 bg-[#0f172a]">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-4xl font-bold text-white mb-6">
+            Stay Updated with
+            <br />
+            <span className="text-[#06b6d4]">Yoruba Learning Tips</span>
+          </h2>
+          <p className="text-[#cbd5e1] text-lg mb-8">
+            Get weekly insights, cultural stories, and exclusive learning resources delivered to your inbox.
+          </p>
+
+          <form onSubmit={handleNewsletterSubmit} className="max-w-md mx-auto">
+            <div className="flex flex-col sm:flex-row gap-4">
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email"
+                className="flex-1 px-6 py-4 rounded-full bg-[#1e293b] border border-[#334155] text-white placeholder-[#cbd5e1] focus:outline-none focus:border-[#06b6d4]"
+                required
+              />
+              <button
+                type="submit"
+                className="px-8 py-4 bg-[#06b6d4] hover:bg-[#0891b2] text-white rounded-full font-semibold transition-all"
+              >
+                Subscribe
+              </button>
+            </div>
+            
+            {newsletterStatus === 'success' && (
+              <p className="text-[#10b981] mt-4">Thank you for subscribing!</p>
+            )}
+            {newsletterStatus === 'error' && (
+              <p className="text-red-500 mt-4">Something went wrong. Please try again.</p>
+            )}
+          </form>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-[#1e293b] border-t border-[#334155] py-12 px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div className="md:col-span-2">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-r from-[#10b981] to-[#06b6d4] flex items-center justify-center">
+                  <span className="text-lg font-bold">E</span>
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-white">Ewa Ede Yoruba Academy</h3>
+                </div>
+              </div>
+              <p className="text-[#cbd5e1] mb-4">
+                Empowering learners worldwide to master the beautiful Yoruba language and connect with its rich cultural heritage.
+              </p>
+            </div>
+            
+            <div>
+              <h4 className="text-white font-semibold mb-4">Quick Links</h4>
+              <ul className="space-y-2">
+                <li><a href="#features" className="text-[#cbd5e1] hover:text-white transition-colors">Features</a></li>
+                <li><a href="#levels" className="text-[#cbd5e1] hover:text-white transition-colors">Learning Levels</a></li>
+                <li><a href="/account/signin" className="text-[#cbd5e1] hover:text-white transition-colors">Sign In</a></li>
+                <li><a href="/account/signup" className="text-[#cbd5e1] hover:text-white transition-colors">Sign Up</a></li>
+              </ul>
+            </div>
+            
+            <div>
+              <h4 className="text-white font-semibold mb-4">Support</h4>
+              <ul className="space-y-2">
+                <li><span className="text-[#cbd5e1]">Email: info@ewaede.com</span></li>
+                <li><span className="text-[#cbd5e1]">Phone: +1 (555) 123-4567</span></li>
+              </ul>
+            </div>
+          </div>
+          
+          <div className="border-t border-[#334155] mt-8 pt-8 text-center">
+            <p className="text-[#cbd5e1]">&copy; 2024 Ewa Ede Yoruba Academy. All rights reserved.</p>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}
