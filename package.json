@@ -9,7 +9,7 @@
     "deploy": "cd apps/web && npm run deploy"
   },
   "workspaces": [
-    "apps/*"
+    "apps/web"
   ],
   "engines": {
     "node": ">=18.0.0"

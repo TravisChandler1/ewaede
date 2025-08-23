@@ -1,2 +1,11 @@
-# Only exclude the mobile app to prevent dependency conflicts
+# Exclude mobile app completely - it's not needed for web deployment
 apps/mobile/
+apps/mobile/**
+node_modules/
+.git/
+.vscode/
+.qodo/
+.DS_Store
+README.md
+SUPABASE_MIGRATION.md
+DEPLOYMENT_GUIDE.md
