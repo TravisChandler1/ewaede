@@ -11,7 +11,12 @@ function SignUpPage() {
     fullName: '',
     role: 'student',
     learningLevel: 'novice',
-    teachingPreference: 'group'
+    teachingPreference: 'group',
+    // Teacher-specific fields
+    qualifications: '',
+    experienceYears: 0,
+    teachingSubjects: [],
+    coverLetter: ''
   });
 
   const { signUp } = useAuth();
@@ -39,7 +44,12 @@ function SignUpPage() {
         email: formData.email,
         password: formData.password,
         name: formData.fullName,
-        role: formData.role
+        role: formData.role,
+        // Teacher-specific data
+        qualifications: formData.qualifications,
+        experience_years: formData.experienceYears,
+        teaching_subjects: formData.teachingSubjects,
+        cover_letter: formData.coverLetter
       });
 
       if (result.success) {
@@ -51,8 +61,12 @@ function SignUpPage() {
           teachingPreference: formData.role === 'student' ? formData.teachingPreference : null
         }));
 
-        // Redirect to setup page
-        navigate('/dashboard/setup');
+        // Redirect based on role
+        if (formData.role === 'teacher') {
+          navigate('/account/pending-approval');
+        } else {
+          navigate('/dashboard/setup');
+        }
       } else {
         setError(result.error || "Sign-up failed. Please try again.");
       }
@@ -255,26 +269,94 @@ function SignUpPage() {
             )}
 
             {formData.role === 'teacher' && (
-              <div className="bg-[#334155] border border-[#475569] rounded-lg p-6">
-                <h3 className="text-lg font-semibold text-white mb-4">Teacher Benefits</h3>
-                <ul className="space-y-2 text-[#cbd5e1]">
-                  <li className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-[#10b981] rounded-full"></div>
-                    Comprehensive teacher dashboard
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-[#10b981] rounded-full"></div>
-                    Student progress monitoring
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-[#10b981] rounded-full"></div>
-                    Live session management
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-[#10b981] rounded-full"></div>
-                    Analytics and reporting
-                  </li>
-                </ul>
+              <div className="space-y-6">
+                <div>
+                  <label className="block text-sm font-medium text-[#cbd5e1] mb-2">
+                    Qualifications *
+                  </label>
+                  <textarea
+                    required
+                    name="qualifications"
+                    value={formData.qualifications}
+                    onChange={handleInputChange}
+                    placeholder="Describe your qualifications, certifications, and educational background..."
+                    rows={3}
+                    className="w-full px-4 py-3 rounded-lg bg-[#334155] border border-[#475569] text-white placeholder-[#94a3b8] focus:outline-none focus:border-[#10b981] focus:ring-1 focus:ring-[#10b981]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-[#cbd5e1] mb-2">
+                    Years of Teaching Experience *
+                  </label>
+                  <input
+                    required
+                    name="experienceYears"
+                    type="number"
+                    min="0"
+                    max="50"
+                    value={formData.experienceYears}
+                    onChange={handleInputChange}
+                    placeholder="Number of years"
+                    className="w-full px-4 py-3 rounded-lg bg-[#334155] border border-[#475569] text-white placeholder-[#94a3b8] focus:outline-none focus:border-[#10b981] focus:ring-1 focus:ring-[#10b981]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-[#cbd5e1] mb-2">
+                    Teaching Subjects *
+                  </label>
+                  <div className="space-y-2">
+                    {['Yoruba Grammar', 'Yoruba Conversation', 'Yoruba Culture', 'Yoruba Literature', 'Yoruba History', 'Yoruba Music'].map((subject) => (
+                      <label key={subject} className="flex items-center gap-3 p-3 rounded-lg bg-[#334155] border border-[#475569] hover:border-[#10b981] cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={formData.teachingSubjects.includes(subject)}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              setFormData(prev => ({
+                                ...prev,
+                                teachingSubjects: [...prev.teachingSubjects, subject]
+                              }));
+                            } else {
+                              setFormData(prev => ({
+                                ...prev,
+                                teachingSubjects: prev.teachingSubjects.filter(s => s !== subject)
+                              }));
+                            }
+                          }}
+                          className="w-4 h-4 text-[#10b981] bg-[#334155] border-[#475569] rounded focus:ring-[#10b981] focus:ring-2"
+                        />
+                        <span className="text-[#cbd5e1]">{subject}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-[#cbd5e1] mb-2">
+                    Cover Letter *
+                  </label>
+                  <textarea
+                    required
+                    name="coverLetter"
+                    value={formData.coverLetter}
+                    onChange={handleInputChange}
+                    placeholder="Tell us about your teaching philosophy, why you want to teach Yoruba, and what makes you a great teacher..."
+                    rows={4}
+                    className="w-full px-4 py-3 rounded-lg bg-[#334155] border border-[#475569] text-white placeholder-[#94a3b8] focus:outline-none focus:border-[#10b981] focus:ring-1 focus:ring-[#10b981]"
+                  />
+                </div>
+
+                <div className="bg-[#334155] border border-[#475569] rounded-lg p-4">
+                  <h3 className="text-sm font-semibold text-white mb-2">📋 Application Process</h3>
+                  <ul className="space-y-1 text-xs text-[#cbd5e1]">
+                    <li>• Your application will be reviewed by our admin team</li>
+                    <li>• You'll receive an email notification once reviewed</li>
+                    <li>• Approved teachers can access the full dashboard</li>
+                    <li>• This process typically takes 1-3 business days</li>
+                  </ul>
+                </div>
               </div>
             )}
           </div>

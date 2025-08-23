@@ -70,6 +70,36 @@ export const AuthProvider = ({ children }) => {
           console.warn('Profile fetch error:', profileError);
         }
 
+        // If user is a teacher, check if they're approved
+        if (profile && profile.role === 'teacher') {
+          const { data: application, error: appError } = await supabase
+            .from('teacher_applications')
+            .select('status, rejection_reason')
+            .eq('user_id', data.user.id)
+            .single();
+
+          if (appError && appError.code !== 'PGRST116') {
+            console.warn('Teacher application fetch error:', appError);
+          }
+
+          if (application) {
+            if (application.status === 'pending') {
+              setError('Your teacher application is still under review. Please wait for admin approval.');
+              await supabase.auth.signOut(); // Sign them out
+              return { success: false, error: 'Your teacher application is still under review. Please wait for admin approval.' };
+            } else if (application.status === 'rejected') {
+              setError(`Your teacher application was rejected. Reason: ${application.rejection_reason || 'No reason provided'}`);
+              await supabase.auth.signOut(); // Sign them out
+              return { success: false, error: `Your teacher application was rejected. Reason: ${application.rejection_reason || 'No reason provided'}` };
+            } else if (application.status === 'under_review') {
+              setError('Your teacher application is currently under review. Please wait for admin decision.');
+              await supabase.auth.signOut(); // Sign them out
+              return { success: false, error: 'Your teacher application is currently under review. Please wait for admin decision.' };
+            }
+            // If status is 'approved', continue with sign in
+          }
+        }
+
         return { success: true, user: data.user, profile };
       }
 
@@ -113,13 +143,33 @@ export const AuthProvider = ({ children }) => {
             full_name: credentials.name,
             email: credentials.email,
             role: credentials.role || 'student',
-            is_active: true,
+            is_active: credentials.role === 'student', // Only students are active by default
             created_at: new Date().toISOString()
           });
 
         if (profileError) {
           console.warn('Profile creation error:', profileError);
-          // Don't fail signup if profile creation fails
+        }
+
+        // If user selected teacher role, create teacher application
+        if (credentials.role === 'teacher') {
+          const { error: applicationError } = await supabase
+            .from('teacher_applications')
+            .insert({
+              user_id: data.user.id,
+              full_name: credentials.name,
+              email: credentials.email,
+              qualifications: credentials.qualifications || '',
+              experience_years: credentials.experience_years || 0,
+              teaching_subjects: credentials.teaching_subjects || [],
+              cover_letter: credentials.cover_letter || '',
+              status: 'pending',
+              applied_at: new Date().toISOString()
+            });
+
+          if (applicationError) {
+            console.warn('Teacher application creation error:', applicationError);
+          }
         }
 
         return { success: true, user: data.user };
