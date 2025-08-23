@@ -62,7 +62,10 @@ export default defineConfig({
     loadFontsFromTailwindSource(),
     addRenderIds(),
     reactRouter(),
-    tsconfigPaths(),
+    tsconfigPaths({
+      ignoreConfigErrors: true,
+      root: path.resolve(__dirname, 'src')
+    }),
     aliases(),
     layoutWrapperPlugin(),
   ],
@@ -89,4 +92,16 @@ export default defineConfig({
       clientFiles: ['./src/app/**/*', './src/app/root.tsx', './src/app/routes.ts'],
     },
   },
+  build: {
+    ssr: false,
+    rollupOptions: {
+      external: [
+        '@neondatabase/serverless',
+        '@hono/auth-js',
+        'hono',
+        'ws',
+        'argon2'
+      ]
+    }
+  }
 });

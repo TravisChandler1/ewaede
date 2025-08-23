@@ -1,6 +1,13 @@
 # Exclude mobile app completely - it's not needed for web deployment
 apps/mobile/
 apps/mobile/**
+
+# Exclude server-side code that's not needed for Vercel
+apps/web/__create/
+apps/web/build/server/
+apps/web/src/__create/
+
+# Exclude root-level unnecessary files
 node_modules/
 .git/
 .vscode/
@@ -9,3 +16,14 @@ node_modules/
 README.md
 SUPABASE_MIGRATION.md
 DEPLOYMENT_GUIDE.md
+
+# Keep web app files accessible
+!apps/web/
+!apps/web/src/
+!apps/web/package.json
+!apps/web/package-lock.json
+!apps/web/react-router.config.ts
+!apps/web/vite.config.ts
+!apps/web/tailwind.config.js
+!apps/web/postcss.config.js
+!apps/web/tsconfig.json
