@@ -1,33 +1,53 @@
 import * as React from 'react';
-import { useSession } from "@auth/create/react";
-
+import { useAuth } from './useAuth';
+import { supabase } from '../lib/supabase';
 
 const useUser = () => {
-  const { data: session, status } = useSession();
-  const id = session?.user?.id
+  const { user, loading } = useAuth();
+  const [profile, setProfile] = React.useState(null);
+  const [profileLoading, setProfileLoading] = React.useState(false);
 
-  const [user, setUser] = React.useState(session?.user ?? null);
-
-  const fetchUser = React.useCallback(async (session) => {
-  return session?.user;
-}, [])
-
-  const refetchUser = React.useCallback(() => {
-    if(process.env.NEXT_PUBLIC_CREATE_ENV === "PRODUCTION") {
-      if (id) {
-        fetchUser(session).then(setUser);
-      } else {
-        setUser(null);
-      }
+  const fetchProfile = React.useCallback(async () => {
+    if (!user) {
+      setProfile(null);
+      return;
     }
-  }, [fetchUser, id])
 
-  React.useEffect(refetchUser, [refetchUser]);
+    setProfileLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from('user_profiles')
+        .select('*')
+        .eq('user_id', user.id)
+        .single();
 
-  if (process.env.NEXT_PUBLIC_CREATE_ENV !== "PRODUCTION") {
-    return { user, data: session?.user || null, loading: status === 'loading', refetch: refetchUser };
-  }
-  return { user, data: user, loading: status === 'loading' || (status === 'authenticated' && !user), refetch: refetchUser };
+      if (error && error.code !== 'PGRST116') {
+        console.warn('Profile fetch error:', error);
+      }
+
+      setProfile(data);
+    } catch (error) {
+      console.error('Error fetching profile:', error);
+    } finally {
+      setProfileLoading(false);
+    }
+  }, [user]);
+
+  React.useEffect(() => {
+    fetchProfile();
+  }, [fetchProfile]);
+
+  const refetch = React.useCallback(() => {
+    fetchProfile();
+  }, [fetchProfile]);
+
+  return { 
+    user, 
+    data: profile || user, 
+    profile,
+    loading: loading || profileLoading,
+    refetch
+  };
 };
 
 export { useUser }

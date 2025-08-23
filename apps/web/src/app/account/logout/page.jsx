@@ -1,13 +1,13 @@
+import { useNavigate } from "react-router";
 import useAuth from "@/utils/useAuth";
 
 function LogoutPage() {
   const { signOut } = useAuth();
+  const navigate = useNavigate();
   
   const handleSignOut = async () => {
-    await signOut({
-      callbackUrl: "/",
-      redirect: true,
-    });
+    signOut();
+    navigate("/");
   };
   
   return (

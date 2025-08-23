@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router";
 import useAuth from "@/utils/useAuth";
 
 function SignInPage() {
@@ -6,8 +7,9 @@ function SignInPage() {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
-  const { signInWithCredentials } = useAuth();
+  const { signIn } = useAuth();
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -21,27 +23,20 @@ function SignInPage() {
     }
 
     try {
-      await signInWithCredentials({
+      const result = await signIn({
         email,
         password,
-        callbackUrl: "/dashboard",
-        redirect: true,
+        name: email.split('@')[0] // Use email prefix as name for now
       });
+      
+      if (result.success) {
+        navigate("/dashboard");
+      } else {
+        setError(result.error || "Sign-in failed. Please try again.");
+      }
     } catch (err) {
-      const errorMessages = {
-        OAuthSignin: "Couldn't start sign-in. Please try again or use a different method.",
-        OAuthCallback: "Sign-in failed after redirecting. Please try again.",
-        OAuthCreateAccount: "Couldn't create an account with this sign-in method. Try another option.",
-        EmailCreateAccount: "This email can't be used to create an account. It may already exist.",
-        Callback: "Something went wrong during sign-in. Please try again.",
-        OAuthAccountNotLinked: "This account is linked to a different sign-in method. Try using that instead.",
-        CredentialsSignin: "Incorrect email or password. Try again or reset your password.",
-        AccessDenied: "You don't have permission to sign in.",
-        Configuration: "Sign-in isn't working right now. Please try again later.",
-        Verification: "Your sign-in link has expired. Request a new one.",
-      };
-
-      setError(errorMessages[err.message] || "Something went wrong. Please try again.");
+      setError("Something went wrong. Please try again.");
+    } finally {
       setLoading(false);
     }
   };

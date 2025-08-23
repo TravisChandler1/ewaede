@@ -16,8 +16,10 @@ import {
 } from 'react';
 import './global.css';
 
+// Import the new AuthProvider
+import { AuthProvider } from '../utils/useAuth';
+
 // Production fallbacks for development tools
-const SessionProvider = ({ children }: { children: ReactNode }) => <>{children}</>;
 const HotReloadIndicator = () => null;
 const useSandboxStore = () => ({});
 const useDevServerHeartbeat = () => {};
@@ -392,8 +394,8 @@ export function Layout({ children }: { children: ReactNode }) {
 
 export default function App() {
   return (
-    <SessionProvider>
+    <AuthProvider>
       <Outlet />
-    </SessionProvider>
+    </AuthProvider>
   );
 }

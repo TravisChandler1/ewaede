@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router";
 import useAuth from "@/utils/useAuth";
 
 function SignUpPage() {
@@ -13,7 +14,8 @@ function SignUpPage() {
     teachingPreference: 'group'
   });
 
-  const { signUpWithCredentials } = useAuth();
+  const { signUp } = useAuth();
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -32,39 +34,31 @@ function SignUpPage() {
     }
 
     try {
-      // First create the account
-      await signUpWithCredentials({
+      // Create the account using the new auth system
+      const result = await signUp({
         email: formData.email,
         password: formData.password,
-        callbackUrl: "/dashboard/setup",
-        redirect: false,
+        name: formData.fullName,
+        role: formData.role
       });
 
-      // Store the profile data temporarily in localStorage
-      localStorage.setItem('pendingProfile', JSON.stringify({
-        fullName: formData.fullName,
-        role: formData.role,
-        learningLevel: formData.role === 'student' ? formData.learningLevel : null,
-        teachingPreference: formData.role === 'student' ? formData.teachingPreference : null
-      }));
+      if (result.success) {
+        // Store the profile data temporarily in localStorage
+        localStorage.setItem('pendingProfile', JSON.stringify({
+          fullName: formData.fullName,
+          role: formData.role,
+          learningLevel: formData.role === 'student' ? formData.learningLevel : null,
+          teachingPreference: formData.role === 'student' ? formData.teachingPreference : null
+        }));
 
-      // Redirect to setup page
-      window.location.href = '/dashboard/setup';
+        // Redirect to setup page
+        navigate('/dashboard/setup');
+      } else {
+        setError(result.error || "Sign-up failed. Please try again.");
+      }
     } catch (err) {
-      const errorMessages = {
-        OAuthSignin: "Couldn't start sign-up. Please try again or use a different method.",
-        OAuthCallback: "Sign-up failed after redirecting. Please try again.",
-        OAuthCreateAccount: "Couldn't create an account with this sign-up option. Try another one.",
-        EmailCreateAccount: "This email can't be used. It may already be registered.",
-        Callback: "Something went wrong during sign-up. Please try again.",
-        OAuthAccountNotLinked: "This account is linked to a different sign-in method. Try using that instead.",
-        CredentialsSignin: "Invalid email or password. If you already have an account, try signing in instead.",
-        AccessDenied: "You don't have permission to sign up.",
-        Configuration: "Sign-up isn't working right now. Please try again later.",
-        Verification: "Your sign-up link has expired. Request a new one.",
-      };
-
-      setError(errorMessages[err.message] || "Something went wrong. Please try again.");
+      setError("Something went wrong. Please try again.");
+    } finally {
       setLoading(false);
     }
   };
