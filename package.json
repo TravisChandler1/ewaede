@@ -1,0 +1,18 @@
+{
+  "name": "ewaede-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Ewa Ede - Yoruba Learning Platform",
+  "scripts": {
+    "build": "cd apps/web && npm install && npm run build",
+    "dev": "cd apps/web && npm run dev",
+    "install:web": "cd apps/web && npm install",
+    "deploy": "cd apps/web && npm run deploy"
+  },
+  "workspaces": [
+    "apps/*"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

@@ -1,11 +1,11 @@
 {
-  "buildCommand": "npm run build",
-  "outputDirectory": "build/client",
-  "installCommand": "npm install",
-  "devCommand": "npm run dev",
+  "buildCommand": "cd apps/web && npm install && npm run build",
+  "outputDirectory": "apps/web/build/client",
+  "installCommand": "cd apps/web && npm install",
+  "devCommand": "cd apps/web && npm run dev",
   "framework": null,
   "functions": {
-    "build/server/index.js": {
+    "apps/web/build/server/index.js": {
       "runtime": "nodejs18.x"
     }
   },
@@ -21,7 +21,7 @@
     },
     {
       "src": "/(.*)",
-      "dest": "/build/server/index.js"
+      "dest": "/apps/web/build/server/index.js"
     }
   ],
   "env": {
