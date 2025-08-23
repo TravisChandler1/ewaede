@@ -1,0 +1,15 @@
+# Exclude mobile app and other unnecessary files
+apps/mobile/
+node_modules/
+.git/
+.vscode/
+.qodo/
+.DS_Store
+README.md
+SUPABASE_MIGRATION.md
+DEPLOYMENT_GUIDE.md
+
+# Keep web app files accessible
+!apps/web/
+!apps/web/package.json
+!apps/web/package-lock.json

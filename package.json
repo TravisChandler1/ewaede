@@ -4,7 +4,6 @@
   "private": true,
   "description": "Ewa Ede - Yoruba Learning Platform",
   "scripts": {
-    "build": "cd apps/web && npm install && npm run build",
     "dev": "cd apps/web && npm run dev",
     "install:web": "cd apps/web && npm install",
     "deploy": "cd apps/web && npm run deploy"
