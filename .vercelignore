@@ -17,6 +17,10 @@ README.md
 SUPABASE_MIGRATION.md
 DEPLOYMENT_GUIDE.md
 
+# Exclude rollup platform-specific binaries that cause issues
+**/node_modules/@rollup/rollup-*
+**/node_modules/rollup/dist/native.js
+
 # Keep web app files accessible
 !apps/web/
 !apps/web/src/

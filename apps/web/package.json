@@ -5,6 +5,7 @@
 	"scripts": {
 		"dev": "react-router dev",
 		"build": "react-router build",
+		"vercel-build": "npm ci --prefer-offline --no-audit && react-router build",
 		"start": "react-router-serve ./build/server/index.js",
 		"typecheck": "react-router typegen && tsc --noEmit",
 		"db:init": "node database/init_complete.js",
@@ -104,6 +105,10 @@
 		"vitest": "^3.2.4"
 	},
 	"overrides": {
-		"next-themes": "^0.3.0"
+		"next-themes": "^0.3.0",
+		"rollup": "^4.0.0"
+	},
+	"resolutions": {
+		"rollup": "^4.0.0"
 	}
 }

@@ -86,11 +86,14 @@ export default defineConfig({
         '@supabase/supabase-js',
         'ws',
         'argon2'
-      ]
+      ],
+      onwarn(warning, warn) {
+        // Suppress rollup warnings about missing optional dependencies
+        if (warning.code === 'MODULE_NOT_FOUND' && warning.message.includes('@rollup/rollup-')) {
+          return;
+        }
+        warn(warning);
+      }
     }
-  },
-  ssr: {
-    external: ['@supabase/supabase-js'],
-    noExternal: []
   }
 });
