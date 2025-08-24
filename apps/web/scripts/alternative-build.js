@@ -4,7 +4,7 @@ import { execSync } from 'child_process';
 import { writeFileSync, mkdirSync, existsSync, rmSync } from 'fs';
 import { join } from 'path';
 
-console.log('🚀 Starting Vercel build process...');
+console.log('🚀 Starting alternative build process...');
 
 try {
   // Step 1: Clean install without optional dependencies
@@ -40,28 +40,19 @@ try {
   console.log('🔧 Installing pure JavaScript rollup...');
   execSync('npm install rollup@^4.0.0 --no-optional --force', { stdio: 'inherit' });
   
-  // Step 4: Create a rollup override to prevent platform-specific binary issues
-  console.log('⚙️  Creating rollup override...');
-  const rollupOverride = `
-// Force pure JavaScript rollup
-const rollup = require('rollup');
-
-// Override native rollup to use pure JavaScript version
-process.env.ROLLUP_NATIVE = 'false';
-process.env.ROLLUP_PLATFORM = 'linux';
-process.env.ROLLUP_ARCH = 'x64';
-
-// Export the pure JavaScript rollup
-module.exports = rollup;
-`;
-  
-  const overrideDir = join(process.cwd(), 'node_modules', 'rollup-override');
-  mkdirSync(overrideDir, { recursive: true });
-  writeFileSync(join(overrideDir, 'index.js'), rollupOverride);
-  
-  // Step 5: Create a native.js override to prevent the error
-  console.log('🔄 Creating native.js override...');
-  const nativeOverride = `
+  // Step 4: Try to use Vite directly instead of React Router build
+  console.log('🏗️  Attempting Vite build...');
+  try {
+    execSync('npx vite build', { stdio: 'inherit' });
+    console.log('✅ Vite build completed successfully!');
+  } catch (viteError) {
+    console.log('⚠️  Vite build failed, trying React Router with overrides...');
+    
+    // Step 5: Create aggressive rollup overrides
+    console.log('⚙️  Creating aggressive rollup overrides...');
+    
+    // Override the problematic native.js file
+    const nativeOverride = `
 // Override the problematic native.js file
 const rollup = require('rollup');
 
@@ -74,33 +65,34 @@ module.exports.requireWithFriendlyError = (id) => {
   return require(id);
 };
 `;
-  
-  const rollupDir = join(process.cwd(), 'node_modules', 'rollup', 'dist');
-  if (existsSync(rollupDir)) {
-    const nativePath = join(rollupDir, 'native.js');
-    if (existsSync(nativePath)) {
-      // Backup the original
-      writeFileSync(nativePath + '.backup', require('fs').readFileSync(nativePath, 'utf8'));
-      // Replace with our override
-      writeFileSync(nativePath, nativeOverride);
-      console.log('✅ Created native.js override');
+    
+    const rollupDir = join(process.cwd(), 'node_modules', 'rollup', 'dist');
+    if (existsSync(rollupDir)) {
+      const nativePath = join(rollupDir, 'native.js');
+      if (existsSync(nativePath)) {
+        // Backup the original
+        writeFileSync(nativePath + '.backup', require('fs').readFileSync(nativePath, 'utf8'));
+        // Replace with our override
+        writeFileSync(nativePath, nativeOverride);
+        console.log('✅ Created native.js override');
+      }
     }
+    
+    // Step 6: Set environment variables to force pure JavaScript
+    process.env.ROLLUP_NATIVE = 'false';
+    process.env.ROLLUP_PLATFORM = 'linux';
+    process.env.ROLLUP_ARCH = 'x64';
+    process.env.NODE_OPTIONS = '--max-old-space-size=4096';
+    
+    // Step 7: Try React Router build again
+    console.log('🏗️  Running React Router build with overrides...');
+    execSync('npx react-router build', { 
+      stdio: 'inherit',
+      env: { ...process.env }
+    });
   }
   
-  // Step 6: Set environment variables to force pure JavaScript
-  process.env.ROLLUP_NATIVE = 'false';
-  process.env.ROLLUP_PLATFORM = 'linux';
-  process.env.ROLLUP_ARCH = 'x64';
-  process.env.NODE_OPTIONS = '--max-old-space-size=4096';
-  
-  // Step 7: Run the actual build
-  console.log('🏗️  Running React Router build...');
-  execSync('npx react-router build', { 
-    stdio: 'inherit',
-    env: { ...process.env }
-  });
-  
-  console.log('✅ Vercel build completed successfully!');
+  console.log('✅ Alternative build completed successfully!');
   
 } catch (error) {
   console.error('❌ Build failed:', error.message);

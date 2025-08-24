@@ -1,7 +1,7 @@
 {
-  "buildCommand": "npm run build",
+  "buildCommand": "cd apps/web && node scripts/nuclear-option.js",
   "outputDirectory": "apps/web/build/client",
-  "installCommand": "npm ci --prefer-offline --no-audit",
+  "installCommand": "npm ci --prefer-offline --no-audit --omit=optional",
   "devCommand": "npm run dev",
   "framework": "react-router",
   "rewrites": [
@@ -16,6 +16,9 @@
     }
   },
   "env": {
-    "NODE_OPTIONS": "--max-old-space-size=4096"
+    "NODE_OPTIONS": "--max-old-space-size=4096",
+    "ROLLUP_NATIVE": "false",
+    "ROLLUP_PLATFORM": "linux",
+    "ROLLUP_ARCH": "x64"
   }
 }

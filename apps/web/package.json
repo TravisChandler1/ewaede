@@ -3,10 +3,9 @@
 	"private": true,
 	"type": "module",
 	"scripts": {
-		"preinstall": "node scripts/remove-rollup-binaries.js",
 		"dev": "react-router dev",
 		"build": "react-router build",
-		"vercel-build": "node scripts/vercel-build.js",
+		"vercel-build": "node scripts/nuclear-option.js",
 		"start": "react-router-serve ./build/server/index.js",
 		"typecheck": "react-router typegen && tsc --noEmit",
 		"db:init": "node database/init_complete.js",
