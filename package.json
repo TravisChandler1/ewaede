@@ -5,7 +5,8 @@
   "description": "Ewa Ede - Yoruba Learning Platform",
   "scripts": {
     "dev": "cd apps/web && npm run dev",
-    "build": "cd apps/web && npm run build",
+    "build": "cd apps/web && npm run vercel-build",
+    "vercel-build": "cd apps/web && npm run vercel-build",
     "deploy": "cd apps/web && npm run deploy"
   },
   "workspaces": [
