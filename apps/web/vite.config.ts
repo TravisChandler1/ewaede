@@ -13,6 +13,11 @@ import { nextPublicProcessEnv } from './plugins/nextPublicProcessEnv';
 import { restart } from './plugins/restart';
 import { restartEnvFileChange } from './plugins/restartEnvFileChange';
 
+// Force pure JavaScript rollup
+process.env.ROLLUP_NATIVE = 'false';
+process.env.ROLLUP_PLATFORM = 'linux';
+process.env.ROLLUP_ARCH = 'x64';
+
 export default defineConfig({
   // Use VITE_ prefix for environment variables (required for Supabase)
   envPrefix: 'VITE_',
@@ -63,6 +68,10 @@ export default defineConfig({
       'npm:stripe': 'stripe',
       stripe: path.resolve(__dirname, './src/__create/stripe'),
       '@': path.resolve(__dirname, 'src'),
+      // Force pure JavaScript rollup
+      '@rollup/rollup-linux-x64-gnu': 'rollup',
+      '@rollup/rollup-darwin-x64': 'rollup',
+      '@rollup/rollup-win32-x64-msvc': 'rollup',
     },
     dedupe: ['react', 'react-dom'],
   },
@@ -85,11 +94,18 @@ export default defineConfig({
         '@neondatabase/serverless',
         '@supabase/supabase-js',
         'ws',
-        'argon2'
+        'argon2',
+        // Force external for platform-specific rollup binaries
+        '@rollup/rollup-linux-x64-gnu',
+        '@rollup/rollup-darwin-x64',
+        '@rollup/rollup-win32-x64-msvc'
       ],
       onwarn(warning, warn) {
         // Suppress rollup warnings about missing optional dependencies
         if (warning.code === 'MODULE_NOT_FOUND' && warning.message.includes('@rollup/rollup-')) {
+          return;
+        }
+        if (warning.code === 'UNRESOLVED_IMPORT' && warning.message.includes('@rollup/rollup-')) {
           return;
         }
         warn(warning);

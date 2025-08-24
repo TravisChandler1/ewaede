@@ -14,5 +14,16 @@
   ],
   "engines": {
     "node": ">=18.0.0"
+  },
+  "overrides": {
+    "rollup": "^4.0.0",
+    "@rollup/rollup-linux-x64-gnu": "npm:rollup@^4.0.0",
+    "@rollup/rollup-darwin-x64": "npm:rollup@^4.0.0",
+    "@rollup/rollup-win32-x64-msvc": "npm:rollup@^4.0.0",
+    "@rollup/rollup-linux-x64-musl": "npm:rollup@^4.0.0",
+    "@rollup/rollup-linux-arm64-gnu": "npm:rollup@^4.0.0",
+    "@rollup/rollup-linux-arm64-musl": "npm:rollup@^4.0.0",
+    "@rollup/rollup-darwin-arm64": "npm:rollup@^4.0.0",
+    "@rollup/rollup-win32-arm64-msvc": "npm:rollup@^4.0.0"
   }
 }

@@ -3,9 +3,10 @@
 	"private": true,
 	"type": "module",
 	"scripts": {
+		"preinstall": "node scripts/remove-rollup-binaries.js",
 		"dev": "react-router dev",
 		"build": "react-router build",
-		"vercel-build": "npm ci --prefer-offline --no-audit && react-router build",
+		"vercel-build": "node scripts/vercel-build.js",
 		"start": "react-router-serve ./build/server/index.js",
 		"typecheck": "react-router typegen && tsc --noEmit",
 		"db:init": "node database/init_complete.js",
@@ -106,9 +107,25 @@
 	},
 	"overrides": {
 		"next-themes": "^0.3.0",
-		"rollup": "^4.0.0"
+		"rollup": "^4.0.0",
+		"@rollup/rollup-linux-x64-gnu": "npm:rollup@^4.0.0",
+		"@rollup/rollup-darwin-x64": "npm:rollup@^4.0.0",
+		"@rollup/rollup-win32-x64-msvc": "npm:rollup@^4.0.0",
+		"@rollup/rollup-linux-x64-musl": "npm:rollup@^4.0.0",
+		"@rollup/rollup-linux-arm64-gnu": "npm:rollup@^4.0.0",
+		"@rollup/rollup-linux-arm64-musl": "npm:rollup@^4.0.0",
+		"@rollup/rollup-darwin-arm64": "npm:rollup@^4.0.0",
+		"@rollup/rollup-win32-arm64-msvc": "npm:rollup@^4.0.0"
 	},
 	"resolutions": {
-		"rollup": "^4.0.0"
+		"rollup": "^4.0.0",
+		"@rollup/rollup-linux-x64-gnu": "npm:rollup@^4.0.0",
+		"@rollup/rollup-darwin-x64": "npm:rollup@^4.0.0",
+		"@rollup/rollup-win32-x64-msvc": "npm:rollup@^4.0.0",
+		"@rollup/rollup-linux-x64-musl": "npm:rollup@^4.0.0",
+		"@rollup/rollup-linux-arm64-gnu": "npm:rollup@^4.0.0",
+		"@rollup/rollup-linux-arm64-musl": "npm:rollup@^4.0.0",
+		"@rollup/rollup-darwin-arm64": "npm:rollup@^4.0.0",
+		"@rollup/rollup-win32-arm64-msvc": "npm:rollup@^4.0.0"
 	}
 }
