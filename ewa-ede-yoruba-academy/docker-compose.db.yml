@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: ewa-ede-db
+    environment:
+      POSTGRES_USER: ewa_ede
+      POSTGRES_PASSWORD: ewa_ede_password
+      POSTGRES_DB: ewa_ede
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ewa_ede -d ewa_ede"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
