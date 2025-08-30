@@ -55,14 +55,17 @@ export async function POST(req: Request) {
       ]);
 
       // Log admin action
-      await prisma.adminActionLog.create({
+      await prisma.adminAuditLog.create({
         data: {
-          adminId: user.id,
-          action: 'APPROVE_TEACHER',
-          targetId: teacherId,
-          metadata: {
-            rejectionReason: undefined,
-          },
+          performedBy: user.id,
+          action: 'TEACHER_APPROVED',
+          entityType: 'TEACHER',
+          entityId: teacherId,
+          newData: {
+            status: 'APPROVED',
+            reviewedAt: new Date().toISOString(),
+            approvedBy: user.id
+          }
         },
       });
 
@@ -90,23 +93,24 @@ export async function POST(req: Request) {
           userId: teacherId,
           title: 'Teacher Application Rejected',
           message: `Your teacher application has been rejected. ${rejectionReason ? `Reason: ${rejectionReason}` : ''}`,
-          type: 'TEACHER_APPLICATION_UPDATE',
-          metadata: {
-            action: 'reject',
-            rejectionReason: rejectionReason,
-          },
+          type: 'SYSTEM',
+          link: '/dashboard/teacher'
         },
       });
 
       // Log admin action
-      await prisma.adminActionLog.create({
+      await prisma.adminAuditLog.create({
         data: {
-          adminId: user.id,
-          action: 'REJECT_TEACHER',
-          targetId: teacherId,
-          metadata: {
-            rejectionReason: rejectionReason,
-          },
+          performedBy: user.id,
+          action: 'TEACHER_REJECTED',
+          entityType: 'TEACHER',
+          entityId: teacherId,
+          newData: {
+            status: 'REJECTED',
+            rejectionReason: rejectionReason || 'No reason provided',
+            reviewedAt: new Date().toISOString(),
+            rejectedBy: user.id
+          }
         },
       });
 
