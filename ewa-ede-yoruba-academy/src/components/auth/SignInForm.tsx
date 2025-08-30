@@ -1,11 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
-export default function SignInForm() {
+function SignInFormContent() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -33,7 +33,7 @@ export default function SignInForm() {
       }
 
       router.push(callbackUrl);
-    } catch (error) {
+    } catch {
       setError('An error occurred during sign in');
       setIsLoading(false);
     }
@@ -138,5 +138,13 @@ export default function SignInForm() {
         </form>
       </div>
     </div>
+  );
+}
+
+export default function SignInForm() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SignInFormContent />
+    </Suspense>
   );
 }

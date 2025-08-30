@@ -1,14 +1,13 @@
 import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth';
+import { getCurrentUser } from '@/lib/auth-utils';
 import prisma from '@/lib/prisma';
 
 export async function POST(req: Request) {
   try {
-    const session = await getServerSession(authOptions);
+    const user = await getCurrentUser();
     
     // Verify admin access
-    if (session?.user.role !== 'ADMIN') {
+    if (user?.role !== 'ADMIN') {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 403 }
@@ -55,15 +54,16 @@ export async function POST(req: Request) {
         })
       ]);
 
-      // Create audit log
-      await prisma.adminAuditLog.create({
+      // Log admin action
+      await prisma.adminActionLog.create({
         data: {
-          action: 'TEACHER_APPROVED',
-          entityType: 'TEACHER',
-          entityId: teacherId,
-          performedBy: session.user.id,
-          newData: { status: 'APPROVED' }
-        }
+          adminId: user.id,
+          action: 'APPROVE_TEACHER',
+          targetId: teacherId,
+          metadata: {
+            rejectionReason: undefined,
+          },
+        },
       });
 
       // TODO: Send approval email
@@ -84,18 +84,30 @@ export async function POST(req: Request) {
         }
       });
 
-      // Create audit log
-      await prisma.adminAuditLog.create({
+      // Send notification to teacher
+      await prisma.notification.create({
         data: {
-          action: 'TEACHER_REJECTED',
-          entityType: 'TEACHER',
-          entityId: teacherId,
-          performedBy: session.user.id,
-          newData: { 
-            status: 'REJECTED',
-            rejectionReason: rejectionReason || 'No reason provided'
-          }
-        }
+          userId: teacherId,
+          title: 'Teacher Application Rejected',
+          message: `Your teacher application has been rejected. ${rejectionReason ? `Reason: ${rejectionReason}` : ''}`,
+          type: 'TEACHER_APPLICATION_UPDATE',
+          metadata: {
+            action: 'reject',
+            rejectionReason: rejectionReason,
+          },
+        },
+      });
+
+      // Log admin action
+      await prisma.adminActionLog.create({
+        data: {
+          adminId: user.id,
+          action: 'REJECT_TEACHER',
+          targetId: teacherId,
+          metadata: {
+            rejectionReason: rejectionReason,
+          },
+        },
       });
 
       // TODO: Send rejection email

@@ -1,33 +1,49 @@
 'use client';
 
-import { BookOpen, Clock, Award, BarChart2, Calendar, ChevronRight, Menu, X, Bell, Search, Plus } from 'lucide-react';
-import { useSessionCheck } from '@/hooks/useSessionCheck';
-import { Loading } from '@/components/ui/loading';
-import { CourseCard } from '@/components/dashboard/CourseCard';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
+import {
+  BookOpen,
+  Clock,
+  Award,
+  BarChart2,
+  Calendar,
+  ChevronRight,
+  Menu,
+  X,
+  Bell,
+  Search
+} from 'lucide-react';
+import { getCurrentUser } from '@/lib/auth-utils';
+import { Loading } from '@/components/ui/loading';
+import { CourseCard } from '@/components/dashboard/CourseCard';
 
-type StatItem = {
+interface AuthUser {
+  id: string;
+  name?: string | null;
+  email?: string | null;
+  role: string;
+}
+
+// Define interfaces for our data types
+interface StatItem {
   name: string;
   value: string;
   icon: React.ReactNode;
   change: string;
-};
+}
 
 interface Course {
   id: string;
   title: string;
+  description?: string;
   instructor: {
     name: string;
     email?: string;
   };
   progress: number;
   nextLesson?: string;
-  time?: string;
   thumbnail?: string;
   level: string;
   duration: number;
@@ -37,6 +53,34 @@ interface Course {
   key?: string;
 }
 
+interface StatsResponse {
+  activeCourses: number;
+  hoursThisWeek: number;
+  currentStreak: number;
+  overallProgress: number;
+  totalLessons: number;
+  completedLessons: number;
+  enrolledCourses: number;
+}
+
+interface CourseResponse {
+  id: string;
+  title: string;
+  description?: string;
+  thumbnail?: string | null;
+  level: string;
+  duration: number;
+  instructor?: {
+    name: string;
+    email?: string;
+  } | null;
+  progress: number;
+  nextLesson?: string;
+  _count: {
+    enrollments: number;
+  };
+}
+
 interface Stats {
   activeCourses: number;
   hoursThisWeek: number;
@@ -44,25 +88,32 @@ interface Stats {
   overallProgress: number;
 }
 
-export default function StudentDashboard() {
-  const { isAuthenticated, isLoading: isSessionLoading } = useSessionCheck();
+interface Activity {
+  id: number;
+  text: string;
+  time: string;
+}
+
+interface Session {
+  id: number;
+  title: string;
+  time: string;
+  type: string;
+}
+
+const StudentDashboard = () => {
+  const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [courses, setCourses] = useState<Course[]>([]);
+  const [user, setUser] = useState<AuthUser | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [stats, setStats] = useState<Stats>({
     activeCourses: 0,
     hoursThisWeek: 0,
     currentStreak: 0,
     overallProgress: 0,
   });
-  const [isLoading, setIsLoading] = useState(true);
-  const router = useRouter();
-
-  useEffect(() => {
-    if (!isSessionLoading && isAuthenticated) {
-      fetchEnrolledCourses();
-      fetchDashboardStats();
-    }
-  }, [isSessionLoading, isAuthenticated]);
 
   const fetchEnrolledCourses = async () => {
     try {
@@ -70,12 +121,23 @@ export default function StudentDashboard() {
       if (!response.ok) {
         throw new Error('Failed to fetch enrolled courses');
       }
-      const data = await response.json();
-      setCourses(data.courses);
+      const data: CourseResponse[] = await response.json();
+      setCourses(data.map(course => ({
+        id: course.id,
+        title: course.title,
+        instructor: course.instructor || { name: 'Unknown Instructor' },
+        progress: course.progress || 0,
+        nextLesson: course.nextLesson,
+        thumbnail: course.thumbnail || undefined,
+        level: course.level || 'Beginner',
+        duration: course.duration || 0,
+        _count: {
+          enrollments: course._count?.enrollments || 0
+        }
+      })));
     } catch (error) {
       console.error('Error fetching courses:', error);
-    } finally {
-      setIsLoading(false);
+      setCourses([]);
     }
   };
 
@@ -85,41 +147,81 @@ export default function StudentDashboard() {
       if (!response.ok) {
         throw new Error('Failed to fetch dashboard stats');
       }
-      const data = await response.json();
-      setStats(data);
+      const data: StatsResponse = await response.json();
+      setStats({
+        activeCourses: data.activeCourses || 0,
+        hoursThisWeek: data.hoursThisWeek || 0,
+        currentStreak: data.currentStreak || 0,
+        overallProgress: data.overallProgress || 0,
+      });
     } catch (error) {
       console.error('Error fetching stats:', error);
+      setStats({
+        activeCourses: 0,
+        hoursThisWeek: 0,
+        currentStreak: 0,
+        overallProgress: 0,
+      });
     }
   };
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const currentUser = await getCurrentUser();
+        if (!currentUser) {
+          router.push('/auth/signin');
+          return;
+        }
+        setUser(currentUser);
+        await Promise.all([fetchEnrolledCourses(), fetchDashboardStats()]);
+      } catch (error) {
+        console.error('Authentication error:', error);
+        router.push('/auth/signin');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    checkAuth();
+  }, [router]);
 
   const statsList: StatItem[] = [
     { 
       name: 'Active Courses', 
-      value: stats.activeCourses.toString(), 
-      icon: <BookOpen className="w-5 h-5 text-indigo-600" />, 
-      change: '+0' 
+      value: stats?.activeCourses?.toString() || '0',
+      icon: <BookOpen className="h-6 w-6 text-blue-500" />,
+      change: '+2 from last month',
     },
     { 
       name: 'Hours This Week', 
-      value: stats.hoursThisWeek.toFixed(1), 
-      icon: <Clock className="w-5 h-5 text-green-600" />, 
-      change: '+0' 
+      value: stats?.hoursThisWeek?.toString() || '0',
+      icon: <Clock className="h-6 w-6 text-green-500" />,
+      change: '+3 from last week',
     },
     { 
       name: 'Current Streak', 
-      value: stats.currentStreak.toString(), 
-      icon: <Award className="w-5 h-5 text-yellow-600" />, 
-      change: '0' 
+      value: stats?.currentStreak?.toString() || '0',
+      icon: <Award className="h-6 w-6 text-yellow-500" />,
+      change: '2 day streak',
     },
     { 
       name: 'Overall Progress', 
-      value: `${Math.round(stats.overallProgress)}%`, 
-      icon: <BarChart2 className="w-5 h-5 text-blue-600" />, 
-      change: '+0%' 
+      value: `${stats?.overallProgress || 0}%`,
+      icon: <BarChart2 className="h-6 w-6 text-purple-500" />,
+      change: '+5% this week',
     }
   ];
 
-  const upcomingSessions = [
+  const recentActivities: Activity[] = [
+    { id: 1, text: 'Completed lesson: Greetings in Yoruba', time: '2h ago' },
+    { id: 2, text: 'Earned badge: Fast Learner', time: '1d ago' },
+    { id: 3, text: 'Started new course: Intermediate Yoruba', time: '2d ago' },
+    { id: 4, text: 'Posted in Book Club: Chapter 3 Discussion', time: '3d ago' },
+    { id: 5, text: 'Completed quiz: Basic Phrases with 90% score', time: '4d ago' },
+  ];
+
+  const upcomingSessions: Session[] = [
     {
       id: 1,
       title: 'Yoruba Conversation Practice',
@@ -133,21 +235,13 @@ export default function StudentDashboard() {
       type: 'Book Club',
     },
   ];
-
-  const recentActivities = [
-    { id: 1, text: 'Completed lesson: Greetings in Yoruba', time: '2h ago' },
-    { id: 2, text: 'Earned badge: Fast Learner', time: '1d ago' },
-  { id: 3, text: 'Started new course: Intermediate Yoruba', time: '2d ago' },
-  { id: 4, text: 'Posted in Book Club: Chapter 3 Discussion', time: '3d ago' },
-  { id: 5, text: 'Completed quiz: Basic Phrases with 90% score', time: '4d ago' },
-];
-
-export default function StudentDashboard() {
-  const { session, isLoading } = useSessionCheck('STUDENT');
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   
-  if (isLoading || !session) {
+  if (isLoading) {
     return <Loading />;
+  }
+
+  if (!user) {
+    return null;
   }
 
   return (
@@ -209,13 +303,27 @@ export default function StudentDashboard() {
         <main className="py-6 px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <div className="pb-6 border-b border-gray-200">
-            <h1 className="text-2xl font-bold text-gray-900">Welcome back, {session.user.name?.split(' ')[0] || 'Student'}! 👋</h1>
-                <div className="flex items-center">
-                  <p className="text-2xl font-bold">{stat.value}</p>
-                  {stat.change && (
-                    <span className="ml-2 text-sm text-green-600">{stat.change}</span>
-                  )}
+            <h1 className="text-2xl font-bold text-gray-900">Welcome back, {user?.name?.split(' ')[0] || 'Student'}! 👋</h1>
+          <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {statsList.map((stat) => (
+              <div key={stat.name} className="bg-white p-6 rounded-lg shadow">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-500">{stat.name}</p>
+                    <div className="mt-1 flex items-baseline">
+                      <p className="text-2xl font-semibold text-gray-900">{stat.value}</p>
+                      {stat.change && (
+                        <span className="ml-2 text-sm text-green-600">{stat.change}</span>
+                      )}
+                    </div>
+                  </div>
+                  <div className="p-2 rounded-full bg-gray-100">
+                    {stat.icon}
+                  </div>
                 </div>
+              </div>
+            ))}
+          </div>
               </div>
           {/* Main Content */}
           <div className="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -234,26 +342,29 @@ export default function StudentDashboard() {
                 ))}
               </div>
 
-              {/* Recent Activity */}
+              {/* Upcoming Sessions */}
               <div className="bg-white shadow overflow-hidden rounded-lg">
                 <div className="px-4 py-5 sm:px-6 border-b border-gray-200">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-medium text-gray-900">Recent Activity</h3>
+                    <h3 className="text-lg font-medium text-gray-900">Upcoming Sessions</h3>
                     <button className="text-sm font-medium text-indigo-600 hover:text-indigo-800">
                       View all
                     </button>
                   </div>
                 </div>
                 <div className="divide-y divide-gray-200">
-                  {recentActivities.map((activity) => (
-                    <div key={activity.id} className="p-4 hover:bg-gray-50 transition-colors duration-150">
-                      <div className="flex">
+                  {upcomingSessions.map((session) => (
+                    <div key={session.id} className="p-4 hover:bg-gray-50 transition-colors duration-150">
+                      <div className="flex items-start">
                         <div className="flex-shrink-0 h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center">
-                          <Award className="h-5 w-5 text-indigo-600" />
+                          <Calendar className="h-5 w-5 text-indigo-600" />
                         </div>
                         <div className="ml-4">
-                          <p className="text-sm font-medium text-gray-900">{activity.text}</p>
-                          <p className="text-sm text-gray-500">{activity.time}</p>
+                          <p className="text-sm font-medium text-gray-900">{session.title}</p>
+                          <p className="text-sm text-gray-500">{session.time}</p>
+                          <span className="mt-1 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
+                            {session.type}
+                          </span>
                         </div>
                       </div>
                     </div>

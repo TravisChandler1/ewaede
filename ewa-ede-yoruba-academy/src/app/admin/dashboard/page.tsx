@@ -1,8 +1,16 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { requireAdmin } from '@/lib/auth-utils';
 import prisma from '@/lib/prisma';
 import { Users, BookOpen, CheckCircle, Clock } from 'lucide-react';
 import { auth } from '@/auth';
+
+interface ApprovalLog {
+  id: string;
+  createdAt: Date;
+  user: {
+    name: string | null;
+    email: string;
+  } | null;
+}
 
 export default async function AdminDashboard() {
   const session = await auth();
@@ -110,7 +118,7 @@ export default async function AdminDashboard() {
         <CardContent>
           {recentApprovals.length > 0 ? (
             <div className="space-y-4">
-              {recentApprovals.map((approval: any) => (
+              {recentApprovals.map((approval: ApprovalLog) => (
                 <div key={approval.id} className="flex items-center justify-between">
                   <div className="space-y-1">
                     <p className="text-sm font-medium leading-none">

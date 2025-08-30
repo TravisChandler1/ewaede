@@ -3,22 +3,11 @@ import Credentials from 'next-auth/providers/credentials';
 import bcrypt from 'bcryptjs';
 import prisma from './lib/prisma';
 import { authConfig, type UserRole } from './auth.config';
-import type { JWT } from '@auth/core/jwt';
 
-// Extend JWT type from @auth/core/jwt
-declare module '@auth/core/jwt' {
-  interface JWT {
-    id: string;
-    role: UserRole;
-  }
-}
+// Re-export UserRole for consistency
+export type { UserRole };
 
-const { 
-  handlers: { GET, POST },
-  auth,
-  signIn,
-  signOut,
-} = NextAuth({
+const authHandlers = NextAuth({
   ...authConfig,
   providers: [
     Credentials({
@@ -29,7 +18,7 @@ const {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          throw new Error('Invalid credentials');
+          throw new Error('Email and password are required');
         }
 
         const user = await prisma.user.findUnique({
@@ -37,7 +26,7 @@ const {
         });
 
         if (!user || !user.password) {
-          throw new Error('Invalid credentials');
+          throw new Error('Invalid email or password');
         }
 
         const isPasswordValid = await bcrypt.compare(
@@ -46,54 +35,37 @@ const {
         );
 
         if (!isPasswordValid) {
-          throw new Error('Invalid credentials');
+          throw new Error('Invalid email or password');
         }
 
         return {
           id: user.id,
           email: user.email,
           name: user.name,
-          role: user.role,
+          role: user.role as UserRole,
         };
       },
     }),
   ],
-  callbacks: {
-    ...authConfig.callbacks,
-    async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id;
-        token.role = user.role as UserRole;
-      }
-      return token;
-    },
-    async session({ session, token }) {
-      if (session.user) {
-        session.user.id = token.id as string;
-        session.user.role = token.role as UserRole;
-      }
-      return session;
-    },
-  },
+  callbacks: authConfig.callbacks,
   session: {
-    strategy: 'jwt',
+    strategy: 'jwt' as const,
+    maxAge: 30 * 24 * 60 * 60, // 30 days
   },
-  pages: {
-    ...authConfig.pages,
-  },
-  secret: process.env.NEXTAUTH_SECRET,
+  pages: authConfig.pages,
   debug: process.env.NODE_ENV === 'development',
 });
 
-export { GET, POST, auth, signIn, signOut };
+// Export the handlers, auth function, and signIn/signOut functions
+export const {
+  handlers: { GET, POST },
+  auth,
+  signIn,
+  signOut,
+} = authHandlers;
 
 // This is the recommended way to use NextAuth.js with the App Router
-export default auth((req) => {
+export default auth(() => {
   // Handle authentication logic here if needed
   return null;
 });
-
-// Optionally configure which paths should be public
-export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
-};

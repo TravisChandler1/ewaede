@@ -1,6 +1,16 @@
 import { NextResponse } from 'next/server';
 import { auth } from './auth';
-import type { UserRole } from './auth.config';
+import type { AuthUser } from './auth.config';
+
+export { auth as middleware } from './auth';
+
+declare module 'next/server' {
+  interface NextRequest {
+    auth?: {
+      user?: AuthUser | null;
+    };
+  }
+}
 
 const publicPaths = new Set([
   '/',
@@ -17,12 +27,8 @@ const authRoutes = new Set([
   '/auth/forgot-password',
 ]);
 
-const adminPaths = new Set([
-  '/admin',
-  '/admin/(.*)',
-]);
-
-export default auth(async (req) => {
+// This function can be marked `async` if using `await` inside
+export default auth((req) => {
   const { nextUrl } = req;
   const pathname = nextUrl.pathname;
   const isPublicPath = publicPaths.has(pathname) || 
@@ -38,9 +44,9 @@ export default auth(async (req) => {
     return NextResponse.next();
   }
 
-  const session = await auth();
-  const isAuth = !!session?.user;
-  const userRole = session?.user?.role as UserRole | undefined;
+  const user = req.auth?.user;
+  const isAuth = !!user;
+  const userRole = user?.role;
 
   // Handle auth routes
   if (authRoutes.has(pathname)) {

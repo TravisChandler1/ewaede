@@ -40,7 +40,7 @@ export function NewsletterSubscription() {
         description: "Thank you for subscribing to our newsletter.",
       })
       setEmail("")
-    } catch (error) {
+    } catch {
       toast({
         title: "Something went wrong",
         description: "Please try again later.",

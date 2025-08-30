@@ -1,6 +1,25 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { BookOpen, Users, Clock, ArrowRight } from 'lucide-react';
+import { Users, Clock, ArrowRight } from 'lucide-react';
+
+interface Course {
+  id: string;
+  title: string;
+  description: string;
+  thumbnail?: string;
+  duration: number;
+  level: string;
+  price: number;
+  instructor?: {
+    name: string;
+  };
+  teacher?: {
+    name: string;
+  };
+  _count?: {
+    enrollments: number;
+  };
+}
 
 export const metadata: Metadata = {
   title: 'Browse Courses - Ewa Ede Yoruba Academy',
@@ -10,15 +29,22 @@ export const metadata: Metadata = {
 export const revalidate = 60; // Revalidate every 60 seconds
 
 async function getCourses() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/courses`, {
-    next: { revalidate: 60 },
-  });
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+    const res = await fetch(`${baseUrl}/api/courses`, {
+      next: { revalidate: 60 },
+    });
 
-  if (!res.ok) {
-    throw new Error('Failed to fetch courses');
+    if (!res.ok) {
+      throw new Error('Failed to fetch courses');
+    }
+
+    return res.json();
+  } catch (error) {
+    // Return empty array if fetch fails (e.g., during build time)
+    console.warn('Failed to fetch courses:', error);
+    return [];
   }
-
-  return res.json();
 }
 
 export default async function CoursesPage() {
@@ -37,7 +63,7 @@ export default async function CoursesPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {courses.map((course: any) => (
+          {courses.map((course: Course) => (
             <div
               key={course.id}
               className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"

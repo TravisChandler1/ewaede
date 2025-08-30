@@ -1,46 +1,89 @@
 import type { NextAuthConfig } from 'next-auth';
+import type { JWT } from 'next-auth/jwt';
+import type { Session, User } from 'next-auth';
 
+// Export UserRole from here to avoid circular dependencies
 export type UserRole = 'STUDENT' | 'TEACHER' | 'ADMIN' | 'PENDING_TEACHER';
 
-declare module 'next-auth' {
-  interface User {
-    id: string;
-    email?: string | null;
-    name?: string | null;
-    role: UserRole;
-    image?: string | null;
-  }
-
-  interface Session {
-    user: {
-      id: string;
-      email?: string | null;
-      name?: string | null;
-      image?: string | null;
-      role: UserRole;
-    };
-  }
+export interface AuthToken extends JWT {
+  id: string;
+  role: UserRole;
 }
 
-// JWT types are now handled in the main auth.ts file
+export interface AuthUser extends User {
+  id: string;
+  role: UserRole;
+}
 
-export const authConfig: NextAuthConfig = {
+export interface AuthSession extends Session {
+  user: AuthUser;
+}
+
+interface AuthConfig extends NextAuthConfig {
+  pages: {
+    signIn: string;
+    error: string;
+  };
+  callbacks: {
+    jwt: (params: { token: AuthToken; user?: AuthUser }) => Promise<AuthToken>;
+    session: (params: { session: AuthSession; token: AuthToken }) => Promise<AuthSession>;
+    authorized: (params: { 
+      auth: { user: AuthUser | null } | null; 
+      request: { nextUrl: URL } 
+    }) => boolean | Response;
+  };
+  session: {
+    strategy: 'jwt';
+  };
+  providers: NextAuthConfig['providers'];
+}
+
+export const authConfig: AuthConfig = {
   pages: {
     signIn: '/auth/signin',
     error: '/auth/error',
   },
   callbacks: {
-    authorized({ auth, request: { nextUrl } }) {
+    async jwt({ token, user }: { token: AuthToken; user?: AuthUser }) {
+      if (user) {
+        token.id = user.id;
+        token.role = user.role as UserRole;
+      }
+      return token;
+    },
+    async session({ session, token }: { session: AuthSession; token: AuthToken }) {
+      if (session.user) {
+        session.user.id = token.id as string;
+        session.user.role = token.role as UserRole;
+      }
+      return session;
+    },
+    authorized({ auth, request }: { auth: { user: AuthUser | null } | null; request: { nextUrl: URL } }) {
       const isLoggedIn = !!auth?.user;
-      const isOnDashboard = nextUrl.pathname.startsWith('/dashboard');
+      const { pathname } = request.nextUrl;
       
-      if (isOnDashboard) {
-        if (isLoggedIn) return true;
-        return false; // Redirect unauthenticated users to login page
-      } 
+      // Public routes that don't require authentication
+      const publicRoutes = ['/auth/signin', '/auth/signup', '/auth/error'];
+      if (publicRoutes.includes(pathname)) return true;
+
+      // Protected routes
+      if (pathname.startsWith('/admin')) {
+        return isLoggedIn && auth.user?.role === 'ADMIN';
+      }
+      
+      if (pathname.startsWith('/teacher')) {
+        return isLoggedIn && (auth.user?.role === 'TEACHER' || auth.user?.role === 'ADMIN');
+      }
+      
+      if (pathname.startsWith('/dashboard')) {
+        return isLoggedIn;
+      }
       
       return true;
     },
   },
-  providers: [], // Add providers with an empty array for now
-} satisfies NextAuthConfig;
+  session: {
+    strategy: 'jwt',
+  },
+  providers: [], // Will be added in auth.ts
+};

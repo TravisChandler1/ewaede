@@ -1,5 +1,4 @@
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth';
+import { auth } from '@/auth';
 import prisma from '@/lib/prisma';
 import { redirect } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -8,8 +7,42 @@ import { Badge } from '@/components/ui/badge';
 import { CheckCircle2, XCircle, Clock } from 'lucide-react';
 import { TeacherApprovalButton } from '@/components/admin/TeacherApprovalButton';
 
+interface TeacherProfile {
+  id: string;
+  bio?: string | null;
+  qualifications: string[];
+  experience?: number | null;
+  specialization: string[];
+  rating?: number | null;
+  totalRatings: number;
+  isVerified: boolean;
+  status: string;
+  rejectionReason?: string | null;
+  submittedAt: Date;
+  reviewedAt?: Date | null;
+}
+
+interface PendingTeacher {
+  id: string;
+  name: string | null;
+  email: string;
+  createdAt: Date;
+  teacherProfile: TeacherProfile | null;
+}
+
+interface ApprovedTeacher {
+  id: string;
+  name: string | null;
+  email: string;
+  createdAt: Date;
+  teacherProfile: TeacherProfile | null;
+  _count?: {
+    createdCourses: number;
+  };
+}
+
 export default async function AdminTeachersPage() {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   
   if (session?.user.role !== 'ADMIN') {
     redirect('/dashboard');
@@ -69,7 +102,7 @@ export default async function AdminTeachersPage() {
         <CardContent>
           {pendingTeachers.length > 0 ? (
             <div className="space-y-4">
-              {pendingTeachers.map((teacher) => (
+              {pendingTeachers.map((teacher: PendingTeacher) => (
                 <div 
                   key={teacher.id}
                   className="flex items-center justify-between p-4 border rounded-lg"
@@ -79,7 +112,7 @@ export default async function AdminTeachersPage() {
                     <p className="text-sm text-gray-600">{teacher.email}</p>
                     {teacher.teacherProfile?.specialization && (
                       <div className="flex flex-wrap gap-1 mt-1">
-                        {teacher.teacherProfile.specialization.map((skill) => (
+                        {teacher.teacherProfile.specialization.map((skill: string) => (
                           <Badge key={skill} variant="secondary">
                             {skill}
                           </Badge>
@@ -131,7 +164,7 @@ export default async function AdminTeachersPage() {
         <CardContent>
           {approvedTeachers.length > 0 ? (
             <div className="space-y-4">
-              {approvedTeachers.map((teacher) => (
+              {approvedTeachers.map((teacher: ApprovedTeacher) => (
                 <div 
                   key={teacher.id}
                   className="flex items-center justify-between p-4 border rounded-lg"

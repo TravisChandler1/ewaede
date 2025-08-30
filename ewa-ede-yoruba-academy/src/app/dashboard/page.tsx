@@ -1,16 +1,15 @@
-import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { getCurrentUser } from '@/lib/auth-utils';
 
 export default async function DashboardPage() {
-  const session = await getServerSession(authOptions);
+  const user = await getCurrentUser();
 
-  if (!session) {
+  if (!user) {
     redirect('/auth/signin');
   }
 
   // Redirect based on user role
-  if (session.user.role === 'TEACHER') {
+  if (user.role === 'TEACHER' || user.role === 'ADMIN') {
     redirect('/dashboard/teacher');
   } else {
     // Default to student dashboard for all other roles

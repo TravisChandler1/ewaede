@@ -1,10 +1,46 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { BookOpen, Users, Clock, Calendar, MapPin, CheckCircle, Play } from 'lucide-react';
+import { BookOpen, Users, Clock, Calendar, Play } from 'lucide-react';
 import { notFound } from 'next/navigation';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth';
+import { getCurrentUser } from '@/lib/auth-utils';
 import { EnrollButton } from '@/components/courses/EnrollButton';
+
+interface Enrollment {
+  userId: string;
+}
+
+interface Lesson {
+  id: string;
+  title: string;
+  duration: number;
+}
+
+interface Module {
+  id: string;
+  title: string;
+  lessons?: Lesson[];
+}
+
+interface CourseDetail {
+  id: string;
+  title: string;
+  description: string;
+  thumbnail?: string;
+  level: string;
+  duration: number;
+  price: number;
+  instructor?: {
+    name: string;
+  };
+  teacher?: {
+    name: string;
+  };
+  enrollments?: Enrollment[];
+  modules?: Module[];
+  _count?: {
+    enrollments: number;
+  };
+}
 
 interface CoursePageProps {
   params: {
@@ -21,7 +57,8 @@ export async function generateMetadata({ params }: CoursePageProps): Promise<Met
 }
 
 async function getCourse(id: string) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/courses/${id}`, {
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const res = await fetch(`${baseUrl}/api/courses/${id}`, {
     next: { revalidate: 60 },
   });
 
@@ -36,10 +73,10 @@ async function getCourse(id: string) {
 }
 
 export default async function CoursePage({ params }: CoursePageProps) {
-  const session = await getServerSession(authOptions);
+  const user = await getCurrentUser();
   const course = await getCourse(params.id);
-  const isEnrolled = session?.user?.id && course.enrollments?.some(
-    (e: any) => e.userId === session.user.id
+  const isEnrolled = user && course.enrollments?.some(
+    (e: Enrollment) => e.userId === user.id
   );
 
   if (!course) {
@@ -94,13 +131,13 @@ export default async function CoursePage({ params }: CoursePageProps) {
               <div className="mt-12">
                 <h2 className="text-2xl font-bold mb-6">Course Content</h2>
                 <div className="space-y-2">
-                  {course.modules?.map((module: any) => (
+                  {course.modules?.map((module: Module) => (
                     <div key={module.id} className="border rounded-lg overflow-hidden">
                       <div className="bg-gray-50 px-4 py-3 border-b">
                         <h3 className="font-medium">{module.title}</h3>
                       </div>
                       <div className="divide-y">
-                        {module.lessons?.map((lesson: any) => (
+                        {module.lessons?.map((lesson: Lesson) => (
                           <div key={lesson.id} className="px-4 py-3 flex items-center justify-between hover:bg-gray-50">
                             <div className="flex items-center">
                               <Play className="w-4 h-4 text-gray-400 mr-3" />
@@ -126,7 +163,7 @@ export default async function CoursePage({ params }: CoursePageProps) {
                 <EnrollButton 
                   courseId={course.id} 
                   isEnrolled={!!isEnrolled} 
-                  isAuthenticated={!!session?.user}
+                  isAuthenticated={!!user}
                   price={course.price}
                 />
 

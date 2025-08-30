@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getAuthSession } from '@/lib/auth';
+import { getCurrentUser } from '@/lib/auth-utils';
 import prisma from '@/lib/prisma';
 
 interface UserProgress {
@@ -48,9 +48,9 @@ interface NextLesson {
 
 export async function GET() {
   try {
-    const session = await getAuthSession();
-    
-    if (!session?.user?.email) {
+    const user = await getCurrentUser();
+
+    if (!user) {
       return NextResponse.json(
         { error: 'You must be signed in to view your courses' },
         { status: 401 }
@@ -58,20 +58,11 @@ export async function GET() {
     }
 
     const enrollments = await prisma.enrollment.findMany({
-      where: {
-        userId: session.user.id,
-        status: 'ACTIVE',
-      },
+      where: { userId: user.id },
       include: {
         course: {
           include: {
             instructor: {
-              select: {
-                name: true,
-                email: true,
-              },
-            },
-            teacher: {
               select: {
                 name: true,
                 email: true,
@@ -82,9 +73,7 @@ export async function GET() {
                 lessons: {
                   include: {
                     userProgress: {
-                      where: {
-                        userId: session.user.id,
-                      },
+                      where: { userId: user.id },
                     },
                   },
                 },
@@ -120,15 +109,15 @@ export async function GET() {
 
       // Get next lesson
       let nextLesson: NextLesson | null = null;
-      for (const module of course.modules) {
-        const incompleteLesson = module.lessons.find(
+      for (const courseModule of course.modules) {
+        const incompleteLesson = courseModule.lessons.find(
           lesson => !lesson.userProgress.some(up => up.completed)
         );
-        
+
         if (incompleteLesson) {
           nextLesson = {
             title: incompleteLesson.title,
-            moduleTitle: module.title,
+            moduleTitle: courseModule.title,
           };
           break;
         }

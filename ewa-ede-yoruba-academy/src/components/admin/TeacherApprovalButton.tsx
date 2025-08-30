@@ -38,7 +38,7 @@ export function TeacherApprovalButton({
         throw new Error('Failed to process request');
       }
 
-      const data = await response.json();
+      await response.json();
       
       toast.success(
         action === 'APPROVE' 

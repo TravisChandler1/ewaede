@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { CheckCircle, ChevronRight, ChevronLeft, User, Mail, Lock, BookOpen, MapPin, Phone, Calendar } from 'lucide-react';
+import { CheckCircle, ChevronRight, ChevronLeft, User, Mail, Lock, BookOpen, Phone, Calendar } from 'lucide-react';
 
 const steps = [
   { id: 'Account', name: 'Account Information', icon: User },
@@ -47,7 +47,6 @@ export default function RegisterForm() {
   
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
   
   const validateStep = (step: number) => {
     const newErrors: Record<string, string> = {};
@@ -345,8 +344,8 @@ export default function RegisterForm() {
                 <option value="">Select education level</option>
                 <option value="HIGH_SCHOOL">High School</option>
                 <option value="ASSOCIATE">Associate Degree</option>
-                <option value="BACHELORS">Bachelor's Degree</option>
-                <option value="MASTERS">Master's Degree</option>
+                <option value="BACHELORS">Bachelor&apos;s Degree</option>
+                <option value="MASTERS">Master&apos;s Degree</option>
                 <option value="PHD">PhD/Doctorate</option>
                 <option value="OTHER">Other</option>
               </select>

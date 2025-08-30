@@ -1,25 +1,49 @@
 import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth';
+import { getCurrentUser } from '@/lib/auth-utils';
 import prisma from '@/lib/prisma';
+
+interface UserProgress {
+  completed: boolean;
+}
+
+interface Lesson {
+  userProgress: UserProgress[];
+}
+
+interface Module {
+  lessons: Lesson[];
+}
+
+interface Course {
+  modules: Module[];
+}
+
+interface Enrollment {
+  course: Course;
+}
 
 export async function GET() {
   try {
-    const session = await getServerSession(authOptions);
+    const user = await getCurrentUser();
     
-    if (!session?.user?.id) {
+    if (!user) {
       return NextResponse.json(
         { error: 'You must be signed in to view your stats' },
         { status: 401 }
       );
     }
 
-    const userId = session.user.id;
+    // Get completed lessons
+    const completedLessons = await prisma.lessonCompletion.count({
+      where: {
+        userId: user.id,
+      },
+    });
 
     // Get active enrollments
     const enrollments = await prisma.enrollment.findMany({
       where: {
-        userId,
+        userId: user.id,
         status: 'ACTIVE',
       },
       include: {
@@ -30,7 +54,7 @@ export async function GET() {
                 lessons: {
                   include: {
                     userProgress: {
-                      where: { userId },
+                      where: { userId: user.id },
                     },
                   },
                 },
@@ -43,26 +67,24 @@ export async function GET() {
 
     // Calculate stats
     let totalLessons = 0;
-    let completedLessons = 0;
     let totalCourseProgress = 0;
     let minutesThisWeek = 0; // Placeholder for time tracking
 
-    enrollments.forEach((enrollment) => {
+    enrollments.forEach((enrollment: Enrollment) => {
       const course = enrollment.course;
       let courseLessons = 0;
       let courseCompleted = 0;
 
-      course.modules.forEach((module) => {
-        module.lessons.forEach((lesson) => {
+      course.modules.forEach((module: Module) => {
+        module.lessons.forEach((lesson: Lesson) => {
           courseLessons++;
-          if (lesson.userProgress.some((up) => up.completed)) {
+          if (lesson.userProgress.some((up: UserProgress) => up.completed)) {
             courseCompleted++;
           }
         });
       });
 
       totalLessons += courseLessons;
-      completedLessons += courseCompleted;
       
       if (courseLessons > 0) {
         totalCourseProgress += (courseCompleted / courseLessons) * 100;
@@ -70,7 +92,7 @@ export async function GET() {
     });
 
     // Get current streak (simplified - would need actual tracking)
-    const currentStreak = await getCurrentStreak(userId);
+    const currentStreak = await getCurrentStreak(user.id);
     
     // Calculate overall progress
     const activeCourses = enrollments.length;
@@ -81,7 +103,7 @@ export async function GET() {
     // Get time spent this week (placeholder - would need actual tracking)
     const weeklyActivity = await prisma.userActivity.aggregate({
       where: {
-        userId,
+        userId: user.id,
         activityType: 'LESSON_COMPLETED',
         createdAt: {
           gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // Last 7 days

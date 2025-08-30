@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth';
+import { getCurrentUser } from '@/lib/auth-utils';
 import prisma from '@/lib/prisma';
 
 export async function POST(
@@ -8,8 +7,8 @@ export async function POST(
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.email) {
+    const user = await getCurrentUser();
+    if (!user) {
       return NextResponse.json(
         { error: 'You must be signed in to enroll in a course' },
         { status: 401 }
@@ -17,7 +16,6 @@ export async function POST(
     }
 
     const courseId = params.id;
-    const userEmail = session.user.email;
 
     // Check if course exists and is published
     const course = await prisma.course.findUnique({
@@ -34,7 +32,7 @@ export async function POST(
     // Check if user is already enrolled
     const existingEnrollment = await prisma.enrollment.findFirst({
       where: {
-        userId: session.user.id,
+        userId: user.id,
         courseId,
       },
     });
@@ -47,16 +45,14 @@ export async function POST(
     }
 
     // Create enrollment
-    const enrollment = await prisma.enrollment.create({
+    await prisma.enrollment.create({
       data: {
-        userId: session.user.id,
+        userId: user.id,
         courseId,
-        status: 'ACTIVE',
-        progress: 0,
       },
     });
 
-    return NextResponse.json(enrollment, { status: 201 });
+    return NextResponse.json({ message: 'Enrolled successfully' }, { status: 201 });
   } catch (error) {
     console.error('Enrollment error:', error);
     return NextResponse.json(

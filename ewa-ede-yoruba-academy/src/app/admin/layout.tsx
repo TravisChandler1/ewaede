@@ -1,19 +1,12 @@
 import { AdminSidebar } from '@/components/admin/AdminSidebar';
-import { authOptions } from '@/lib/auth';
-import { getServerSession } from 'next-auth/next';
-import { redirect } from 'next/navigation';
+import { requireAdmin } from '@/lib/auth-utils';
 
 export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getServerSession(authOptions);
-  
-  // Redirect if not admin
-  if (session?.user.role !== 'ADMIN') {
-    redirect('/dashboard');
-  }
+  await requireAdmin();
 
   return (
     <div className="flex h-screen bg-gray-50">

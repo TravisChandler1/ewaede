@@ -1,18 +1,8 @@
-import { getServerSession } from 'next-auth';
-import { redirect } from 'next/navigation';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { requireTeacher } from '@/lib/auth-utils';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default async function TeacherDashboard() {
-  const session = await getServerSession(authOptions);
-
-  if (!session) {
-    redirect('/auth/signin');
-  }
-
-  if (session.user.role !== 'TEACHER') {
-    redirect('/dashboard');
-  }
+  const user = await requireTeacher();
 
   // Mock data - replace with actual data from your database
   const stats = [
@@ -56,9 +46,9 @@ export default async function TeacherDashboard() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold">Welcome, {session.user.name?.split(' ')[0] || 'Teacher'}!</h1>
+        <h1 className="text-3xl font-bold">Welcome, {user.name?.split(' ')[0] || 'Teacher'}!</h1>
         <p className="text-muted-foreground">
-          Here's an overview of your teaching activities.
+          Here&apos;s an overview of your teaching activities.
         </p>
       </div>
 
