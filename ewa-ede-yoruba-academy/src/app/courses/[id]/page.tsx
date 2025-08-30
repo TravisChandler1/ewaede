@@ -57,19 +57,35 @@ export async function generateMetadata({ params }: CoursePageProps): Promise<Met
 }
 
 async function getCourse(id: string) {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-  const res = await fetch(`${baseUrl}/api/courses/${id}`, {
-    next: { revalidate: 60 },
-  });
+  try {
+    // Use relative URL for internal API calls during SSR
+    const apiUrl = process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}/api/courses/${id}`
+      : process.env.NEXT_PUBLIC_APP_URL
+      ? `${process.env.NEXT_PUBLIC_APP_URL}/api/courses/${id}`
+      : `http://localhost:3000/api/courses/${id}`;
+      
+    const res = await fetch(apiUrl, {
+      next: { revalidate: 60 },
+    });
 
-  if (!res.ok) {
-    if (res.status === 404) {
-      notFound();
+    if (!res.ok) {
+      if (res.status === 404) {
+        notFound();
+      }
+      throw new Error('Failed to fetch course');
     }
-    throw new Error('Failed to fetch course');
-  }
 
-  return res.json();
+    return res.json();
+  } catch (error) {
+    console.warn('Failed to fetch course:', error);
+    // Return a default course structure or re-throw based on error type
+    if (error instanceof Error && error.message.includes('Failed to fetch course')) {
+      throw error; // Re-throw fetch errors
+    }
+    // For network errors, return null and let the page handle it
+    notFound();
+  }
 }
 
 export default async function CoursePage({ params }: CoursePageProps) {

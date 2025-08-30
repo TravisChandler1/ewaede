@@ -30,8 +30,14 @@ export const revalidate = 60; // Revalidate every 60 seconds
 
 async function getCourses() {
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-    const res = await fetch(`${baseUrl}/api/courses`, {
+    // Use relative URL for internal API calls during SSR
+    const apiUrl = process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}/api/courses`
+      : process.env.NEXT_PUBLIC_APP_URL
+      ? `${process.env.NEXT_PUBLIC_APP_URL}/api/courses`
+      : 'http://localhost:3000/api/courses';
+      
+    const res = await fetch(apiUrl, {
       next: { revalidate: 60 },
     });
 
