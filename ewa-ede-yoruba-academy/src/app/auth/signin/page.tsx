@@ -1,4 +1,4 @@
-import SignInForm from '@/components/auth/SignInForm';
+import SigninPage from '@/components/auth/SigninPage';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function SignInPage() {
-  return <SignInForm />;
+  return <SigninPage />;
 }
