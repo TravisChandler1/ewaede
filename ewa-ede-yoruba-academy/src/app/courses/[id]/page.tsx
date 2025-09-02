@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import Link from 'next/link';
+import Image from 'next/image';
 import { BookOpen, Users, Clock, Calendar, Play } from 'lucide-react';
 import { notFound } from 'next/navigation';
 import { getCurrentUser } from '@/lib/auth-utils';
@@ -21,26 +21,6 @@ interface Module {
   lessons?: Lesson[];
 }
 
-interface CourseDetail {
-  id: string;
-  title: string;
-  description: string;
-  thumbnail?: string;
-  level: string;
-  duration: number;
-  price: number;
-  instructor?: {
-    name: string;
-  };
-  teacher?: {
-    name: string;
-  };
-  enrollments?: Enrollment[];
-  modules?: Module[];
-  _count?: {
-    enrollments: number;
-  };
-}
 
 interface CoursePageProps {
   params: {
@@ -106,10 +86,11 @@ export default async function CoursePage({ params }: CoursePageProps) {
           {/* Course Header */}
           <div className="relative h-64 bg-gray-200">
             {course.thumbnail && (
-              <img
+              <Image
                 src={course.thumbnail}
                 alt={course.title}
-                className="w-full h-full object-cover"
+                fill
+                className="object-cover"
               />
             )}
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-8">

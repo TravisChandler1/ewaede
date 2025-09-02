@@ -40,7 +40,7 @@ function Newsletter() {
           type: 'error'
         });
       }
-    } catch (error) {
+    } catch {
       setMessage({
         text: 'Failed to connect to the server. Please check your connection.',
         type: 'error'
@@ -430,7 +430,7 @@ export default function HomePage() {
             About Ewa Ede Yoruba Academy
           </h2>
           <p className="text-lg text-[#a1a1aa] mb-8">
-            Founded with a passion for preserving and promoting the Yoruba language and culture, our academy brings together expert teachers and enthusiastic learners from around the world. Whether you're connecting with your heritage or discovering Yoruba for the first time, we provide the structure, community, and resources you need to succeed.
+            Founded with a passion for preserving and promoting the Yoruba language and culture, our academy brings together expert teachers and enthusiastic learners from around the world. Whether you&apos;re connecting with your heritage or discovering Yoruba for the first time, we provide the structure, community, and resources you need to succeed.
           </p>
           <p className="text-lg text-[#a1a1aa]">
             Our platform combines traditional teaching methods with modern technology, creating an engaging and effective learning environment. Join our community of learners and discover the beauty of Yoruba language and culture.

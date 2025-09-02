@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import {
   BookOpen,
   Clock,
@@ -101,9 +100,8 @@ interface Session {
   type: string;
 }
 
-const StudentDashboard = () => {
+export default function StudentDashboard() {
   const router = useRouter();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [courses, setCourses] = useState<Course[]>([]);
   const [user, setUser] = useState<AuthUser | null>(null);

@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Users, Clock, ArrowRight } from 'lucide-react';
 
 interface Course {
@@ -76,10 +77,11 @@ export default async function CoursesPage() {
             >
               <div className="h-48 bg-gray-200 relative">
                 {course.thumbnail && (
-                  <img
+                  <Image
                     src={course.thumbnail}
                     alt={course.title}
-                    className="w-full h-full object-cover"
+                    fill
+                    className="object-cover"
                   />
                 )}
                 <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">

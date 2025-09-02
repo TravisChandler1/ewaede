@@ -1,20 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  swcMinify: true,
   images: {
     domains: ['localhost', 'your-supabase-url.supabase.co'],
   },
-  experimental: {
-    serverActions: true,
-    appDir: true,
-  },
-  typescript: {
-    // !! WARN !!
-    // Dangerously allow production builds to successfully complete even if
-    // your project has type errors.
-    // !! WARN !!
-    ignoreBuildErrors: true,
+  turbopack: {
+    root: __dirname,
   },
   webpack: (config, { isServer }) => {
     if (!isServer) {

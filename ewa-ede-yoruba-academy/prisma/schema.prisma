@@ -52,7 +52,7 @@ model NewsletterSubscription {
   
   // Relations
   userId        String?  @map("user_id")
-  user          User?    @relation(fields: [userId], references: [id], onDelete: CASCADE)
+  user          User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
   
   @@map("newsletter_subscriptions")
 }
