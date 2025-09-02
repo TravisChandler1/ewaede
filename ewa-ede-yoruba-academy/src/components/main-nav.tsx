@@ -99,7 +99,22 @@ export function MainNav() {
                 </Link>
               ))}
             </nav>
-            {/* Auth buttons removed - now handled by MobileNav component */}
+            <div className="pt-4 border-t border-border/40 space-y-2">
+              <Link
+                href="/auth/signin"
+                className="block w-full py-2 px-3 rounded-md text-center text-sm font-medium hover:bg-accent/50"
+                onClick={() => setIsOpen(false)}
+              >
+                Sign In
+              </Link>
+              <Link
+                href="/auth/register"
+                className="block w-full py-2 px-3 rounded-md text-center text-sm font-medium bg-primary text-primary-foreground"
+                onClick={() => setIsOpen(false)}
+              >
+                Get Started
+              </Link>
+            </div>
           </div>
         </div>
       )}
