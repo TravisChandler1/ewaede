@@ -57,6 +57,8 @@ export default function SignupPage() {
       await signUpWithCredentials({
         email: formData.email,
         password: formData.password,
+        name: formData.name,
+        role: formData.role,
         callbackUrl: "/dashboard",
         redirect: true,
       });

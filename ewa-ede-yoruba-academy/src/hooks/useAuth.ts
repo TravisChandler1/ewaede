@@ -3,6 +3,8 @@ import { signIn } from 'next-auth/react';
 export interface SignUpCredentials {
   email: string;
   password: string;
+  name?: string;
+  role?: string;
   callbackUrl?: string;
   redirect?: boolean;
 }
@@ -18,6 +20,8 @@ export const useAuth = () => {
   const signUpWithCredentials = async ({
     email,
     password,
+    name,
+    role,
     callbackUrl = "/dashboard",
     redirect = true,
   }: SignUpCredentials) => {
@@ -29,10 +33,10 @@ export const useAuth = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          name: email.split('@')[0], // Use email prefix as name for now
+          name: name || email.split('@')[0], // Use provided name or email prefix as fallback
           email,
           password,
-          role: 'STUDENT', // Default role, will be updated based on form data
+          role: role ? role.toUpperCase() : 'STUDENT', // Convert role to uppercase
         }),
       });
 

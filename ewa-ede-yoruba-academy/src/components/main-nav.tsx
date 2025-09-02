@@ -65,7 +65,7 @@ export function MainNav() {
             Sign In
           </Link>
           <Link
-            href="/auth/signup"
+            href="/auth/register"
             className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
           >
             Get Started
@@ -99,22 +99,7 @@ export function MainNav() {
                 </Link>
               ))}
             </nav>
-            <div className="pt-4 border-t border-border/40 space-y-2">
-              <Link
-                href="/auth/signin"
-                className="block w-full py-2 px-3 rounded-md text-center text-sm font-medium hover:bg-accent/50"
-                onClick={() => setIsOpen(false)}
-              >
-                Sign In
-              </Link>
-              <Link
-                href="/auth/signup"
-                className="block w-full py-2 px-3 rounded-md text-center text-sm font-medium bg-primary text-primary-foreground"
-                onClick={() => setIsOpen(false)}
-              >
-                Get Started
-              </Link>
-            </div>
+            {/* Auth buttons removed - now handled by MobileNav component */}
           </div>
         </div>
       )}
