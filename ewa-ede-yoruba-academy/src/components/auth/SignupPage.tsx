@@ -59,7 +59,6 @@ export default function SignupPage() {
         password: formData.password,
         name: formData.name,
         role: formData.role,
-        callbackUrl: "/dashboard",
         redirect: true,
       });
     } catch {

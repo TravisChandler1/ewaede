@@ -16,13 +16,37 @@ export interface SignInCredentials {
   redirect?: boolean;
 }
 
+// Helper function to get role-based dashboard URL
+const getDashboardUrl = (role?: string): string => {
+  if (!role) return '/dashboard';
+
+  switch (role.toUpperCase()) {
+    case 'STUDENT':
+      return '/dashboard/student';
+    case 'TEACHER':
+    case 'PENDING_TEACHER':
+      return '/dashboard/teacher';
+    case 'ADMIN':
+      return '/admin/dashboard';
+    default:
+      return '/dashboard';
+  }
+};
+
+export interface SignInCredentials {
+  email: string;
+  password: string;
+  callbackUrl?: string;
+  redirect?: boolean;
+}
+
 export const useAuth = () => {
   const signUpWithCredentials = async ({
     email,
     password,
     name,
     role,
-    callbackUrl = "/dashboard",
+    callbackUrl,
     redirect = true,
   }: SignUpCredentials) => {
     try {
@@ -45,13 +69,16 @@ export const useAuth = () => {
         throw new Error(errorData.error || 'Registration failed');
       }
 
+      // Determine the correct dashboard URL based on role
+      const dashboardUrl = callbackUrl || getDashboardUrl(role);
+
       // Then sign in the user
       if (redirect) {
         await signIn('credentials', {
           email,
           password,
           redirect: true,
-          callbackUrl,
+          callbackUrl: dashboardUrl,
         });
         return { success: true };
       } else {
@@ -79,27 +106,18 @@ export const useAuth = () => {
     redirect = true,
   }: SignInCredentials) => {
     try {
-      if (redirect) {
-        await signIn('credentials', {
-          email,
-          password,
-          redirect: true,
-          callbackUrl,
-        });
-        return { success: true };
-      } else {
-        const result = await signIn('credentials', {
-          email,
-          password,
-          redirect: false,
-        });
+      const result = await signIn('credentials', {
+        email,
+        password,
+        redirect,
+        callbackUrl,
+      });
 
-        if (result?.error) {
-          throw new Error(result.error);
-        }
-
-        return result;
+      if (!redirect && result?.error) {
+        throw new Error(result.error);
       }
+
+      return result;
     } catch (error) {
       throw error;
     }

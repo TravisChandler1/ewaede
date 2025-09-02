@@ -27,10 +27,11 @@ interface AuthConfig extends NextAuthConfig {
   callbacks: {
     jwt: (params: { token: AuthToken; user?: AuthUser }) => Promise<AuthToken>;
     session: (params: { session: AuthSession; token: AuthToken }) => Promise<AuthSession>;
-    authorized: (params: { 
-      auth: { user: AuthUser | null } | null; 
-      request: { nextUrl: URL } 
+    authorized: (params: {
+      auth: { user: AuthUser | null } | null;
+      request: { nextUrl: URL }
     }) => boolean | Response;
+    redirect: (params: { url: string; baseUrl: string }) => string;
   };
   session: {
     strategy: 'jwt';
@@ -80,6 +81,16 @@ export const authConfig: AuthConfig = {
       }
       
       return true;
+    },
+    redirect({ url, baseUrl }: { url: string; baseUrl: string }) {
+      // If the URL is relative, prepend the base URL
+      if (url.startsWith('/')) return `${baseUrl}${url}`;
+
+      // If the URL is already absolute, return it as is
+      if (url.startsWith(baseUrl)) return url;
+
+      // Default to base URL
+      return baseUrl;
     },
   },
   session: {
