@@ -37,8 +37,24 @@ model User {
   discussions       Discussion[]
   userProgress      UserProgress[]
   auditLogs         AdminAuditLog[]
+  newsletterSubscriptions NewsletterSubscription[]
   
   @@map("users")
+}
+
+model NewsletterSubscription {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  status        String   @default("SUBSCRIBED")
+  subscribedAt  DateTime @default(now()) @map("subscribed_at")
+  unsubscribedAt DateTime? @map("unsubscribed_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+  
+  // Relations
+  userId        String?  @map("user_id")
+  user          User?    @relation(fields: [userId], references: [id], onDelete: CASCADE)
+  
+  @@map("newsletter_subscriptions")
 }
 
 model StudentProfile {
