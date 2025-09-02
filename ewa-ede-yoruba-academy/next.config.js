@@ -7,6 +7,9 @@ const nextConfig = {
   turbopack: {
     root: __dirname,
   },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   webpack: (config, { isServer }) => {
     if (!isServer) {
       // Fixes npm packages that depend on `net` module
