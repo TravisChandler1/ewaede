@@ -146,6 +146,7 @@ export default function SignupPage() {
                     onChange={(e) => handleInputChange('password', e.target.value)}
                     className="w-full px-4 py-3 bg-[#0f0f0f] border border-[#374151] rounded-lg text-white placeholder-[#6b7280] focus:border-[#4f46e5] focus:outline-none transition-colors"
                     placeholder="Create a password"
+                    autoComplete="new-password"
                   />
                 </div>
               </div>
