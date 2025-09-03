@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Level } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -24,7 +24,7 @@ async function main() {
       slug: 'yoruba-for-beginners',
       description: 'Start your Yoruba language journey with this comprehensive beginner course. Learn basic greetings, vocabulary, and simple conversations.',
       price: 29.99,
-      level: 'BEGINNER',
+      level: Level.BEGINNER,
       duration: 8,
       isPublished: true,
       instructorId: teacher.id,
@@ -35,7 +35,7 @@ async function main() {
       slug: 'intermediate-yoruba-conversation',
       description: 'Build on your basic knowledge with intermediate conversation skills. Learn complex sentence structures and cultural contexts.',
       price: 49.99,
-      level: 'INTERMEDIATE',
+      level: Level.INTERMEDIATE,
       duration: 12,
       isPublished: true,
       instructorId: teacher.id,
@@ -46,7 +46,7 @@ async function main() {
       slug: 'advanced-yoruba-literature',
       description: 'Dive deep into Yoruba literature, proverbs, and traditional storytelling. Perfect for advanced learners.',
       price: 69.99,
-      level: 'ADVANCED',
+      level: Level.ADVANCED,
       duration: 16,
       isPublished: true,
       instructorId: teacher.id,
@@ -57,7 +57,7 @@ async function main() {
       slug: 'yoruba-business-communication',
       description: 'Learn professional Yoruba for business settings. Master formal communication, negotiations, and workplace terminology.',
       price: 59.99,
-      level: 'INTERMEDIATE',
+      level: Level.INTERMEDIATE,
       duration: 10,
       isPublished: true,
       instructorId: teacher.id,

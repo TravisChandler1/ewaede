@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { MobileNav } from "@/components/MobileNav";
+import { SessionProvider } from "next-auth/react";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -13,6 +14,23 @@ export const metadata: Metadata = {
   keywords: ["Yoruba", "Learn Yoruba", "Yoruba Language", "Online Yoruba Classes", "Yoruba Academy"],
 };
 
+function Providers({ children }: { children: React.ReactNode }) {
+  return (
+    <SessionProvider>
+      <ThemeProvider
+        attribute="class"
+        defaultTheme="dark"
+        enableSystem
+        disableTransitionOnChange
+      >
+        {children}
+        <Toaster />
+        <MobileNav />
+      </ThemeProvider>
+    </SessionProvider>
+  );
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -21,16 +39,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} font-sans antialiased min-h-screen bg-background text-foreground`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-          <Toaster />
-          <MobileNav />
-        </ThemeProvider>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

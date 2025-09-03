@@ -1,8 +1,11 @@
 import NextAuth from 'next-auth';
-import Credentials from 'next-auth/providers/credentials';
+import CredentialsProvider from 'next-auth/providers/credentials';
 import bcrypt from 'bcryptjs';
-import prisma from './lib/prisma';
+import { PrismaClient } from '@prisma/client';
 import { authConfig, type UserRole } from './auth.config';
+
+// Create a new Prisma client instance for NextAuth
+const prisma = new PrismaClient();
 
 // Re-export UserRole for consistency
 export type { UserRole };
@@ -10,44 +13,87 @@ export type { UserRole };
 const authHandlers = NextAuth({
   ...authConfig,
   providers: [
-    Credentials({
+    CredentialsProvider({
+      id: 'credentials',
       name: 'credentials',
       credentials: {
         email: { label: 'Email', type: 'email' },
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
-          throw new Error('Email and password are required');
+        try {
+          // Validate credentials exist and are strings
+          if (!credentials || typeof credentials.email !== 'string' || typeof credentials.password !== 'string') {
+            console.error('Auth error: Invalid or missing credentials');
+            throw new Error('Email and password are required');
+          }
+
+          const email = credentials.email;
+          const password = credentials.password;
+
+          console.log('Auth attempt for email:', email);
+
+          // Find user in database
+          const user = await prisma.user.findUnique({
+            where: { email },
+            include: {
+              studentProfile: true,
+              teacherProfile: true,
+            },
+          });
+
+          if (!user) {
+            console.error('Auth error: User not found for email:', email);
+            throw new Error('Invalid email or password');
+          }
+
+          if (!user.password) {
+            console.error('Auth error: User has no password:', user.id);
+            throw new Error('Invalid email or password');
+          }
+
+          // Verify password
+          const isPasswordValid = await bcrypt.compare(password, user.password);
+
+          if (!isPasswordValid) {
+            console.error('Auth error: Invalid password for user:', user.id);
+            throw new Error('Invalid email or password');
+          }
+
+          console.log('Auth success for user:', user.id, user.role);
+
+          // Return user object for NextAuth
+          return {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            role: user.role as UserRole,
+            image: user.image,
+          };
+        } catch (error) {
+          console.error('Auth error:', error);
+          throw error;
         }
-
-        const user = await prisma.user.findUnique({
-          where: { email: String(credentials.email) },
-        });
-
-        if (!user || !user.password) {
-          throw new Error('Invalid email or password');
-        }
-
-        const isPasswordValid = await bcrypt.compare(
-          String(credentials.password),
-          user.password
-        );
-
-        if (!isPasswordValid) {
-          throw new Error('Invalid email or password');
-        }
-
-        return {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-          role: user.role as UserRole,
-        };
       },
     }),
   ],
-  callbacks: authConfig.callbacks,
+  callbacks: {
+    ...authConfig.callbacks,
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+        token.role = user.role;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (session.user) {
+        session.user.id = token.id as string;
+        session.user.role = token.role as UserRole;
+      }
+      return session;
+    },
+  },
   session: {
     strategy: 'jwt' as const,
     maxAge: 30 * 24 * 60 * 60, // 30 days

@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { useAuth } from "@/hooks/useAuth";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { BookOpen } from "lucide-react";
 
 export default function SigninPage() {
@@ -9,8 +10,7 @@ export default function SigninPage() {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const { signInWithCredentials } = useAuth();
+  const router = useRouter();
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,14 +24,45 @@ export default function SigninPage() {
     }
 
     try {
-      await signInWithCredentials({
+      console.log('Attempting sign in for:', email);
+
+      const result = await signIn("credentials", {
         email,
         password,
-        callbackUrl: "/dashboard",
-        redirect: true,
+        redirect: false,
       });
-    } catch {
-      setError("Invalid email or password. Please try again.");
+
+      console.log('Sign in result:', result);
+
+      if (result?.error) {
+        console.error('Sign in error:', result.error);
+        setError("Invalid email or password. Please try again.");
+      } else if (result?.ok) {
+        console.log('Sign in successful, redirecting to dashboard');
+        // Get user role from session to determine redirect destination
+        const sessionResponse = await fetch('/api/auth/session');
+        const sessionData = await sessionResponse.json();
+
+        if (sessionData?.user?.role) {
+          const role = sessionData.user.role.toLowerCase();
+          if (role === 'admin') {
+            router.push('/admin/dashboard');
+          } else if (role === 'teacher') {
+            router.push('/dashboard/teacher');
+          } else {
+            router.push('/dashboard/student');
+          }
+        } else {
+          router.push('/dashboard');
+        }
+      } else {
+        console.log('Sign in result:', result);
+        setError("An unexpected error occurred. Please try again.");
+      }
+    } catch (err) {
+      console.error('Sign in exception:', err);
+      setError("An error occurred. Please try again.");
+    } finally {
       setLoading(false);
     }
   };

@@ -29,48 +29,48 @@ export function CourseCard({
   const instructorName = typeof instructor === 'string' ? instructor : instructor?.name || 'Unknown Instructor';
   
   return (
-    <div className="p-6 hover:bg-gray-50 transition-colors duration-150 rounded-lg border border-gray-200">
+    <div className="p-6 hover:bg-[#2a2a2a]/50 transition-colors duration-150 rounded-lg border border-[#2a2a2a] bg-[#1a1a1a] hover:border-[#4f46e5]/50">
       <div className="flex items-start justify-between">
         <div className="flex-1">
           <div className="flex items-center">
-            <div className="flex-shrink-0 h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center">
-              <BookOpen className="h-5 w-5 text-indigo-600" />
+            <div className="flex-shrink-0 h-10 w-10 rounded-full bg-[#2a2a2a] flex items-center justify-center">
+              <BookOpen className="h-5 w-5 text-[#4f46e5]" />
             </div>
             <div className="ml-4">
-              <h4 className="text-lg font-medium text-gray-900">{title}</h4>
-              <p className="mt-1 text-sm text-gray-500">With {instructorName}</p>
+              <h4 className="text-lg font-medium text-white">{title}</h4>
+              <p className="mt-1 text-sm text-[#a1a1aa]">With {instructorName}</p>
               {level && (
-                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 mt-1">
+                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#4f46e5]/20 text-[#4f46e5] border border-[#4f46e5]/30 mt-1">
                   {level}
                 </span>
               )}
             </div>
           </div>
-          
-          <p className="mt-3 text-sm text-gray-700">
-            Next: <span className="text-indigo-600 font-medium">{nextLesson}</span>
+
+          <p className="mt-3 text-sm text-[#a1a1aa]">
+            Next: <span className="text-[#4f46e5] font-medium">{nextLesson}</span>
           </p>
-          
+
           <div className="mt-4">
             <div className="flex items-center justify-between text-sm mb-1">
-              <span className="font-medium text-gray-700">Progress</span>
-              <span className="text-gray-500">{progress}%</span>
+              <span className="font-medium text-white">Progress</span>
+              <span className="text-[#a1a1aa]">{progress}%</span>
             </div>
-            <div className="w-full bg-gray-200 rounded-full h-2.5 mb-3">
-              <div 
-                className="bg-indigo-600 h-2.5 rounded-full transition-all duration-500 ease-in-out" 
+            <div className="w-full bg-[#2a2a2a] rounded-full h-2.5 mb-3">
+              <div
+                className="bg-[#4f46e5] h-2.5 rounded-full transition-all duration-500 ease-in-out"
                 style={{ width: `${progress}%` }}
               ></div>
             </div>
-            
+
             {nextLesson && (
-              <p className="text-sm text-gray-700 mb-3">
-                Next: <span className="text-indigo-600 font-medium">{nextLesson}</span>
+              <p className="text-sm text-[#a1a1aa] mb-3">
+                Next: <span className="text-[#4f46e5] font-medium">{nextLesson}</span>
               </p>
             )}
           </div>
-          
-          <div className="mt-4 flex items-center justify-between text-sm text-gray-500">
+
+          <div className="mt-4 flex items-center justify-between text-sm text-[#a1a1aa]">
             <div className="flex items-center space-x-2">
               {time && <span>⏱️ {time}</span>}
               {duration && <span>• {duration} weeks</span>}
@@ -78,9 +78,9 @@ export function CourseCard({
                 <span>• 👥 {_count.enrollments}</span>
               )}
             </div>
-            <Link 
-              href={`/courses/${id}`} 
-              className="text-indigo-600 hover:text-indigo-800 font-medium flex items-center"
+            <Link
+              href={`/courses/${id}`}
+              className="text-[#4f46e5] hover:text-[#4338ca] font-medium flex items-center"
             >
               Continue <span className="ml-1">→</span>
             </Link>

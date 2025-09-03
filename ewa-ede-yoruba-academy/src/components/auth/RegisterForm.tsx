@@ -49,7 +49,7 @@ export default function RegisterForm() {
   
   const validateStep = (step: number) => {
     const newErrors: Record<string, string> = {};
-    
+
     if (step === 0) {
       if (!formData.email) newErrors.email = 'Email is required';
       else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Email is invalid';
@@ -57,14 +57,12 @@ export default function RegisterForm() {
       else if (formData.password.length < 8) newErrors.password = 'Password must be at least 8 characters';
       if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = 'Passwords do not match';
     }
-    
+
+    // Make personal details optional for now to simplify registration
     if (step === 1) {
-      if (!formData.firstName) newErrors.firstName = 'First name is required';
-      if (!formData.lastName) newErrors.lastName = 'Last name is required';
-      if (!formData.dateOfBirth) newErrors.dateOfBirth = 'Date of birth is required';
-      if (!formData.gender) newErrors.gender = 'Please select a gender';
+      // Optional validation - don't block registration
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };

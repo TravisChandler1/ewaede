@@ -172,7 +172,12 @@ export default function StudentDashboard() {
           return;
         }
         setUser(currentUser);
-        await Promise.all([fetchEnrolledCourses(), fetchDashboardStats()]);
+        await Promise.all([
+          fetchEnrolledCourses(),
+          fetchDashboardStats(),
+          fetchRecentActivities(),
+          fetchUpcomingSessions()
+        ]);
       } catch (error) {
         console.error('Authentication error:', error);
         router.push('/auth/signin');
@@ -180,59 +185,72 @@ export default function StudentDashboard() {
         setIsLoading(false);
       }
     };
-    
+
     checkAuth();
   }, [router]);
 
   const statsList: StatItem[] = [
-    { 
-      name: 'Active Courses', 
+    {
+      name: 'Active Courses',
       value: stats?.activeCourses?.toString() || '0',
-      icon: <BookOpen className="h-6 w-6 text-blue-500" />,
-      change: '+2 from last month',
+      icon: <BookOpen className="h-6 w-6 text-[#4f46e5]" />,
+      change: 'Currently enrolled',
     },
-    { 
-      name: 'Hours This Week', 
-      value: stats?.hoursThisWeek?.toString() || '0',
-      icon: <Clock className="h-6 w-6 text-green-500" />,
-      change: '+3 from last week',
+    {
+      name: 'Hours This Week',
+      value: Math.round((stats?.hoursThisWeek || 0) * 10) / 10 + 'h',
+      icon: <Clock className="h-6 w-6 text-[#10b981]" />,
+      change: 'This week',
     },
-    { 
-      name: 'Current Streak', 
+    {
+      name: 'Current Streak',
       value: stats?.currentStreak?.toString() || '0',
-      icon: <Award className="h-6 w-6 text-yellow-500" />,
-      change: '2 day streak',
+      icon: <Award className="h-6 w-6 text-[#f59e0b]" />,
+      change: 'Day streak',
     },
-    { 
-      name: 'Overall Progress', 
+    {
+      name: 'Overall Progress',
       value: `${stats?.overallProgress || 0}%`,
-      icon: <BarChart2 className="h-6 w-6 text-purple-500" />,
-      change: '+5% this week',
+      icon: <BarChart2 className="h-6 w-6 text-[#4f46e5]" />,
+      change: 'Average completion',
     }
   ];
 
-  const recentActivities: Activity[] = [
-    { id: 1, text: 'Completed lesson: Greetings in Yoruba', time: '2h ago' },
-    { id: 2, text: 'Earned badge: Fast Learner', time: '1d ago' },
-    { id: 3, text: 'Started new course: Intermediate Yoruba', time: '2d ago' },
-    { id: 4, text: 'Posted in Book Club: Chapter 3 Discussion', time: '3d ago' },
-    { id: 5, text: 'Completed quiz: Basic Phrases with 90% score', time: '4d ago' },
-  ];
+  // Fetch recent activities from database
+  const [recentActivities, setRecentActivities] = useState<Activity[]>([]);
+  const [upcomingSessions, setUpcomingSessions] = useState<Session[]>([]);
 
-  const upcomingSessions: Session[] = [
-    {
-      id: 1,
-      title: 'Yoruba Conversation Practice',
-      time: 'Tomorrow, 3:00 PM - 4:00 PM',
-      type: 'Group Session',
-    },
-    {
-      id: 2,
-      title: 'Book Club Discussion',
-      time: 'Friday, 5:00 PM - 6:00 PM',
-      type: 'Book Club',
-    },
-  ];
+  const fetchRecentActivities = async () => {
+    try {
+      const response = await fetch('/api/students/activities');
+      if (!response.ok) {
+        // If API doesn't exist yet, show empty state
+        setRecentActivities([]);
+        return;
+      }
+      const data = await response.json();
+      setRecentActivities(data.activities || []);
+    } catch (error) {
+      console.error('Error fetching activities:', error);
+      setRecentActivities([]);
+    }
+  };
+
+  const fetchUpcomingSessions = async () => {
+    try {
+      const response = await fetch('/api/students/sessions');
+      if (!response.ok) {
+        // If API doesn't exist yet, show empty state
+        setUpcomingSessions([]);
+        return;
+      }
+      const data = await response.json();
+      setUpcomingSessions(data.sessions || []);
+    } catch (error) {
+      console.error('Error fetching sessions:', error);
+      setUpcomingSessions([]);
+    }
+  };
   
   if (isLoading) {
     return <Loading />;
@@ -243,33 +261,33 @@ export default function StudentDashboard() {
   }
 
   return (
-    <div className="min-h-full">
+    <div className="min-h-full bg-[#0f0f0f]">
       {/* Mobile sidebar toggle */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 z-40 bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between">
-        <button 
+      <div className="lg:hidden fixed top-0 left-0 right-0 z-40 bg-[#1a1a1a] border-b border-[#2a2a2a] px-4 py-3 flex items-center justify-between">
+        <button
           type="button"
-          className="text-gray-500 hover:text-gray-600"
+          className="text-[#a1a1aa] hover:text-white"
           onClick={() => setSidebarOpen(true)}
         >
           <span className="sr-only">Open sidebar</span>
           <Menu className="h-6 w-6" />
         </button>
-        
-        <h1 className="text-xl font-bold text-gray-900">Ewa Ede</h1>
-        
+
+        <h1 className="text-xl font-bold text-white">Ewa Ede</h1>
+
         <div className="flex items-center space-x-4">
-          <button type="button" className="text-gray-500 hover:text-gray-600">
+          <button type="button" className="text-[#a1a1aa] hover:text-white">
             <span className="sr-only">View notifications</span>
             <Bell className="h-6 w-6" />
           </button>
-          
+
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Search className="h-5 w-5 text-gray-400" />
+              <Search className="h-5 w-5 text-[#6b7280]" />
             </div>
             <input
               type="text"
-              className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className="block w-full pl-10 pr-3 py-2 border border-[#374151] rounded-lg leading-5 bg-[#0f0f0f] placeholder-[#6b7280] text-white focus:outline-none focus:ring-[#4f46e5] focus:border-[#4f46e5] sm:text-sm"
               placeholder="Search"
             />
           </div>
@@ -279,13 +297,13 @@ export default function StudentDashboard() {
       {/* Mobile sidebar */}
       {sidebarOpen && (
         <div className="fixed inset-0 z-50 lg:hidden">
-          <div className="fixed inset-0 bg-gray-600 bg-opacity-75" onClick={() => setSidebarOpen(false)}></div>
-          <div className="fixed inset-y-0 left-0 max-w-xs w-full bg-white">
-            <div className="flex items-center justify-between h-16 px-4 border-b border-gray-200">
-              <h2 className="text-xl font-semibold text-gray-900">Menu</h2>
+          <div className="fixed inset-0 bg-black bg-opacity-75" onClick={() => setSidebarOpen(false)}></div>
+          <div className="fixed inset-y-0 left-0 max-w-xs w-full bg-[#1a1a1a] border-r border-[#2a2a2a]">
+            <div className="flex items-center justify-between h-16 px-4 border-b border-[#2a2a2a]">
+              <h2 className="text-xl font-semibold text-white">Menu</h2>
               <button
                 type="button"
-                className="text-gray-500 hover:text-gray-600"
+                className="text-[#a1a1aa] hover:text-white"
                 onClick={() => setSidebarOpen(false)}
               >
                 <span className="sr-only">Close sidebar</span>
@@ -298,24 +316,24 @@ export default function StudentDashboard() {
       )}
 
       <div className="lg:pl-64 pt-16 lg:pt-0">
-        <main className="py-6 px-4 sm:px-6 lg:px-8">
+        <main className="py-6 px-4 sm:px-6 lg:px-8 bg-[#0f0f0f]">
           {/* Header */}
-          <div className="pb-6 border-b border-gray-200">
-            <h1 className="text-2xl font-bold text-gray-900">Welcome back, {user?.name?.split(' ')[0] || 'Student'}! 👋</h1>
+          <div className="pb-6 border-b border-[#2a2a2a]">
+            <h1 className="text-2xl font-bold text-white">Welcome back, {user?.name?.split(' ')[0] || 'Student'}! 👋</h1>
           <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {statsList.map((stat) => (
-              <div key={stat.name} className="bg-white p-6 rounded-lg shadow">
+              <div key={stat.name} className="bg-[#1a1a1a] border border-[#2a2a2a] p-6 rounded-lg shadow-lg hover:border-[#4f46e5]/50 transition-all duration-300">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-500">{stat.name}</p>
+                    <p className="text-sm font-medium text-[#a1a1aa]">{stat.name}</p>
                     <div className="mt-1 flex items-baseline">
-                      <p className="text-2xl font-semibold text-gray-900">{stat.value}</p>
+                      <p className="text-2xl font-semibold text-white">{stat.value}</p>
                       {stat.change && (
-                        <span className="ml-2 text-sm text-green-600">{stat.change}</span>
+                        <span className="ml-2 text-sm text-[#10b981]">{stat.change}</span>
                       )}
                     </div>
                   </div>
-                  <div className="p-2 rounded-full bg-gray-100">
+                  <div className="p-2 rounded-full bg-[#2a2a2a]">
                     {stat.icon}
                   </div>
                 </div>
@@ -328,12 +346,12 @@ export default function StudentDashboard() {
             {/* Courses Section */}
             <div className="lg:col-span-2 space-y-6">
               <div className="flex items-center justify-between">
-                <h2 className="text-xl font-semibold text-gray-900">Continue Learning</h2>
-                <button className="text-sm font-medium text-indigo-600 hover:text-indigo-800">
+                <h2 className="text-xl font-semibold text-white">Continue Learning</h2>
+                <button className="text-sm font-medium text-[#4f46e5] hover:text-[#4338ca]">
                   View all
                 </button>
               </div>
-              
+
               <div className="space-y-4">
                 {courses.map((course) => (
                   <CourseCard key={course.id} {...course} />
@@ -341,59 +359,75 @@ export default function StudentDashboard() {
               </div>
 
               {/* Upcoming Sessions */}
-              <div className="bg-white shadow overflow-hidden rounded-lg">
-                <div className="px-4 py-5 sm:px-6 border-b border-gray-200">
+              <div className="bg-[#1a1a1a] border border-[#2a2a2a] shadow-lg overflow-hidden rounded-lg hover:border-[#4f46e5]/50 transition-all duration-300">
+                <div className="px-4 py-5 sm:px-6 border-b border-[#2a2a2a]">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-medium text-gray-900">Upcoming Sessions</h3>
-                    <button className="text-sm font-medium text-indigo-600 hover:text-indigo-800">
+                    <h3 className="text-lg font-medium text-white">Upcoming Sessions</h3>
+                    <button className="text-sm font-medium text-[#4f46e5] hover:text-[#4338ca]">
                       View all
                     </button>
                   </div>
                 </div>
-                <div className="divide-y divide-gray-200">
-                  {upcomingSessions.map((session) => (
-                    <div key={session.id} className="p-4 hover:bg-gray-50 transition-colors duration-150">
-                      <div className="flex items-start">
-                        <div className="flex-shrink-0 h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center">
-                          <Calendar className="h-5 w-5 text-indigo-600" />
-                        </div>
-                        <div className="ml-4">
-                          <p className="text-sm font-medium text-gray-900">{session.title}</p>
-                          <p className="text-sm text-gray-500">{session.time}</p>
-                          <span className="mt-1 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
-                            {session.type}
-                          </span>
+                <div className="divide-y divide-[#2a2a2a]">
+                  {upcomingSessions.length > 0 ? (
+                    upcomingSessions.map((session) => (
+                      <div key={session.id} className="p-4 hover:bg-[#2a2a2a]/50 transition-colors duration-150">
+                        <div className="flex items-start">
+                          <div className="flex-shrink-0 h-10 w-10 rounded-full bg-[#2a2a2a] flex items-center justify-center">
+                            <Calendar className="h-5 w-5 text-[#4f46e5]" />
+                          </div>
+                          <div className="ml-4">
+                            <p className="text-sm font-medium text-white">{session.title}</p>
+                            <p className="text-sm text-[#a1a1aa]">{session.time}</p>
+                            <span className="mt-1 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#4f46e5]/20 text-[#4f46e5] border border-[#4f46e5]/30">
+                              {session.type}
+                            </span>
+                          </div>
                         </div>
                       </div>
+                    ))
+                  ) : (
+                    <div className="p-8 text-center">
+                      <Calendar className="h-12 w-12 text-[#a1a1aa] mx-auto mb-4" />
+                      <p className="text-[#a1a1aa]">No upcoming sessions</p>
+                      <p className="text-sm text-[#6b7280] mt-1">Check back later for scheduled classes!</p>
                     </div>
-                  ))}
+                  )}
                 </div>
               </div>
 
               {/* Recent Activity */}
-              <div className="bg-white shadow overflow-hidden rounded-lg">
-                <div className="px-4 py-5 sm:px-6 border-b border-gray-200">
+              <div className="bg-[#1a1a1a] border border-[#2a2a2a] shadow-lg overflow-hidden rounded-lg hover:border-[#4f46e5]/50 transition-all duration-300">
+                <div className="px-4 py-5 sm:px-6 border-b border-[#2a2a2a]">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-medium text-gray-900">Recent Activity</h3>
-                    <button className="text-sm font-medium text-indigo-600 hover:text-indigo-800">
+                    <h3 className="text-lg font-medium text-white">Recent Activity</h3>
+                    <button className="text-sm font-medium text-[#4f46e5] hover:text-[#4338ca]">
                       View all
                     </button>
                   </div>
                 </div>
-                <div className="divide-y divide-gray-200">
-                  {recentActivities.map((activity) => (
-                    <div key={activity.id} className="p-4 hover:bg-gray-50 transition-colors duration-150">
-                      <div className="flex">
-                        <div className="flex-shrink-0 h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center">
-                          <Award className="h-5 w-5 text-indigo-600" />
-                        </div>
-                        <div className="ml-4">
-                          <p className="text-sm font-medium text-gray-900">{activity.text}</p>
-                          <p className="text-sm text-gray-500">{activity.time}</p>
+                <div className="divide-y divide-[#2a2a2a]">
+                  {recentActivities.length > 0 ? (
+                    recentActivities.map((activity) => (
+                      <div key={activity.id} className="p-4 hover:bg-[#2a2a2a]/50 transition-colors duration-150">
+                        <div className="flex">
+                          <div className="flex-shrink-0 h-10 w-10 rounded-full bg-[#2a2a2a] flex items-center justify-center">
+                            <Award className="h-5 w-5 text-[#4f46e5]" />
+                          </div>
+                          <div className="ml-4">
+                            <p className="text-sm font-medium text-white">{activity.text}</p>
+                            <p className="text-sm text-[#a1a1aa]">{activity.time}</p>
+                          </div>
                         </div>
                       </div>
+                    ))
+                  ) : (
+                    <div className="p-8 text-center">
+                      <Award className="h-12 w-12 text-[#a1a1aa] mx-auto mb-4" />
+                      <p className="text-[#a1a1aa]">No recent activity yet</p>
+                      <p className="text-sm text-[#6b7280] mt-1">Start learning to see your progress here!</p>
                     </div>
-                  ))}
+                  )}
                 </div>
               </div>
             </div>
@@ -401,25 +435,25 @@ export default function StudentDashboard() {
             {/* Right Sidebar */}
             <div className="space-y-6">
               {/* Upcoming Sessions */}
-              <div className="bg-white shadow overflow-hidden rounded-lg">
-                <div className="px-4 py-5 sm:px-6 border-b border-gray-200">
-                  <h3 className="text-lg font-medium text-gray-900">Upcoming Sessions</h3>
+              <div className="bg-[#1a1a1a] border border-[#2a2a2a] shadow-lg overflow-hidden rounded-lg hover:border-[#4f46e5]/50 transition-all duration-300">
+                <div className="px-4 py-5 sm:px-6 border-b border-[#2a2a2a]">
+                  <h3 className="text-lg font-medium text-white">Upcoming Sessions</h3>
                 </div>
-                <div className="divide-y divide-gray-200">
+                <div className="divide-y divide-[#2a2a2a]">
                   {upcomingSessions.map((session) => (
-                    <div key={session.id} className="p-4 hover:bg-gray-50 transition-colors duration-150">
+                    <div key={session.id} className="p-4 hover:bg-[#2a2a2a]/50 transition-colors duration-150">
                       <div className="flex items-start">
-                        <div className="flex-shrink-0 h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center">
-                          <Calendar className="h-5 w-5 text-indigo-600" />
+                        <div className="flex-shrink-0 h-10 w-10 rounded-full bg-[#2a2a2a] flex items-center justify-center">
+                          <Calendar className="h-5 w-5 text-[#4f46e5]" />
                         </div>
                         <div className="ml-4">
-                          <p className="text-sm font-medium text-gray-900">{session.title}</p>
-                          <p className="text-sm text-gray-500">{session.time}</p>
-                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 mt-1">
+                          <p className="text-sm font-medium text-white">{session.title}</p>
+                          <p className="text-sm text-[#a1a1aa]">{session.time}</p>
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#4f46e5]/20 text-[#4f46e5] border border-[#4f46e5]/30 mt-1">
                             {session.type}
                           </span>
                         </div>
-                        <button className="ml-auto text-indigo-600 hover:text-indigo-900">
+                        <button className="ml-auto text-[#4f46e5] hover:text-[#4338ca]">
                           <ChevronRight className="h-5 w-5" />
                         </button>
                       </div>
@@ -429,18 +463,18 @@ export default function StudentDashboard() {
               </div>
 
               {/* Quick Actions */}
-              <div className="bg-white shadow overflow-hidden rounded-lg">
-                <div className="px-4 py-5 sm:px-6 border-b border-gray-200">
-                  <h3 className="text-lg font-medium text-gray-900">Quick Actions</h3>
+              <div className="bg-[#1a1a1a] border border-[#2a2a2a] shadow-lg overflow-hidden rounded-lg hover:border-[#4f46e5]/50 transition-all duration-300">
+                <div className="px-4 py-5 sm:px-6 border-b border-[#2a2a2a]">
+                  <h3 className="text-lg font-medium text-white">Quick Actions</h3>
                 </div>
                 <div className="p-4 space-y-3">
-                  <button className="w-full flex items-center justify-center px-4 py-2.5 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
+                  <button className="w-full flex items-center justify-center px-4 py-2.5 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-[#4f46e5] hover:bg-[#4338ca] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#4f46e5] transition-colors duration-200">
                     Join Live Session
                   </button>
-                  <button className="w-full flex items-center justify-center px-4 py-2.5 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
+                  <button className="w-full flex items-center justify-center px-4 py-2.5 border border-[#374151] rounded-lg shadow-sm text-sm font-medium text-white bg-[#2a2a2a] hover:bg-[#374151] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#4f46e5] transition-colors duration-200">
                     Browse Courses
                   </button>
-                  <button className="w-full flex items-center justify-center px-4 py-2.5 border border-transparent rounded-md shadow-sm text-sm font-medium text-indigo-700 bg-indigo-50 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
+                  <button className="w-full flex items-center justify-center px-4 py-2.5 border border-[#4f46e5]/30 rounded-lg shadow-sm text-sm font-medium text-[#4f46e5] bg-[#4f46e5]/10 hover:bg-[#4f46e5]/20 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#4f46e5] transition-colors duration-200">
                     View Progress
                   </button>
                 </div>

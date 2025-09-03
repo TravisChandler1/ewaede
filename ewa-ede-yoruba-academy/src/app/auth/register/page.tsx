@@ -1,4 +1,4 @@
-import SignupPage from '@/components/auth/SignupPage';
+import SimpleRegisterForm from '@/components/auth/SimpleRegisterForm';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function RegisterPage() {
-  return <SignupPage />;
+  return <SimpleRegisterForm />;
 }
