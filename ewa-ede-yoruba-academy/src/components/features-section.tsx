@@ -48,12 +48,20 @@ export function FeaturesSection() {
         
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           {features.map((feature, index) => (
-            <div key={index} className="p-6 rounded-lg bg-background border border-border shadow-sm hover:shadow-md transition-shadow">
-              <div className="mb-4">
+            <div
+              key={index}
+              className="group p-6 rounded-lg bg-background border border-border shadow-sm hover:shadow-lg hover-lift hover-glow transition-all duration-300 cursor-pointer"
+              style={{ animationDelay: `${index * 0.1}s` }}
+            >
+              <div className="mb-4 icon-bounce">
                 {feature.icon}
               </div>
-              <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-              <p className="text-muted-foreground">{feature.description}</p>
+              <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors duration-300">
+                {feature.title}
+              </h3>
+              <p className="text-muted-foreground group-hover:text-foreground/80 transition-colors duration-300">
+                {feature.description}
+              </p>
             </div>
           ))}
         </div>
