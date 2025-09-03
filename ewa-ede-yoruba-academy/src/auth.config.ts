@@ -64,7 +64,7 @@ export const authConfig: AuthConfig = {
       const { pathname } = request.nextUrl;
       
       // Public routes that don't require authentication
-      const publicRoutes = ['/auth/signin', '/auth/signup', '/auth/error'];
+      const publicRoutes = ['/auth/signin', '/auth/register', '/auth/error'];
       if (publicRoutes.includes(pathname)) return true;
 
       // Protected routes

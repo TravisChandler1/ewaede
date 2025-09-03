@@ -218,7 +218,7 @@ export default function HomePage() {
               <a href="/auth/signin" className="text-[#a1a1aa] hover:text-white transition-colors">
                 Sign In
               </a>
-              <a href="/auth/signup" className="px-4 py-2 bg-[#4f46e5] hover:bg-[#4338ca] text-white rounded-lg transition-colors">
+              <a href="/auth/register" className="px-4 py-2 bg-[#4f46e5] hover:bg-[#4338ca] text-white rounded-lg transition-colors">
                 Get Started
               </a>
             </div>
@@ -254,7 +254,7 @@ export default function HomePage() {
             Immerse yourself in the rich culture and traditions of the Yoruba people through our interactive language programs. From greetings to proverbs, we make learning Yoruba engaging and meaningful.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="/auth/signup" className="px-8 py-4 bg-[#4f46e5] hover:bg-[#4338ca] text-white rounded-lg text-lg font-medium transition-colors flex items-center justify-center group">
+            <a href="/auth/register" className="px-8 py-4 bg-[#4f46e5] hover:bg-[#4338ca] text-white rounded-lg text-lg font-medium transition-colors flex items-center justify-center group">
               <span>Bẹ̀rẹ̀ Níṣe</span>
               <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
             </a>
@@ -395,7 +395,7 @@ export default function HomePage() {
                   ))}
                 </ul>
 
-                <a href="/auth/signup" className={`block w-full py-3 text-center rounded-lg font-medium transition-colors ${level.popular ? 'bg-[#4f46e5] hover:bg-[#4338ca] text-white' : 'border border-[#374151] text-white hover:border-[#4b5563]'}`}>
+                <a href="/auth/register" className={`block w-full py-3 text-center rounded-lg font-medium transition-colors ${level.popular ? 'bg-[#4f46e5] hover:bg-[#4338ca] text-white' : 'border border-[#374151] text-white hover:border-[#4b5563]'}`}>
                   Get Started
                 </a>
               </div>
