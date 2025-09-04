@@ -8,6 +8,8 @@ export default function SimpleRegisterForm() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    password: '',
+    confirmPassword: '',
     role: 'STUDENT',
     level: 'NOVICE'
   });
@@ -21,14 +23,26 @@ export default function SimpleRegisterForm() {
     setErrors({});
 
     // Basic validation
-    if (!formData.name || !formData.email) {
-      setErrors({ form: 'Name and email are required' });
+    if (!formData.name || !formData.email || !formData.password) {
+      setErrors({ form: 'Name, email, and password are required' });
       setLoading(false);
       return;
     }
 
     if (!/\S+@\S+\.\S+/.test(formData.email)) {
       setErrors({ form: 'Please enter a valid email address' });
+      setLoading(false);
+      return;
+    }
+
+    if (formData.password.length < 8) {
+      setErrors({ form: 'Password must be at least 8 characters long' });
+      setLoading(false);
+      return;
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      setErrors({ form: 'Passwords do not match' });
       setLoading(false);
       return;
     }
@@ -40,7 +54,7 @@ export default function SimpleRegisterForm() {
         body: JSON.stringify({
           name: formData.name,
           email: formData.email,
-          password: 'defaultpassword123', // Simple password for now
+          password: formData.password,
           role: formData.role,
           level: formData.level
         })
@@ -124,6 +138,30 @@ export default function SimpleRegisterForm() {
               onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
               className="w-full px-4 py-3 bg-[#0f0f0f] border border-[#374151] rounded-lg text-white placeholder-[#6b7280] focus:border-[#4f46e5] focus:outline-none transition-colors"
               placeholder="Enter your email"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-[#d1d5db] mb-2">Password</label>
+            <input
+              type="password"
+              value={formData.password}
+              onChange={(e) => setFormData(prev => ({ ...prev, password: e.target.value }))}
+              className="w-full px-4 py-3 bg-[#0f0f0f] border border-[#374151] rounded-lg text-white placeholder-[#6b7280] focus:border-[#4f46e5] focus:outline-none transition-colors"
+              placeholder="Enter your password"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-[#d1d5db] mb-2">Confirm Password</label>
+            <input
+              type="password"
+              value={formData.confirmPassword}
+              onChange={(e) => setFormData(prev => ({ ...prev, confirmPassword: e.target.value }))}
+              className="w-full px-4 py-3 bg-[#0f0f0f] border border-[#374151] rounded-lg text-white placeholder-[#6b7280] focus:border-[#4f46e5] focus:outline-none transition-colors"
+              placeholder="Confirm your password"
               required
             />
           </div>

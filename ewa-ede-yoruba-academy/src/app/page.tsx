@@ -242,8 +242,7 @@ export default function HomePage() {
             Ẹ kú àbọ̀! Welcome to Ewa Ede Yoruba Academy
           </div>
           <h1 className="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
-            Ẹ kú kíkọ́ ní èdè Yorùbá
-            <span className="text-[#4f46e5] block mt-2">Learn the Beautiful Yoruba Language</span>
+            <span className="text-[#4f46e5]">Learn the Beautiful Yoruba Language</span>
           </h1>
           <p className="text-xl lg:text-2xl text-[#a1a1aa] mb-8 max-w-3xl mx-auto">
             Immerse yourself in the rich culture and traditions of the Yoruba people through our interactive language programs. From greetings to proverbs, we make learning Yoruba engaging and meaningful.

@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Home, BookOpen, Users, User, LogIn } from 'lucide-react';
+import { Home, User, LogIn } from 'lucide-react';
 
 export default function BottomTabs() {
   const tabs = [
@@ -10,18 +10,6 @@ export default function BottomTabs() {
       href: '/',
       icon: Home,
       active: true
-    },
-    {
-      name: 'Courses',
-      href: '/courses',
-      icon: BookOpen,
-      active: false
-    },
-    {
-      name: 'Community',
-      href: '#community',
-      icon: Users,
-      active: false
     },
     {
       name: 'Sign In',
