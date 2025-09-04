@@ -6,6 +6,7 @@ export async function POST(request: Request) {
   try {
     console.log('Registration request received');
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const {
       name,
       email,
@@ -14,14 +15,14 @@ export async function POST(request: Request) {
       firstName,
       lastName,
       dateOfBirth,
-      gender,
+      gender: _gender, // Not currently used but stored for future use
       educationLevel,
       institution,
       courseOfStudy,
       phoneNumber,
-      address,
-      city,
-      state,
+      address: _address, // Not currently used but stored for future use
+      city: _city, // Not currently used but stored for future use
+      state: _state, // Not currently used but stored for future use
       country,
       newsletter
     } = await request.json();

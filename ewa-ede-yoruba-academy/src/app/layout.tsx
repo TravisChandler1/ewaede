@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { MobileNav } from "@/components/MobileNav";
+import BottomTabs from "@/components/BottomTabs";
 import { SessionProvider } from "next-auth/react";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
@@ -26,6 +27,7 @@ function Providers({ children }: { children: React.ReactNode }) {
         {children}
         <Toaster />
         <MobileNav />
+        <BottomTabs />
       </ThemeProvider>
     </SessionProvider>
   );
@@ -38,7 +40,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} font-sans antialiased min-h-screen bg-background text-foreground`}>
+      <body className={`${inter.variable} font-sans antialiased min-h-screen bg-background text-foreground pb-16`}>
         <Providers>{children}</Providers>
       </body>
     </html>

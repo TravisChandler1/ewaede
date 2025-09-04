@@ -15,19 +15,19 @@ function Newsletter() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!email.trim()) return;
-    
+
     setLoading(true);
     setMessage(null);
-    
+
     try {
       const response = await fetch('/api/newsletter', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
       });
-      
+
       const data: NewsletterResponse = await response.json();
-      
+
       if (response.ok) {
         setMessage({
           text: data.message || 'Thank you for subscribing!',
@@ -47,7 +47,7 @@ function Newsletter() {
       });
     } finally {
       setLoading(false);
-      
+
       // Clear message after 5 seconds
       if (message) {
         const timer = setTimeout(() => {
@@ -69,7 +69,7 @@ function Newsletter() {
             Ṣe ẹ fẹ́ kí a ránṣẹ́ létà sí ẹ? <span className="block text-[#4f46e5] mt-2">Stay Updated</span>
           </h2>
           <p className="text-[#a1a1aa] text-lg mb-8 max-w-2xl">
-            Gba àwọn ìmọ̀ tuntun nípa èdè àti àṣà Yorùbá, àwọn ìpèsè ẹ̀kọ́, àti àwọn ìròyìn tó ṣe pàtàkì. 
+            Gba àwọn ìmọ̀ tuntun nípa èdè àti àṣà Yorùbá, àwọn ìpèsè ẹ̀kọ́, àti àwọn ìròyìn tó ṣe pàtàkì.
             <span className="block mt-2">
               Get the latest Yoruba learning tips, cultural insights, and academy updates delivered to your inbox.
             </span>
@@ -90,14 +90,14 @@ function Newsletter() {
                 aria-label="Email address for newsletter subscription"
               />
               {message && (
-                <div 
+                <div
                   className={`absolute -bottom-7 left-0 right-0 text-sm text-center transition-opacity duration-300 ${
                     message ? 'opacity-100' : 'opacity-0'
                   }`}
                 >
                   <span className={`inline-block px-3 py-1 rounded-full ${
-                    message.type === 'success' 
-                      ? 'bg-green-900/30 text-green-400' 
+                    message.type === 'success'
+                      ? 'bg-green-900/30 text-green-400'
                       : 'bg-red-900/30 text-red-400'
                   }`}>
                     {message.text}
@@ -215,12 +215,7 @@ export default function HomePage() {
               <a href="#about" className="text-[#a1a1aa] hover:text-white transition-colors">About</a>
             </div>
             <div className="flex items-center space-x-4">
-              <a href="/auth/signin" className="text-[#a1a1aa] hover:text-white transition-colors">
-                Sign In
-              </a>
-              <a href="/auth/register" className="px-4 py-2 bg-[#4f46e5] hover:bg-[#4338ca] text-white rounded-lg transition-colors">
-                Get Started
-              </a>
+              {/* Navigation buttons moved to bottom tabs */}
             </div>
           </div>
         </div>
@@ -254,13 +249,7 @@ export default function HomePage() {
             Immerse yourself in the rich culture and traditions of the Yoruba people through our interactive language programs. From greetings to proverbs, we make learning Yoruba engaging and meaningful.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="/auth/register" className="px-8 py-4 bg-[#4f46e5] hover:bg-[#4338ca] text-white rounded-lg text-lg font-medium transition-colors flex items-center justify-center group">
-              <span>Bẹ̀rẹ̀ Níṣe</span>
-              <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
-            </a>
-            <a href="#pricing" className="px-8 py-4 border border-[#374151] text-white rounded-lg text-lg font-medium hover:border-[#4b5563] transition-colors flex items-center justify-center">
-              <span>See Plans & Pricing</span>
-            </a>
+            {/* Hero buttons moved to bottom tabs */}
           </div>
           <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
             {[
@@ -315,7 +304,7 @@ export default function HomePage() {
               We combine traditional Yoruba teaching methods with modern technology for effective learning
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               {
@@ -395,9 +384,7 @@ export default function HomePage() {
                   ))}
                 </ul>
 
-                <a href="/auth/register" className={`block w-full py-3 text-center rounded-lg font-medium transition-colors ${level.popular ? 'bg-[#4f46e5] hover:bg-[#4338ca] text-white' : 'border border-[#374151] text-white hover:border-[#4b5563]'}`}>
-                  Get Started
-                </a>
+                {/* Pricing buttons moved to bottom tabs */}
               </div>
             ))}
           </div>
@@ -430,7 +417,8 @@ export default function HomePage() {
             About Ewa Ede Yoruba Academy
           </h2>
           <p className="text-lg text-[#a1a1aa] mb-8">
-            Founded with a passion for preserving and promoting the Yoruba language and culture, our academy brings together expert teachers and enthusiastic learners from around the world. Whether you&apos;re connecting with your heritage or discovering Yoruba for the first time, we provide the structure, community, and resources you need to succeed.
+            {/* eslint-disable-next-line react/no-unescaped-entities */}
+            Founded with a passion for preserving and promoting the Yoruba language and culture, our academy brings together expert teachers and enthusiastic learners from around the world. Whether you're connecting with your heritage or discovering Yoruba for the first time, we provide the structure, community, and resources you need to succeed.
           </p>
           <p className="text-lg text-[#a1a1aa]">
             Our platform combines traditional teaching methods with modern technology, creating an engaging and effective learning environment. Join our community of learners and discover the beauty of Yoruba language and culture.

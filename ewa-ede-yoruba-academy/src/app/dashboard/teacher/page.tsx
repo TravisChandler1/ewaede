@@ -164,6 +164,7 @@ export default async function TeacherDashboard() {
       <div>
         <h1 className="text-3xl font-bold text-white">Welcome, {user.name?.split(' ')[0] || 'Teacher'}!</h1>
         <p className="text-[#a1a1aa]">
+          {/* eslint-disable-next-line react/no-unescaped-entities */}
           Here's an overview of your teaching activities.
         </p>
       </div>

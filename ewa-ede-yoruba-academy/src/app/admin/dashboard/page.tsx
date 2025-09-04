@@ -89,13 +89,12 @@ export default async function AdminDashboard() {
     Promise.all([
       prisma.session.count({ where: { startTime: { gte: new Date() } } }), // Upcoming sessions
       prisma.assignmentSubmission.count({ where: { gradedAt: null } }), // Ungraded submissions
-      prisma.bookClub.count(), // Total book clubs
-      prisma.message.count() // Total messages
+      prisma.bookClub.count() // Total book clubs
     ])
   ]);
 
   // Destructure system stats
-  const [upcomingSessions, ungradedSubmissions, totalBookClubs, totalMessages] = systemStats;
+  const [upcomingSessions, ungradedSubmissions, totalBookClubs] = systemStats;
 
   return (
     <div className="space-y-6 bg-[#0f0f0f] min-h-screen p-6">
