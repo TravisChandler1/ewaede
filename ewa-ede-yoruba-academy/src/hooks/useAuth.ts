@@ -1,4 +1,4 @@
-import { signIn } from '@/auth';
+import { signIn } from 'next-auth/react';
 
 export interface SignUpCredentials {
   email: string;
@@ -77,7 +77,6 @@ export const useAuth = () => {
         await signIn('credentials', {
           email,
           password,
-          redirect: true,
           callbackUrl: dashboardUrl,
         });
         return { success: true };
@@ -106,18 +105,26 @@ export const useAuth = () => {
     redirect = true,
   }: SignInCredentials) => {
     try {
-      const result = await signIn('credentials', {
-        email,
-        password,
-        redirect,
-        callbackUrl,
-      });
+      if (redirect) {
+        await signIn('credentials', {
+          email,
+          password,
+          callbackUrl,
+        });
+        return { success: true };
+      } else {
+        const result = await signIn('credentials', {
+          email,
+          password,
+          redirect: false,
+        });
 
-      if (!redirect && result?.error) {
-        throw new Error(result.error);
+        if (result?.error) {
+          throw new Error(result.error);
+        }
+
+        return result;
       }
-
-      return result;
     } catch (error) {
       throw error;
     }

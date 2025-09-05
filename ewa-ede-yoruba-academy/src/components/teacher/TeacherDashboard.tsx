@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import {
   Calendar,
   Clock,
@@ -27,7 +28,6 @@ import {
   Pause,
   StopCircle
 } from 'lucide-react';
-import { getCurrentUser } from '@/lib/auth-utils';
 import SessionScheduler from './SessionScheduler';
 import type { AuthUser } from '@/auth.config';
 
@@ -61,8 +61,8 @@ interface Course {
 
 export default function TeacherDashboard() {
   const router = useRouter();
+  const { data: session, status } = useSession();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [user, setUser] = useState<AuthUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
 
@@ -79,25 +79,16 @@ export default function TeacherDashboard() {
   const [courses, setCourses] = useState<Course[]>([]);
 
   useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const currentUser = await getCurrentUser();
-        if (!currentUser || currentUser.role !== 'TEACHER') {
-          router.push('/auth/signin');
-          return;
-        }
-        setUser(currentUser);
-        await loadDashboardData();
-      } catch (error) {
-        console.error('Authentication error:', error);
-        router.push('/auth/signin');
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    if (status === 'loading') return;
 
-    checkAuth();
-  }, [router]);
+    if (!session?.user || session.user.role !== 'TEACHER') {
+      router.push('/auth/signin');
+      return;
+    }
+
+    loadDashboardData();
+    setIsLoading(false);
+  }, [session, status, router]);
 
   const loadDashboardData = async () => {
     try {
@@ -153,7 +144,7 @@ export default function TeacherDashboard() {
     },
   ];
 
-  if (isLoading) {
+  if (isLoading || status === 'loading') {
     return (
       <div className="min-h-screen bg-[#0f0f0f] flex items-center justify-center">
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-[#4f46e5]"></div>
@@ -161,7 +152,7 @@ export default function TeacherDashboard() {
     );
   }
 
-  if (!user) {
+  if (!session?.user || session.user.role !== 'TEACHER') {
     return null;
   }
 
@@ -277,7 +268,7 @@ export default function TeacherDashboard() {
           {/* Header */}
           <div className="pb-6 border-b border-[#2a2a2a]">
             <h1 className="text-2xl font-bold text-white">
-              Welcome back, {user?.name?.split(' ')[0] || 'Teacher'}! 👋
+              Welcome back, {session?.user?.name?.split(' ')[0] || 'Teacher'}! 👋
             </h1>
             <p className="mt-2 text-[#a1a1aa]">
               Manage your courses, schedule sessions, and connect with students.

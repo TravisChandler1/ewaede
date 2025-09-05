@@ -22,33 +22,18 @@ const navigation: NavItem[] = [
   },
   {
     name: 'My Courses',
-    href: '/dashboard/courses',
+    href: '/courses',
     icon: <FiBook className="w-5 h-5" />,
-  },
-  {
-    name: 'Book Club',
-    href: '/dashboard/book-club',
-    icon: <FiUsers className="w-5 h-5" />,
-  },
-  {
-    name: 'Live Sessions',
-    href: '/dashboard/sessions',
-    icon: <FiVideo className="w-5 h-5" />,
   },
   {
     name: 'Messages',
     href: '/dashboard/messages',
     icon: <FiMessageSquare className="w-5 h-5" />,
   },
-  {
-    name: 'Settings',
-    href: '/dashboard/settings',
-    icon: <FiSettings className="w-5 h-5" />,
-  },
 ];
 
 type DashboardSidebarProps = {
-  user: User;
+  user?: User;
 };
 
 export default function DashboardSidebar({ user }: DashboardSidebarProps) {
@@ -68,7 +53,7 @@ export default function DashboardSidebar({ user }: DashboardSidebarProps) {
 
   const filteredNavigation = navigation.filter((item) => {
     if (!item.roles) return true;
-    return item.roles.includes(session?.user?.role || '');
+    return item.roles.includes(session?.user?.role || user?.role || '');
   });
 
   // Mobile menu button
@@ -145,7 +130,7 @@ export default function DashboardSidebar({ user }: DashboardSidebarProps) {
       <div className="p-4 border-t border-gray-200">
         <div className="flex items-center">
           <div className="h-9 w-9 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-medium">
-            {user?.name
+            {(session?.user?.name || user?.name || 'U')
               ?.split(' ')
               .map((n) => n[0])
               .join('')
@@ -154,7 +139,7 @@ export default function DashboardSidebar({ user }: DashboardSidebarProps) {
           {!isCollapsed && (
             <div className="ml-3">
               <p className="text-sm font-medium text-gray-900">
-                {user?.name || 'User'}
+                {session?.user?.name || user?.name || 'User'}
               </p>
               <button
                 onClick={() => signOut({ callbackUrl: '/auth/signin' })}

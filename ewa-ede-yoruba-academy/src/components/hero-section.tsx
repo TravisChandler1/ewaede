@@ -14,29 +14,32 @@ export function HeroSection() {
 
   return (
     <section className="relative overflow-hidden min-h-screen flex items-center">
-      {/* Animated Background with Glowing Candle Effect */}
+      {/* Background Image with Overlay */}
       <div className="absolute inset-0 -z-10">
-        {/* Grid Pattern */}
-        <div className="absolute inset-0 h-full w-full bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:32px_32px]" />
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: "url('/hero-background.jpg')",
+          }}
+        />
+        {/* Dark overlay for better text readability */}
+        <div className="absolute inset-0 bg-black/40" />
 
-        {/* Glowing Candle Animation */}
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 opacity-20">
-          <div className="absolute inset-0 bg-gradient-radial from-purple-500/30 via-purple-400/20 to-transparent rounded-full animate-pulse" />
-          <div className="absolute inset-4 bg-gradient-radial from-indigo-500/25 via-indigo-400/15 to-transparent rounded-full animate-pulse animation-delay-1000" />
-          <div className="absolute inset-8 bg-gradient-radial from-violet-500/20 via-violet-400/10 to-transparent rounded-full animate-pulse animation-delay-2000" />
-        </div>
+        {/* Grid Pattern Overlay */}
+        <div className="absolute inset-0 h-full w-full bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:32px_32px]" />
 
-        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 opacity-15">
-          <div className="absolute inset-0 bg-gradient-radial from-orange-500/25 via-orange-400/15 to-transparent rounded-full animate-pulse animation-delay-1500" />
-          <div className="absolute inset-6 bg-gradient-radial from-yellow-500/20 via-yellow-400/10 to-transparent rounded-full animate-pulse animation-delay-2500" />
+        {/* Subtle Glowing Effects */}
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 opacity-10">
+          <div className="absolute inset-0 bg-gradient-radial from-purple-500/20 via-purple-400/10 to-transparent rounded-full animate-pulse" />
+          <div className="absolute inset-4 bg-gradient-radial from-indigo-500/15 via-indigo-400/5 to-transparent rounded-full animate-pulse animation-delay-1000" />
         </div>
 
         {/* Floating Particles */}
         <div className="absolute inset-0">
-          {mounted && Array.from({ length: 20 }).map((_, i) => (
+          {mounted && Array.from({ length: 15 }).map((_, i) => (
             <div
               key={i}
-              className="absolute w-1 h-1 bg-purple-400/30 rounded-full animate-float"
+              className="absolute w-1 h-1 bg-white/20 rounded-full animate-float"
               style={{
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,

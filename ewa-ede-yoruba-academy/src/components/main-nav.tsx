@@ -42,19 +42,32 @@ export function MainNav() {
           </span>
         </Link>
 
-        <nav className="hidden items-center space-x-6 text-sm font-medium md:flex">
-          {routes.map((route) => (
-            <Link
-              key={route.href}
-              href={route.href}
-              className={cn(
-                "transition-colors hover:text-foreground/80",
-                route.active ? "text-foreground" : "text-foreground/60"
-              )}
-            >
-              {route.label}
-            </Link>
-          ))}
+        <nav className="hidden items-center md:flex">
+          <div className="relative flex items-center bg-muted/50 rounded-lg p-1">
+            {/* Active tab background indicator */}
+            <div
+              className="absolute top-1 left-1 h-8 bg-primary rounded-md transition-all duration-300 ease-in-out"
+              style={{
+                width: `${100 / routes.length}%`,
+                transform: `translateX(${routes.findIndex(route => route.active) * 100}%)`,
+              }}
+            />
+
+            {routes.map((route, index) => (
+              <Link
+                key={route.href}
+                href={route.href}
+                className={cn(
+                  "relative z-10 px-4 py-2 text-sm font-medium rounded-md transition-all duration-200",
+                  route.active
+                    ? "text-primary-foreground"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted/80"
+                )}
+              >
+                {route.label}
+              </Link>
+            ))}
+          </div>
         </nav>
 
         <div className="hidden md:flex items-center space-x-4">
@@ -84,14 +97,16 @@ export function MainNav() {
       {isOpen && (
         <div className="md:hidden border-t border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
           <div className="container py-4 space-y-4">
-            <nav className="flex flex-col space-y-2">
+            <nav className="flex flex-col space-y-1">
               {routes.map((route) => (
                 <Link
                   key={route.href}
                   href={route.href}
                   className={cn(
-                    "py-2 px-3 rounded-md transition-colors hover:bg-accent/50",
-                    route.active ? "text-foreground" : "text-foreground/60"
+                    "py-3 px-4 rounded-lg transition-all duration-200",
+                    route.active
+                      ? "bg-primary text-primary-foreground shadow-sm"
+                      : "text-foreground/60 hover:text-foreground hover:bg-muted/50"
                   )}
                   onClick={() => setIsOpen(false)}
                 >
