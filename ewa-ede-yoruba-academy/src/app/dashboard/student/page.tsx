@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import {
   BookOpen,
   Clock,
@@ -14,7 +15,6 @@ import {
   Bell,
   Search
 } from 'lucide-react';
-import { getCurrentUser } from '@/lib/auth-utils';
 import { Loading } from '@/components/ui/loading';
 import { CourseCard } from '@/components/dashboard/CourseCard';
 
@@ -102,9 +102,9 @@ interface Session {
 
 export default function StudentDashboard() {
   const router = useRouter();
+  const { data: session, status } = useSession();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [courses, setCourses] = useState<Course[]>([]);
-  const [user, setUser] = useState<AuthUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [stats, setStats] = useState<Stats>({
     activeCourses: 0,
@@ -164,30 +164,25 @@ export default function StudentDashboard() {
   };
 
   useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const currentUser = await getCurrentUser();
-        if (!currentUser) {
-          router.push('/auth/signin');
-          return;
-        }
-        setUser(currentUser);
-        await Promise.all([
-          fetchEnrolledCourses(),
-          fetchDashboardStats(),
-          fetchRecentActivities(),
-          fetchUpcomingSessions()
-        ]);
-      } catch (error) {
-        console.error('Authentication error:', error);
-        router.push('/auth/signin');
-      } finally {
-        setIsLoading(false);
-      }
+    if (status === 'loading') return;
+
+    if (!session?.user) {
+      router.push('/auth/signin');
+      return;
+    }
+
+    const loadData = async () => {
+      await Promise.all([
+        fetchEnrolledCourses(),
+        fetchDashboardStats(),
+        fetchRecentActivities(),
+        fetchUpcomingSessions()
+      ]);
+      setIsLoading(false);
     };
 
-    checkAuth();
-  }, [router]);
+    loadData();
+  }, [session, status, router]);
 
   const statsList: StatItem[] = [
     {
@@ -252,11 +247,11 @@ export default function StudentDashboard() {
     }
   };
   
-  if (isLoading) {
+  if (status === 'loading' || isLoading) {
     return <Loading />;
   }
 
-  if (!user) {
+  if (!session?.user) {
     return null;
   }
 
@@ -319,7 +314,7 @@ export default function StudentDashboard() {
         <main className="py-6 px-4 sm:px-6 lg:px-8 bg-[#0f0f0f]">
           {/* Header */}
           <div className="pb-6 border-b border-[#2a2a2a]">
-            <h1 className="text-2xl font-bold text-white">Welcome back, {user?.name?.split(' ')[0] || 'Student'}! 👋</h1>
+            <h1 className="text-2xl font-bold text-white">Welcome back, {session?.user?.name?.split(' ')[0] || 'Student'}! 👋</h1>
           <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {statsList.map((stat) => (
               <div key={stat.name} className="bg-[#1a1a1a] border border-[#2a2a2a] p-6 rounded-lg shadow-lg hover:border-[#4f46e5]/50 transition-all duration-300">

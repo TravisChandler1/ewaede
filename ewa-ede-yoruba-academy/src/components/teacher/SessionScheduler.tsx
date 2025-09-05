@@ -81,9 +81,9 @@ export default function SessionScheduler({ onSessionCreated, onClose }: SessionS
   };
 
   const generateMeetingUrl = () => {
-    // Generate a simple meeting URL (in production, integrate with Zoom/Google Meet)
-    const meetingId = Math.random().toString(36).substring(2, 15);
-    const url = `https://meet.ewaede.com/${meetingId}`;
+    // Generate Google Meet URL
+    const meetingId = Math.random().toString(36).substring(2, 15).toUpperCase();
+    const url = `https://meet.google.com/${meetingId}`;
     setFormData(prev => ({ ...prev, meetingUrl: url }));
   };
 
@@ -317,7 +317,7 @@ export default function SessionScheduler({ onSessionCreated, onClose }: SessionS
                       value={formData.meetingUrl}
                       onChange={handleInputChange}
                       className="flex-1 px-3 py-2 border border-[#374151] rounded-l-md shadow-sm bg-[#0f0f0f] text-white placeholder-[#6b7280] focus:outline-none focus:ring-[#4f46e5] focus:border-[#4f46e5]"
-                      placeholder="https://meet.google.com/..."
+                      placeholder="https://meet.google.com/abc-defg-hij"
                     />
                     <button
                       type="button"

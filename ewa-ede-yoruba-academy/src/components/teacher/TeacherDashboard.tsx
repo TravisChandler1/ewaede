@@ -16,20 +16,24 @@ import {
   ChevronRight,
   Menu,
   X,
-  Bell,
-  Search,
-  Edit,
-  Trash2,
-  Eye,
-  Send,
-  CheckCircle,
-  AlertCircle,
-  Play,
-  Pause,
-  StopCircle
+  Bell
 } from 'lucide-react';
 import SessionScheduler from './SessionScheduler';
-import type { AuthUser } from '@/auth.config';
+import Messages from './Messages';
+import CourseManager from './CourseManager';
+
+interface Session {
+  id: string;
+  title: string;
+  courseTitle: string;
+  startTime: string;
+  endTime: string;
+  attendees: number;
+  maxAttendees: number;
+  status: 'completed' | 'scheduled' | 'ongoing' | 'cancelled';
+  meetingUrl?: string;
+  description?: string;
+}
 
 interface TeacherStats {
   totalStudents: number;
@@ -59,12 +63,22 @@ interface Course {
   lastActivity: string;
 }
 
+interface NavigationItem {
+  name: string;
+  icon: any;
+  id: string;
+  action?: () => void;
+}
+
 export default function TeacherDashboard() {
   const router = useRouter();
   const { data: session, status } = useSession();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
+  const [showSessionScheduler, setShowSessionScheduler] = useState(false);
+  const [showMessages, setShowMessages] = useState(false);
+  const [showCourseManager, setShowCourseManager] = useState(false);
 
   const [stats, setStats] = useState<TeacherStats>({
     totalStudents: 0,
@@ -89,6 +103,12 @@ export default function TeacherDashboard() {
     loadDashboardData();
     setIsLoading(false);
   }, [session, status, router]);
+
+  const handleSessionCreated = (session: Session) => {
+    // Refresh the sessions list
+    loadDashboardData();
+    setShowSessionScheduler(false);
+  };
 
   const loadDashboardData = async () => {
     try {
@@ -203,7 +223,7 @@ export default function TeacherDashboard() {
                   { name: 'My Courses', icon: BookOpen, id: 'courses' },
                   { name: 'Sessions', icon: Calendar, id: 'sessions' },
                   { name: 'Students', icon: Users, id: 'students' },
-                  { name: 'Messages', icon: MessageSquare, id: 'messages' },
+                  { name: 'Messages', icon: MessageSquare, id: 'messages', action: () => setShowMessages(true) },
                   { name: 'Settings', icon: Settings, id: 'settings' },
                 ].map((item) => (
                   <button
@@ -239,15 +259,21 @@ export default function TeacherDashboard() {
             <div className="space-y-2">
               {[
                 { name: 'Overview', icon: BarChart3, id: 'overview' },
-                { name: 'My Courses', icon: BookOpen, id: 'courses' },
+                { name: 'My Courses', icon: BookOpen, id: 'courses', action: () => setShowCourseManager(true) },
                 { name: 'Sessions', icon: Calendar, id: 'sessions' },
                 { name: 'Students', icon: Users, id: 'students' },
                 { name: 'Messages', icon: MessageSquare, id: 'messages' },
                 { name: 'Settings', icon: Settings, id: 'settings' },
-              ].map((item) => (
+              ].map((item: NavigationItem) => (
                 <button
                   key={item.id}
-                  onClick={() => setActiveTab(item.id)}
+                  onClick={() => {
+                    if (item.action) {
+                      item.action();
+                    } else {
+                      setActiveTab(item.id);
+                    }
+                  }}
                   className={`w-full flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
                     activeTab === item.id
                       ? 'bg-[#4f46e5] text-white'
@@ -305,7 +331,10 @@ export default function TeacherDashboard() {
               <div className="bg-[#1a1a1a] border border-[#2a2a2a] shadow-lg overflow-hidden rounded-lg hover:border-[#4f46e5]/50 transition-all duration-300">
                 <div className="px-4 py-5 sm:px-6 border-b border-[#2a2a2a] flex items-center justify-between">
                   <h3 className="text-lg font-medium text-white">Upcoming Sessions</h3>
-                  <button className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-[#4f46e5] bg-[#4f46e5]/10 hover:bg-[#4f46e5]/20">
+                  <button
+                    onClick={() => setShowSessionScheduler(true)}
+                    className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-[#4f46e5] bg-[#4f46e5]/10 hover:bg-[#4f46e5]/20"
+                  >
                     <Plus className="h-4 w-4 mr-1" />
                     Schedule New
                   </button>
@@ -365,7 +394,10 @@ export default function TeacherDashboard() {
               <div className="bg-[#1a1a1a] border border-[#2a2a2a] shadow-lg overflow-hidden rounded-lg hover:border-[#4f46e5]/50 transition-all duration-300">
                 <div className="px-4 py-5 sm:px-6 border-b border-[#2a2a2a] flex items-center justify-between">
                   <h3 className="text-lg font-medium text-white">My Courses</h3>
-                  <button className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-[#4f46e5] bg-[#4f46e5]/10 hover:bg-[#4f46e5]/20">
+                  <button
+                    onClick={() => setActiveTab('courses')}
+                    className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-[#4f46e5] bg-[#4f46e5]/10 hover:bg-[#4f46e5]/20"
+                  >
                     <Plus className="h-4 w-4 mr-1" />
                     Create Course
                   </button>
@@ -412,7 +444,10 @@ export default function TeacherDashboard() {
                     <MessageSquare className="h-4 w-4 mr-2" />
                     Message Students
                   </button>
-                  <button className="w-full flex items-center justify-center px-4 py-2.5 border border-[#4f46e5]/30 rounded-lg shadow-sm text-sm font-medium text-[#4f46e5] bg-[#4f46e5]/10 hover:bg-[#4f46e5]/20 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#4f46e5] transition-colors duration-200">
+                  <button
+                    onClick={() => setShowSessionScheduler(true)}
+                    className="w-full flex items-center justify-center px-4 py-2.5 border border-[#4f46e5]/30 rounded-lg shadow-sm text-sm font-medium text-[#4f46e5] bg-[#4f46e5]/10 hover:bg-[#4f46e5]/20 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#4f46e5] transition-colors duration-200"
+                  >
                     <Calendar className="h-4 w-4 mr-2" />
                     Schedule Session
                   </button>
@@ -436,6 +471,28 @@ export default function TeacherDashboard() {
           </div>
         </main>
       </div>
+
+      {/* Session Scheduler Modal */}
+      {showSessionScheduler && (
+        <SessionScheduler
+          onSessionCreated={handleSessionCreated}
+          onClose={() => setShowSessionScheduler(false)}
+        />
+      )}
+
+      {/* Messages Modal */}
+      {showMessages && (
+        <Messages
+          onClose={() => setShowMessages(false)}
+        />
+      )}
+
+      {/* Course Manager Modal */}
+      {showCourseManager && (
+        <CourseManager
+          onClose={() => setShowCourseManager(false)}
+        />
+      )}
     </div>
   );
 }
