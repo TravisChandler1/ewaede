@@ -1,27 +1,35 @@
 'use client';
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Home, User, LogIn } from 'lucide-react';
 
 export default function BottomTabs() {
+  const pathname = usePathname();
+
+  // Hide bottom tabs on dashboard pages
+  if (pathname?.startsWith('/dashboard')) {
+    return null;
+  }
+
   const tabs = [
     {
       name: 'Home',
       href: '/',
       icon: Home,
-      active: true
+      active: pathname === '/'
     },
     {
       name: 'Sign In',
       href: '/auth/signin',
       icon: LogIn,
-      active: false
+      active: pathname === '/auth/signin'
     },
     {
       name: 'Get Started',
       href: '/auth/register',
       icon: User,
-      active: false
+      active: pathname === '/auth/register'
     }
   ];
 
