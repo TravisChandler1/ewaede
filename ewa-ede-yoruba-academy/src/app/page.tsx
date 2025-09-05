@@ -174,28 +174,49 @@ export default function HomePage() {
   const levels = [
     {
       name: "Novice",
-      price: "$29",
-      period: "/month",
+      duration: "15 weeks | once weekly",
+      fullPrice: "$220",
+      flexiblePrice: "$15",
+      period: "(full course package) / (flexible per-class option)",
+      description: "Learning the basics of the Yorùbá Language, how to do simple greetings, introduction of yourself, talk about things in Yorùbá.",
       features: ["Basic alphabet and pronunciation", "Simple greetings and expressions", "Cultural introduction", "Community access"]
     },
     {
       name: "Beginner",
-      price: "$39",
-      period: "/month",
+      duration: "26 weeks | once weekly",
+      fullPrice: "$390",
+      flexiblePrice: "$15",
+      period: "(full course package) / (flexible per-class option)",
+      description: "You know a bit of Yorùbá Language, but want to get better, building vocabulary and simple sentences.",
       features: ["Grammar fundamentals", "Vocabulary building", "Basic conversations", "Group learning sessions", "E-library access"]
     },
     {
       name: "Advanced",
-      price: "$49",
-      period: "/month",
+      duration: "20 weeks | once weekly",
+      fullPrice: "$300",
+      flexiblePrice: "$15",
+      period: "(full course package) / (flexible per-class option)",
+      description: "You need to boost your speaking, you feel stuck, but you know some words, can form a bit of simple sentences and statements.",
       features: ["Complex grammar structures", "Advanced vocabulary", "Cultural context lessons", "Live teacher sessions", "Book club access"],
       popular: true
     },
     {
       name: "Pro",
-      price: "$59",
-      period: "/month",
+      duration: "12 weeks | once weekly",
+      fullPrice: "$180",
+      flexiblePrice: "$15",
+      period: "(full course package) / (flexible per-class option)",
+      description: "Deeper knowledge of grammar and vocabulary, need a community of the Yorùbá language speakers.",
       features: ["Fluency training", "Literature analysis", "One-on-one sessions", "Teaching preparation", "All features included"]
+    },
+    {
+      name: "Individual",
+      duration: "24 weeks | once weekly",
+      fullPrice: "$480",
+      flexiblePrice: "$20",
+      period: "(full course package) / (flexible per-class option)",
+      description: "One on one lesson with the teacher, personalized instruction.",
+      features: ["Personalized one-on-one sessions", "Customized learning pace", "Dedicated teacher attention", "Flexible scheduling", "All features included"]
     }
   ];
 
@@ -349,7 +370,7 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
             {levels.map((level, index) => (
               <div key={index} className={`relative bg-[#1a1a1a] border rounded-xl p-6 ${level.popular ? 'border-[#4f46e5] ring-1 ring-[#4f46e5]/20' : 'border-[#2a2a2a]'}`}>
                 {level.popular && (
@@ -367,11 +388,22 @@ export default function HomePage() {
                   {level.name === 'Beginner' && ' Ìbẹ̀rẹ̀'}
                   {level.name === 'Advanced' && ' Ìlọsíwájú'}
                   {level.name === 'Pro' && ' Ọ̀jọ̀gbọ́n'}
+                  {level.name === 'Individual' && ' (Ẹ̀kọ́ Ẹ̀kọ́)'}
                 </h3>
-                  <div className="flex items-baseline justify-center">
-                    <span className="text-4xl font-bold">{level.price}</span>
-                    <span className="text-[#a1a1aa] ml-1">{level.period}</span>
+                  <div className="mb-2">
+                    <p className="text-sm text-[#a1a1aa]">{level.duration}</p>
                   </div>
+                  <div className="flex flex-col items-center space-y-1">
+                    <div className="flex items-baseline justify-center">
+                      <span className="text-3xl font-bold">{level.fullPrice}</span>
+                      <span className="text-[#a1a1aa] ml-1 text-sm">full course</span>
+                    </div>
+                    <div className="flex items-baseline justify-center">
+                      <span className="text-2xl font-semibold text-[#a78bfa]">{level.flexiblePrice}</span>
+                      <span className="text-[#a1a1aa] ml-1 text-sm">per class</span>
+                    </div>
+                  </div>
+                  <p className="text-sm text-[#a1a1aa] mt-3 px-2">{level.description}</p>
                 </div>
 
                 <ul className="space-y-3 mb-8">

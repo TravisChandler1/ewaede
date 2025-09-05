@@ -6,7 +6,6 @@ export async function POST(request: Request) {
   try {
     console.log('Registration request received');
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const {
       name,
       email,

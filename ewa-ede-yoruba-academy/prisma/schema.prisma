@@ -38,6 +38,7 @@ model User {
   userProgress      UserProgress[]
   auditLogs         AdminAuditLog[]
   newsletterSubscriptions NewsletterSubscription[]
+  uploadedFiles     File[]
   
   @@map("users")
 }
@@ -393,13 +394,35 @@ model UserProgress {
   completed Boolean  @default(false)
   progress  Int      @default(0) // percentage 0-100
   updatedAt DateTime @updatedAt @map("updated_at")
-  
+
   // Relations
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   lesson    Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
-  
+
   @@unique([userId, lessonId])
   @@map("user_progress")
+}
+
+model File {
+  id            String   @id @default(cuid())
+  filename      String
+  originalName  String   @map("original_name")
+  mimeType      String   @map("mime_type")
+  size          Int
+  url           String
+  path          String
+  category      String   @default("content")
+  isPublic      Boolean  @default(true) @map("is_public")
+  uploadedById  String   @map("uploaded_by_id")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  uploadedBy    User     @relation(fields: [uploadedById], references: [id], onDelete: Cascade)
+
+  @@index([uploadedById])
+  @@index([category])
+  @@map("files")
 }
 
 // Enums
