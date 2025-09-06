@@ -66,7 +66,7 @@ function Newsletter() {
             <Mail className="w-8 h-8 text-[#4f46e5]" />
           </div>
           <h2 className="text-3xl font-bold text-white mb-4">
-            Ṣe ẹ fẹ́ kí a ránṣẹ́ létà sí ẹ? <span className="block text-[#4f46e5] mt-2">Stay Updated</span>
+            <span className="block text-[#4f46e5] mt-2">Stay Updated</span>
           </h2>
           <p className="text-[#a1a1aa] text-lg mb-8 max-w-2xl">
             Gba àwọn ìmọ̀ tuntun nípa èdè àti àṣà Yorùbá, àwọn ìpèsè ẹ̀kọ́, àti àwọn ìròyìn tó ṣe pàtàkì.
@@ -247,7 +247,7 @@ export default function HomePage() {
         <div
           className="absolute inset-0 opacity-20"
           style={{
-            backgroundImage: "url('https://images.unsplash.com/photo-1578662996442-48f60103fc96?auto=format&fit=crop&w=2000&q=80')",
+            backgroundImage: "url('/hero-background.jpg')",
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundAttachment: 'fixed'
@@ -260,7 +260,7 @@ export default function HomePage() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#4f46e5] opacity-75"></span>
               <span className="relative inline-flex rounded-full h-3 w-3 bg-[#4f46e5]"></span>
             </span>
-            Ẹ kú àbọ̀! Welcome to Ewa Ede Yoruba Academy
+            E̩ kaabo̩! Welcome to Ewa Ede Yoruba Academy
           </div>
           <h1 className="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
             <span className="text-[#4f46e5]">Learn the Beautiful Yoruba Language</span>
@@ -384,11 +384,6 @@ export default function HomePage() {
                 <div className="text-center mb-6">
                   <h3 className="text-2xl font-bold mb-2">
                   {level.name}
-                  {level.name === 'Novice' && ' (Aṣáájú)'}
-                  {level.name === 'Beginner' && ' Ìbẹ̀rẹ̀'}
-                  {level.name === 'Advanced' && ' Ìlọsíwájú'}
-                  {level.name === 'Pro' && ' Ọ̀jọ̀gbọ́n'}
-                  {level.name === 'Individual' && ' (Ẹ̀kọ́ Ẹ̀kọ́)'}
                 </h3>
                   <div className="mb-2">
                     <p className="text-sm text-[#a1a1aa]">{level.duration}</p>

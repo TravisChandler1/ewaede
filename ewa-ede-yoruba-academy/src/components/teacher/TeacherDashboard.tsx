@@ -14,8 +14,6 @@ import {
   BarChart3,
   Settings,
   ChevronRight,
-  Menu,
-  X,
   Bell
 } from 'lucide-react';
 import SessionScheduler from './SessionScheduler';
@@ -44,17 +42,6 @@ interface TeacherStats {
   monthlyRevenue: number;
 }
 
-interface Session {
-  id: string;
-  title: string;
-  courseTitle: string;
-  startTime: string;
-  endTime: string;
-  attendees: number;
-  maxAttendees: number;
-  status: 'scheduled' | 'ongoing' | 'completed' | 'cancelled';
-}
-
 interface Course {
   id: string;
   title: string;
@@ -63,17 +50,10 @@ interface Course {
   lastActivity: string;
 }
 
-interface NavigationItem {
-  name: string;
-  icon: any;
-  id: string;
-  action?: () => void;
-}
 
 export default function TeacherDashboard() {
   const router = useRouter();
   const { data: session, status } = useSession();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
   const [showSessionScheduler, setShowSessionScheduler] = useState(false);
@@ -110,7 +90,7 @@ export default function TeacherDashboard() {
     setShowSessionScheduler(false);
   };
 
-  const loadDashboardData = async () => {
+  const loadDashboardData = async (): Promise<void> => {
     try {
       // Load teacher statistics
       const statsResponse = await fetch('/api/teacher/stats');
@@ -178,128 +158,77 @@ export default function TeacherDashboard() {
 
   return (
     <div className="min-h-full bg-[#0f0f0f]">
-      {/* Mobile sidebar toggle */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 z-40 bg-[#1a1a1a] border-b border-[#2a2a2a] px-4 py-3 flex items-center justify-between">
-        <button
-          type="button"
-          className="text-[#a1a1aa] hover:text-white"
-          onClick={() => setSidebarOpen(true)}
-        >
-          <span className="sr-only">Open sidebar</span>
-          <Menu className="h-6 w-6" />
-        </button>
-
-        <h1 className="text-xl font-bold text-white">Teacher Dashboard</h1>
-
-        <div className="flex items-center space-x-4">
-          <button type="button" className="text-[#a1a1aa] hover:text-white">
-            <span className="sr-only">View notifications</span>
-            <Bell className="h-6 w-6" />
-          </button>
+      {/* Header */}
+      <div className="bg-[#1a1a1a] border-b border-[#2a2a2a] px-4 py-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-white">Teacher Dashboard</h1>
+            <p className="text-[#a1a1aa] mt-1">Manage your courses, schedule sessions, and connect with students.</p>
+          </div>
+          <div className="flex items-center space-x-4">
+            <button type="button" className="text-[#a1a1aa] hover:text-white">
+              <span className="sr-only">View notifications</span>
+              <Bell className="h-6 w-6" />
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Mobile sidebar */}
-      {sidebarOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden">
-          <div className="fixed inset-0 bg-black bg-opacity-75" onClick={() => setSidebarOpen(false)}></div>
-          <div className="fixed inset-y-0 left-0 max-w-xs w-full bg-[#1a1a1a] border-r border-[#2a2a2a]">
-            <div className="flex items-center justify-between h-16 px-4 border-b border-[#2a2a2a]">
-              <h2 className="text-xl font-semibold text-white">Menu</h2>
+      {/* Tab Navigation */}
+      <div className="bg-[#1a1a1a] border-b border-[#2a2a2a] px-4 py-3">
+        <nav className="flex items-center">
+          <div className="relative flex items-center bg-[#0f0f0f] rounded-lg p-1">
+            {/* Active tab background indicator */}
+            <div
+              className="absolute top-1 left-1 h-8 bg-[#4f46e5] rounded-md transition-all duration-300 ease-in-out"
+              style={{
+                width: `${100 / 6}%`,
+                transform: `translateX(${[
+                  { id: 'overview', index: 0 },
+                  { id: 'courses', index: 1 },
+                  { id: 'sessions', index: 2 },
+                  { id: 'students', index: 3 },
+                  { id: 'messages', index: 4 },
+                  { id: 'settings', index: 5 },
+                ].find(item => item.id === activeTab)?.index ?? 0 * 100}%)`,
+              }}
+            />
+
+            {[
+              { name: 'Overview', icon: BarChart3, id: 'overview' },
+              { name: 'Courses', icon: BookOpen, id: 'courses' },
+              { name: 'Sessions', icon: Calendar, id: 'sessions' },
+              { name: 'Students', icon: Users, id: 'students' },
+              { name: 'Messages', icon: MessageSquare, id: 'messages' },
+              { name: 'Settings', icon: Settings, id: 'settings' },
+            ].map((item) => (
               <button
-                type="button"
-                className="text-[#a1a1aa] hover:text-white"
-                onClick={() => setSidebarOpen(false)}
+                key={item.id}
+                onClick={() => {
+                  if (item.id === 'messages') {
+                    setShowMessages(true);
+                  } else if (item.id === 'courses') {
+                    setShowCourseManager(true);
+                  } else {
+                    setActiveTab(item.id);
+                  }
+                }}
+                className={`relative z-10 px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 flex items-center ${
+                  activeTab === item.id
+                    ? 'text-white'
+                    : 'text-[#a1a1aa] hover:text-white hover:bg-[#2a2a2a]/50'
+                }`}
               >
-                <span className="sr-only">Close sidebar</span>
-                <X className="h-6 w-6" />
+                <item.icon className="h-4 w-4 mr-2" />
+                {item.name}
               </button>
-            </div>
-            {/* Sidebar content */}
-            <nav className="mt-8 px-4">
-              <div className="space-y-2">
-                {[
-                  { name: 'Overview', icon: BarChart3, id: 'overview' },
-                  { name: 'My Courses', icon: BookOpen, id: 'courses' },
-                  { name: 'Sessions', icon: Calendar, id: 'sessions' },
-                  { name: 'Students', icon: Users, id: 'students' },
-                  { name: 'Messages', icon: MessageSquare, id: 'messages', action: () => setShowMessages(true) },
-                  { name: 'Settings', icon: Settings, id: 'settings' },
-                ].map((item) => (
-                  <button
-                    key={item.id}
-                    onClick={() => {
-                      setActiveTab(item.id);
-                      setSidebarOpen(false);
-                    }}
-                    className={`w-full flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
-                      activeTab === item.id
-                        ? 'bg-[#4f46e5] text-white'
-                        : 'text-[#a1a1aa] hover:bg-[#2a2a2a] hover:text-white'
-                    }`}
-                  >
-                    <item.icon className="h-5 w-5 mr-3" />
-                    {item.name}
-                  </button>
-                ))}
-              </div>
-            </nav>
+            ))}
           </div>
-        </div>
-      )}
-
-      {/* Desktop sidebar */}
-      <div className="hidden lg:fixed lg:inset-y-0 lg:left-0 lg:w-64 lg:block">
-        <div className="flex flex-col h-full bg-[#1a1a1a] border-r border-[#2a2a2a]">
-          <div className="flex items-center h-16 px-6 border-b border-[#2a2a2a]">
-            <h1 className="text-xl font-bold text-white">Teacher Portal</h1>
-          </div>
-
-          <nav className="flex-1 mt-8 px-4">
-            <div className="space-y-2">
-              {[
-                { name: 'Overview', icon: BarChart3, id: 'overview' },
-                { name: 'My Courses', icon: BookOpen, id: 'courses', action: () => setShowCourseManager(true) },
-                { name: 'Sessions', icon: Calendar, id: 'sessions' },
-                { name: 'Students', icon: Users, id: 'students' },
-                { name: 'Messages', icon: MessageSquare, id: 'messages' },
-                { name: 'Settings', icon: Settings, id: 'settings' },
-              ].map((item: NavigationItem) => (
-                <button
-                  key={item.id}
-                  onClick={() => {
-                    if (item.action) {
-                      item.action();
-                    } else {
-                      setActiveTab(item.id);
-                    }
-                  }}
-                  className={`w-full flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
-                    activeTab === item.id
-                      ? 'bg-[#4f46e5] text-white'
-                      : 'text-[#a1a1aa] hover:bg-[#2a2a2a] hover:text-white'
-                  }`}
-                >
-                  <item.icon className="h-5 w-5 mr-3" />
-                  {item.name}
-                </button>
-              ))}
-            </div>
-          </nav>
-        </div>
+        </nav>
       </div>
 
-      <div className="lg:pl-64 pt-16 lg:pt-0">
+      <div className="pt-0">
         <main className="py-6 px-4 sm:px-6 lg:px-8 bg-[#0f0f0f]">
-          {/* Header */}
-          <div className="pb-6 border-b border-[#2a2a2a]">
-            <h1 className="text-2xl font-bold text-white">
-              Welcome back, {session?.user?.name?.split(' ')[0] || 'Teacher'}! 👋
-            </h1>
-            <p className="mt-2 text-[#a1a1aa]">
-              Manage your courses, schedule sessions, and connect with students.
-            </p>
-          </div>
 
           {/* Stats Grid */}
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

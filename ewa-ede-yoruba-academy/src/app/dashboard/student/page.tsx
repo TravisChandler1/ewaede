@@ -10,8 +10,6 @@ import {
   BarChart2,
   Calendar,
   ChevronRight,
-  Menu,
-  X,
   Bell,
   Search
 } from 'lucide-react';
@@ -103,9 +101,9 @@ interface Session {
 export default function StudentDashboard() {
   const router = useRouter();
   const { data: session, status } = useSession();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [courses, setCourses] = useState<Course[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState('overview');
   const [stats, setStats] = useState<Stats>({
     activeCourses: 0,
     hoursThisWeek: 0,
@@ -246,7 +244,7 @@ export default function StudentDashboard() {
       setUpcomingSessions([]);
     }
   };
-  
+
   if (status === 'loading' || isLoading) {
     return <Loading />;
   }
@@ -257,64 +255,78 @@ export default function StudentDashboard() {
 
   return (
     <div className="min-h-full bg-[#0f0f0f]">
-      {/* Mobile sidebar toggle */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 z-40 bg-[#1a1a1a] border-b border-[#2a2a2a] px-4 py-3 flex items-center justify-between">
-        <button
-          type="button"
-          className="text-[#a1a1aa] hover:text-white"
-          onClick={() => setSidebarOpen(true)}
-        >
-          <span className="sr-only">Open sidebar</span>
-          <Menu className="h-6 w-6" />
-        </button>
+      {/* Header */}
+      <div className="bg-[#1a1a1a] border-b border-[#2a2a2a] px-4 py-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-white">Student Dashboard</h1>
+            <p className="text-[#a1a1aa] mt-1">Track your progress and continue learning Yoruba.</p>
+          </div>
+          <div className="flex items-center space-x-4">
+            <button type="button" className="text-[#a1a1aa] hover:text-white">
+              <span className="sr-only">View notifications</span>
+              <Bell className="h-6 w-6" />
+            </button>
 
-        <h1 className="text-xl font-bold text-white">Ewa Ede</h1>
-
-        <div className="flex items-center space-x-4">
-          <button type="button" className="text-[#a1a1aa] hover:text-white">
-            <span className="sr-only">View notifications</span>
-            <Bell className="h-6 w-6" />
-          </button>
-
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Search className="h-5 w-5 text-[#6b7280]" />
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Search className="h-5 w-5 text-[#6b7280]" />
+              </div>
+              <input
+                type="text"
+                className="block w-full pl-10 pr-3 py-2 border border-[#374151] rounded-lg leading-5 bg-[#0f0f0f] placeholder-[#6b7280] text-white focus:outline-none focus:ring-[#4f46e5] focus:border-[#4f46e5] sm:text-sm"
+                placeholder="Search courses..."
+              />
             </div>
-            <input
-              type="text"
-              className="block w-full pl-10 pr-3 py-2 border border-[#374151] rounded-lg leading-5 bg-[#0f0f0f] placeholder-[#6b7280] text-white focus:outline-none focus:ring-[#4f46e5] focus:border-[#4f46e5] sm:text-sm"
-              placeholder="Search"
-            />
           </div>
         </div>
       </div>
 
-      {/* Mobile sidebar */}
-      {sidebarOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden">
-          <div className="fixed inset-0 bg-black bg-opacity-75" onClick={() => setSidebarOpen(false)}></div>
-          <div className="fixed inset-y-0 left-0 max-w-xs w-full bg-[#1a1a1a] border-r border-[#2a2a2a]">
-            <div className="flex items-center justify-between h-16 px-4 border-b border-[#2a2a2a]">
-              <h2 className="text-xl font-semibold text-white">Menu</h2>
-              <button
-                type="button"
-                className="text-[#a1a1aa] hover:text-white"
-                onClick={() => setSidebarOpen(false)}
-              >
-                <span className="sr-only">Close sidebar</span>
-                <X className="h-6 w-6" />
-              </button>
-            </div>
-            {/* Sidebar content here */}
-          </div>
-        </div>
-      )}
+      {/* Tab Navigation */}
+      <div className="bg-[#1a1a1a] border-b border-[#2a2a2a] px-4 py-3">
+        <nav className="flex items-center">
+          <div className="relative flex items-center bg-[#0f0f0f] rounded-lg p-1">
+            {/* Active tab background indicator */}
+            <div
+              className="absolute top-1 left-1 h-8 bg-[#4f46e5] rounded-md transition-all duration-300 ease-in-out"
+              style={{
+                width: `${100 / 5}%`,
+                transform: `translateX(${[
+                  { id: 'overview', index: 0 },
+                  { id: 'courses', index: 1 },
+                  { id: 'progress', index: 2 },
+                  { id: 'sessions', index: 3 },
+                  { id: 'achievements', index: 4 },
+                ].find(item => item.id === activeTab)?.index ?? 0 * 100}%)`,
+              }}
+            />
 
-      <div className="lg:pl-64 pt-16 lg:pt-0">
+            {[
+              { name: 'Overview', icon: BarChart2, id: 'overview' },
+              { name: 'My Courses', icon: BookOpen, id: 'courses' },
+              { name: 'Progress', icon: Award, id: 'progress' },
+              { name: 'Sessions', icon: Calendar, id: 'sessions' },
+              { name: 'Achievements', icon: Award, id: 'achievements' },
+            ].map((item) => (
+              <button
+                key={item.id}
+                onClick={() => setActiveTab(item.id)}
+                className={`relative z-10 px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 flex items-center ${
+                  activeTab === item.id
+                    ? 'text-white'
+                    : 'text-[#a1a1aa] hover:text-white hover:bg-[#2a2a2a]/50'
+                }`}
+              >
+                <item.icon className="h-4 w-4 mr-2" />
+                {item.name}
+              </button>
+            ))}
+          </div>
+        </nav>
+      </div>
+
+      <div className="pt-0">
         <main className="py-6 px-4 sm:px-6 lg:px-8 bg-[#0f0f0f]">
-          {/* Header */}
-          <div className="pb-6 border-b border-[#2a2a2a]">
-            <h1 className="text-2xl font-bold text-white">Welcome back, {session?.user?.name?.split(' ')[0] || 'Student'}! 👋</h1>
           <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {statsList.map((stat) => (
               <div key={stat.name} className="bg-[#1a1a1a] border border-[#2a2a2a] p-6 rounded-lg shadow-lg hover:border-[#4f46e5]/50 transition-all duration-300">
@@ -335,7 +347,7 @@ export default function StudentDashboard() {
               </div>
             ))}
           </div>
-              </div>
+
           {/* Main Content */}
           <div className="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Courses Section */}
