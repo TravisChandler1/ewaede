@@ -235,16 +235,19 @@ model Session {
   startTime    DateTime          @map("start_time")
   endTime      DateTime          @map("end_time")
   meetingUrl   String?           @map("meeting_url")
+  meetingPassword String?        @map("meeting_password")
+  level        Level?            @default(BEGINNER)
+  status       SessionStatus     @default(SCHEDULED)
   isRecurring  Boolean           @default(false)
   recurringId  String?           @map("recurring_id")
   teacherId    String            @map("teacher_id")
   courseId     String?           @map("course_id")
-  
+
   // Relations
   teacher      User              @relation("SessionTeacher", fields: [teacherId], references: [id], onDelete: Cascade)
   course       Course?           @relation(fields: [courseId], references: [id])
   attendees    SessionAttendee[]
-  
+
   @@map("sessions")
 }
 
@@ -456,4 +459,11 @@ enum NotificationType {
   MESSAGE
   BOOK_CLUB
   PAYMENT
+}
+
+enum SessionStatus {
+  SCHEDULED
+  ONGOING
+  COMPLETED
+  CANCELLED
 }

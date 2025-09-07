@@ -16,18 +16,10 @@ import {
   Menu,
   X,
   Bell,
-  Search,
-  Edit,
-  Trash2,
   Eye,
-  Send,
   CheckCircle,
   AlertCircle,
-  Play,
-  Pause,
-  StopCircle,
-  Mail,
-  Phone
+  Play
 } from 'lucide-react';
 import { getCurrentUser } from '@/lib/auth-utils';
 import SessionScheduler from './SessionScheduler';

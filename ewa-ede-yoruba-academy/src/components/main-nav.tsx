@@ -53,7 +53,7 @@ export function MainNav() {
               }}
             />
 
-            {routes.map((route, index) => (
+            {routes.map((route) => (
               <Link
                 key={route.href}
                 href={route.href}

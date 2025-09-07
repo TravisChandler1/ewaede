@@ -1,18 +1,67 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { MobileNav } from "@/components/MobileNav";
 import BottomTabs from "@/components/BottomTabs";
 import { SessionProvider } from "next-auth/react";
-
-const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
+import ErrorBoundary from "@/components/ErrorBoundary";
 
 export const metadata: Metadata = {
-  title: "Ewa Ede Yoruba Academy | Learn Yoruba Online",
-  description: "Join Ewa Ede Yoruba Academy to learn Yoruba language with expert tutors and interactive lessons.",
-  keywords: ["Yoruba", "Learn Yoruba", "Yoruba Language", "Online Yoruba Classes", "Yoruba Academy"],
+  title: {
+    default: "Ewa Ede Yoruba Academy | Learn Yoruba Online",
+    template: "%s | Ewa Ede Yoruba Academy"
+  },
+  description: "Join Ewa Ede Yoruba Academy to learn Yoruba language with expert tutors and interactive lessons. Master Yoruba through immersive courses, live sessions, and cultural content.",
+  keywords: [
+    "Yoruba",
+    "Learn Yoruba",
+    "Yoruba Language",
+    "Online Yoruba Classes",
+    "Yoruba Academy",
+    "Yoruba Culture",
+    "Nigerian Language",
+    "Language Learning",
+    "Online Education",
+    "Cultural Education"
+  ],
+  authors: [{ name: "Ewa Ede Yoruba Academy" }],
+  creator: "Ewa Ede Yoruba Academy",
+  publisher: "Ewa Ede Yoruba Academy",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  metadataBase: new URL('https://yorubaacademy.com'),
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    title: "Ewa Ede Yoruba Academy | Learn Yoruba Online",
+    description: "Master Yoruba language with expert tutors and interactive lessons. Join our immersive online learning platform.",
+    url: "https://yorubaacademy.com",
+    siteName: "Ewa Ede Yoruba Academy",
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Ewa Ede Yoruba Academy | Learn Yoruba Online",
+    description: "Master Yoruba language with expert tutors and interactive lessons.",
+    creator: "@yorubaacademy",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
 };
 
 function Providers({ children }: { children: React.ReactNode }) {
@@ -24,7 +73,9 @@ function Providers({ children }: { children: React.ReactNode }) {
         enableSystem
         disableTransitionOnChange
       >
-        {children}
+        <ErrorBoundary>
+          {children}
+        </ErrorBoundary>
         <Toaster />
         <MobileNav />
         <BottomTabs />
@@ -40,7 +91,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} font-sans antialiased min-h-screen bg-background text-foreground pb-16`}>
+      <body className="font-sans antialiased min-h-screen bg-background text-foreground pb-16">
         <Providers>{children}</Providers>
       </body>
     </html>

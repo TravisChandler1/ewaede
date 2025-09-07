@@ -5,7 +5,7 @@ import prisma from '@/lib/prisma';
 export async function GET(request: Request) {
   try {
     const session = await auth();
-    if (!session?.user?.id || session.user.role !== 'TEACHER') {
+    if (!session?.user?.id || session.user.role !== 'STUDENT') {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -60,7 +60,7 @@ export async function GET(request: Request) {
 
     return NextResponse.json({ messages: formattedMessages });
   } catch (error) {
-    console.error('Error fetching teacher messages:', error);
+    console.error('Error fetching student messages:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
@@ -68,34 +68,34 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const session = await auth();
-    if (!session?.user?.id || session.user.role !== 'TEACHER') {
+    if (!session?.user?.id || session.user.role !== 'STUDENT') {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { receiverId, content } = await request.json();
+    const { recipientId, content } = await request.json();
 
-    if (!receiverId || !content?.trim()) {
-      return NextResponse.json({ error: 'Receiver ID and content are required' }, { status: 400 });
+    if (!recipientId || !content?.trim()) {
+      return NextResponse.json({ error: 'Recipient ID and content are required' }, { status: 400 });
     }
 
-    // Verify the receiver is a student enrolled in teacher's courses
+    // Verify the recipient is a teacher of courses the student is enrolled in
     const enrollment = await prisma.enrollment.findFirst({
       where: {
-        userId: receiverId,
+        userId: session.user.id,
         course: {
-          instructorId: session.user.id,
+          instructorId: recipientId,
         },
       },
     });
 
     if (!enrollment) {
-      return NextResponse.json({ error: 'Unauthorized to message this student' }, { status: 403 });
+      return NextResponse.json({ error: 'Unauthorized to message this teacher' }, { status: 403 });
     }
 
     const message = await prisma.message.create({
       data: {
         senderId: session.user.id,
-        recipientId: receiverId,
+        recipientId,
         content: content.trim(),
         isRead: false,
       },
@@ -136,7 +136,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json(formattedMessage, { status: 201 });
   } catch (error) {
-    console.error('Error sending teacher message:', error);
+    console.error('Error sending student message:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

@@ -62,7 +62,7 @@ export default function Messages({ onClose }: MessagesProps) {
         const data = await response.json();
         // Extract unique students from all courses
         const studentMap = new Map<string, Student>();
-        data.courses?.forEach((course: CourseData) => {
+        data.courses?.forEach((_course: CourseData) => {
           // This would need to be implemented in the API to get enrolled students
           // For now, we'll use a placeholder
         });

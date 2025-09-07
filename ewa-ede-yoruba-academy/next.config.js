@@ -1,14 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  poweredByHeader: false,
   images: {
-    domains: ['localhost', 'your-supabase-url.supabase.co'],
+    domains: ['localhost', 'supabase.co', 'vercel.app'],
+    formats: ['image/webp', 'image/avif'],
   },
-  turbopack: {
-    root: __dirname,
-  },
-  typescript: {
-    ignoreBuildErrors: true,
+  experimental: {
+    // optimizeCss: true, // Temporarily disabled due to critters dependency issue
   },
   webpack: (config, { isServer }) => {
     if (!isServer) {
@@ -23,6 +22,40 @@ const nextConfig = {
       };
     }
     return config;
+  },
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'X-Frame-Options',
+            value: 'DENY',
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'origin-when-cross-origin',
+          },
+          {
+            key: 'Permissions-Policy',
+            value: 'camera=(), microphone=(), geolocation=()',
+          },
+        ],
+      },
+      {
+        source: '/api/(.*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'no-cache, no-store, must-revalidate',
+          },
+        ],
+      },
+    ];
   },
 };
 

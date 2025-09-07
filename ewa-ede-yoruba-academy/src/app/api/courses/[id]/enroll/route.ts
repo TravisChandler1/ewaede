@@ -4,7 +4,7 @@ import prisma from '@/lib/prisma';
 
 export async function POST(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await getCurrentUser();
@@ -15,7 +15,7 @@ export async function POST(
       );
     }
 
-    const courseId = params.id;
+    const { id: courseId } = await params;
 
     // Check if course exists and is published
     const course = await prisma.course.findUnique({

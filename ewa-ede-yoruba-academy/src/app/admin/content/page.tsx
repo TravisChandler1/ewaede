@@ -89,7 +89,7 @@ export default function ContentManagementPage() {
     }
   };
 
-  const handleUploadComplete = (_uploadedFiles: unknown[]) => {
+  const handleUploadComplete = () => {
     // Refresh the files list
     loadFiles();
     setShowUploadModal(false);

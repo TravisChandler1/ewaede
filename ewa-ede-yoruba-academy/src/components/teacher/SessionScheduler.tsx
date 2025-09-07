@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Calendar, Clock, Users, Video, MapPin, Save, X, Plus } from 'lucide-react';
+import { Save, X } from 'lucide-react';
 
 interface Course {
   id: string;

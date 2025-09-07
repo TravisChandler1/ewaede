@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
+import { useSession, signOut } from 'next-auth/react';
 import {
   BookOpen,
   Clock,
@@ -11,17 +11,12 @@ import {
   Calendar,
   ChevronRight,
   Bell,
-  Search
+  Search,
+  LogOut
 } from 'lucide-react';
 import { Loading } from '@/components/ui/loading';
 import { CourseCard } from '@/components/dashboard/CourseCard';
-
-interface AuthUser {
-  id: string;
-  name?: string | null;
-  email?: string | null;
-  role: string;
-}
+import NotificationCenter from '@/components/student/NotificationCenter';
 
 // Define interfaces for our data types
 interface StatItem {
@@ -104,6 +99,7 @@ export default function StudentDashboard() {
   const [courses, setCourses] = useState<Course[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
+  const [showNotifications, setShowNotifications] = useState(false);
   const [stats, setStats] = useState<Stats>({
     activeCourses: 0,
     hoursThisWeek: 0,
@@ -259,13 +255,26 @@ export default function StudentDashboard() {
       <div className="bg-[#1a1a1a] border-b border-[#2a2a2a] px-4 py-4">
         <div className="flex items-center justify-between">
           <div>
+            <h2 className="text-lg font-medium text-[#4f46e5]">Welcome back, {session?.user?.name || 'Student'}!</h2>
             <h1 className="text-2xl font-bold text-white">Student Dashboard</h1>
             <p className="text-[#a1a1aa] mt-1">Track your progress and continue learning Yoruba.</p>
           </div>
           <div className="flex items-center space-x-4">
-            <button type="button" className="text-[#a1a1aa] hover:text-white">
+            <button
+              type="button"
+              onClick={() => setShowNotifications(true)}
+              className="text-[#a1a1aa] hover:text-white"
+            >
               <span className="sr-only">View notifications</span>
               <Bell className="h-6 w-6" />
+            </button>
+            <button
+              type="button"
+              onClick={() => signOut({ callbackUrl: '/auth/signin' })}
+              className="text-[#a1a1aa] hover:text-white"
+            >
+              <span className="sr-only">Sign out</span>
+              <LogOut className="h-6 w-6" />
             </button>
 
             <div className="relative">
@@ -291,13 +300,13 @@ export default function StudentDashboard() {
               className="absolute top-1 left-1 h-8 bg-[#4f46e5] rounded-md transition-all duration-300 ease-in-out"
               style={{
                 width: `${100 / 5}%`,
-                transform: `translateX(${[
+                transform: `translateX(${([
                   { id: 'overview', index: 0 },
                   { id: 'courses', index: 1 },
                   { id: 'progress', index: 2 },
                   { id: 'sessions', index: 3 },
                   { id: 'achievements', index: 4 },
-                ].find(item => item.id === activeTab)?.index ?? 0 * 100}%)`,
+                ].find(item => item.id === activeTab)?.index ?? 0) * 100}%)`,
               }}
             />
 
@@ -490,6 +499,12 @@ export default function StudentDashboard() {
           </div>
         </main>
       </div>
+
+      {/* Notification Center */}
+      <NotificationCenter
+        isOpen={showNotifications}
+        onClose={() => setShowNotifications(false)}
+      />
     </div>
   );
 }

@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { User } from 'next-auth';
 import { useState, useEffect } from 'react';
-import { FiMenu, FiX, FiHome, FiBook, FiUsers, FiVideo, FiMessageSquare, FiSettings, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import { FiMenu, FiX, FiHome, FiBook, FiMessageSquare, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 
 type NavItem = {
   name: string;

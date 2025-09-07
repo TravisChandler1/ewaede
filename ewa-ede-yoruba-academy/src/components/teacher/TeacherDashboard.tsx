@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
+import { useSession, signOut } from 'next-auth/react';
 import {
   Calendar,
   Clock,
@@ -14,11 +14,13 @@ import {
   BarChart3,
   Settings,
   ChevronRight,
-  Bell
+  Bell,
+  LogOut
 } from 'lucide-react';
 import SessionScheduler from './SessionScheduler';
-import Messages from './Messages';
-import CourseManager from './CourseManager';
+import StudentSelector from './StudentSelector';
+import ChatModal from './ChatModal';
+import LiveSessionModal, { SessionData } from './LiveSessionModal';
 
 interface Session {
   id: string;
@@ -50,6 +52,13 @@ interface Course {
   lastActivity: string;
 }
 
+interface Student {
+  id: string;
+  name: string;
+  email: string;
+  courseTitle?: string;
+}
+
 
 export default function TeacherDashboard() {
   const router = useRouter();
@@ -57,8 +66,10 @@ export default function TeacherDashboard() {
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
   const [showSessionScheduler, setShowSessionScheduler] = useState(false);
-  const [showMessages, setShowMessages] = useState(false);
-  const [showCourseManager, setShowCourseManager] = useState(false);
+  const [showStudentSelector, setShowStudentSelector] = useState(false);
+  const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
+  const [showChatModal, setShowChatModal] = useState(false);
+  const [showLiveSessionModal, setShowLiveSessionModal] = useState(false);
 
   const [stats, setStats] = useState<TeacherStats>({
     totalStudents: 0,
@@ -84,10 +95,52 @@ export default function TeacherDashboard() {
     setIsLoading(false);
   }, [session, status, router]);
 
-  const handleSessionCreated = (session: Session) => {
+  const handleSessionCreated = (_session: Session) => {
     // Refresh the sessions list
     loadDashboardData();
     setShowSessionScheduler(false);
+  };
+
+  const handleStudentSelect = (student: Student) => {
+    setSelectedStudent(student);
+    setShowStudentSelector(false);
+    setShowChatModal(true);
+  };
+
+  const handleStartLiveSession = () => {
+    setShowLiveSessionModal(true);
+  };
+
+  const handleLiveSessionCreated = async (sessionData: SessionData) => {
+    try {
+      // Send session data to the backend
+      const response = await fetch('/api/teacher/live-sessions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(sessionData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to create live session');
+      }
+
+      const result = await response.json();
+
+      // Close the modal
+      setShowLiveSessionModal(false);
+
+      // Show success message with notification count
+      alert(`Live session "${sessionData.title}" created successfully! ${result.session.notifiedStudents} students have been notified.`);
+
+      // Refresh the sessions list
+      loadDashboardData();
+    } catch (error) {
+      console.error('Error creating live session:', error);
+      alert(error instanceof Error ? error.message : 'Failed to create live session. Please try again.');
+    }
   };
 
   const loadDashboardData = async (): Promise<void> => {
@@ -162,6 +215,7 @@ export default function TeacherDashboard() {
       <div className="bg-[#1a1a1a] border-b border-[#2a2a2a] px-4 py-4">
         <div className="flex items-center justify-between">
           <div>
+            <h2 className="text-lg font-medium text-[#4f46e5]">Welcome back, {session?.user?.name || 'Teacher'}!</h2>
             <h1 className="text-2xl font-bold text-white">Teacher Dashboard</h1>
             <p className="text-[#a1a1aa] mt-1">Manage your courses, schedule sessions, and connect with students.</p>
           </div>
@@ -169,6 +223,14 @@ export default function TeacherDashboard() {
             <button type="button" className="text-[#a1a1aa] hover:text-white">
               <span className="sr-only">View notifications</span>
               <Bell className="h-6 w-6" />
+            </button>
+            <button
+              type="button"
+              onClick={() => signOut({ callbackUrl: '/auth/signin' })}
+              className="text-[#a1a1aa] hover:text-white"
+            >
+              <span className="sr-only">Sign out</span>
+              <LogOut className="h-6 w-6" />
             </button>
           </div>
         </div>
@@ -183,14 +245,14 @@ export default function TeacherDashboard() {
               className="absolute top-1 left-1 h-8 bg-[#4f46e5] rounded-md transition-all duration-300 ease-in-out"
               style={{
                 width: `${100 / 6}%`,
-                transform: `translateX(${[
+                transform: `translateX(${([
                   { id: 'overview', index: 0 },
                   { id: 'courses', index: 1 },
                   { id: 'sessions', index: 2 },
                   { id: 'students', index: 3 },
                   { id: 'messages', index: 4 },
                   { id: 'settings', index: 5 },
-                ].find(item => item.id === activeTab)?.index ?? 0 * 100}%)`,
+                ].find(item => item.id === activeTab)?.index ?? 0) * 100}%)`,
               }}
             />
 
@@ -206,9 +268,7 @@ export default function TeacherDashboard() {
                 key={item.id}
                 onClick={() => {
                   if (item.id === 'messages') {
-                    setShowMessages(true);
-                  } else if (item.id === 'courses') {
-                    setShowCourseManager(true);
+                    setShowStudentSelector(true);
                   } else {
                     setActiveTab(item.id);
                   }
@@ -365,11 +425,17 @@ export default function TeacherDashboard() {
                   <h3 className="text-lg font-medium text-white">Quick Actions</h3>
                 </div>
                 <div className="p-4 space-y-3">
-                  <button className="w-full flex items-center justify-center px-4 py-2.5 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-[#4f46e5] hover:bg-[#4338ca] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#4f46e5] transition-colors duration-200">
+                  <button
+                    onClick={handleStartLiveSession}
+                    className="w-full flex items-center justify-center px-4 py-2.5 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-[#4f46e5] hover:bg-[#4338ca] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#4f46e5] transition-colors duration-200"
+                  >
                     <Video className="h-4 w-4 mr-2" />
                     Start Live Session
                   </button>
-                  <button className="w-full flex items-center justify-center px-4 py-2.5 border border-[#374151] rounded-lg shadow-sm text-sm font-medium text-white bg-[#2a2a2a] hover:bg-[#374151] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#4f46e5] transition-colors duration-200">
+                  <button
+                    onClick={() => setShowStudentSelector(true)}
+                    className="w-full flex items-center justify-center px-4 py-2.5 border border-[#374151] rounded-lg shadow-sm text-sm font-medium text-white bg-[#2a2a2a] hover:bg-[#374151] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#4f46e5] transition-colors duration-200"
+                  >
                     <MessageSquare className="h-4 w-4 mr-2" />
                     Message Students
                   </button>
@@ -409,17 +475,31 @@ export default function TeacherDashboard() {
         />
       )}
 
-      {/* Messages Modal */}
-      {showMessages && (
-        <Messages
-          onClose={() => setShowMessages(false)}
+      {/* Student Selector Modal */}
+      {showStudentSelector && (
+        <StudentSelector
+          onStudentSelect={handleStudentSelect}
+          onClose={() => setShowStudentSelector(false)}
         />
       )}
 
-      {/* Course Manager Modal */}
-      {showCourseManager && (
-        <CourseManager
-          onClose={() => setShowCourseManager(false)}
+      {/* Chat Modal */}
+      {showChatModal && selectedStudent && (
+        <ChatModal
+          student={selectedStudent}
+          onClose={() => {
+            setShowChatModal(false);
+            setSelectedStudent(null);
+          }}
+        />
+      )}
+
+      {/* Live Session Modal */}
+      {showLiveSessionModal && (
+        <LiveSessionModal
+          isOpen={showLiveSessionModal}
+          onClose={() => setShowLiveSessionModal(false)}
+          onStartSession={handleLiveSessionCreated}
         />
       )}
     </div>
