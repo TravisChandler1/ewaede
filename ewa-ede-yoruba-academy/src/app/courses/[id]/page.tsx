@@ -23,13 +23,14 @@ interface Module {
 
 
 interface CoursePageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export async function generateMetadata({ params }: CoursePageProps): Promise<Metadata> {
-  const course = await getCourse(params.id);
+  const { id } = await params;
+  const course = await getCourse(id);
   return {
     title: `${course?.title || 'Course'} - Ẹwà Èdè Yorùbá Academy`,
     description: course?.description,
@@ -69,8 +70,9 @@ async function getCourse(id: string) {
 }
 
 export default async function CoursePage({ params }: CoursePageProps) {
+  const { id } = await params;
   const user = await getCurrentUser();
-  const course = await getCourse(params.id);
+  const course = await getCourse(id);
   const isEnrolled = user && course.enrollments?.some(
     (e: Enrollment) => e.userId === user.id
   );
