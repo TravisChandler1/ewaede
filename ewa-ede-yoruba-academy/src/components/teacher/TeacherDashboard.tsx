@@ -57,6 +57,7 @@ interface Student {
   name: string;
   email: string;
   courseTitle?: string;
+  level?: string;
 }
 
 

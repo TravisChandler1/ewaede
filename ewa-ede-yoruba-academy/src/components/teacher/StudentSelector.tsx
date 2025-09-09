@@ -8,6 +8,7 @@ interface Student {
   name: string;
   email: string;
   courseTitle?: string;
+  level?: string;
   lastMessage?: string;
   lastMessageTime?: string;
 }
@@ -41,29 +42,14 @@ export default function StudentSelector({ onStudentSelect, onClose }: StudentSel
 
   const loadStudents = async () => {
     try {
-      // Get students from teacher's courses
-      const response = await fetch('/api/teacher/courses');
+      // Get real students from the database
+      const response = await fetch('/api/teacher/students');
       if (response.ok) {
         const data = await response.json();
-
-        // For now, create mock students based on enrolled count
-        // In a real app, you'd have an API endpoint that returns actual students
-        const mockStudents: Student[] = [];
-        data.courses?.forEach((course: { id: string; title: string; enrolledStudents: number }) => {
-          for (let i = 1; i <= Math.min(course.enrolledStudents, 5); i++) {
-            mockStudents.push({
-              id: `${course.id}-student-${i}`,
-              name: `Student ${i} (${course.title})`,
-              email: `student${i}@example.com`,
-              courseTitle: course.title,
-              lastMessage: i % 2 === 0 ? 'Thank you for the session!' : undefined,
-              lastMessageTime: i % 2 === 0 ? new Date(Date.now() - Math.random() * 86400000).toISOString() : undefined,
-            });
-          }
-        });
-
-        setStudents(mockStudents);
-        setFilteredStudents(mockStudents);
+        setStudents(data.students || []);
+        setFilteredStudents(data.students || []);
+      } else {
+        console.error('Failed to load students:', response.statusText);
       }
     } catch (error) {
       console.error('Error loading students:', error);
@@ -147,6 +133,11 @@ export default function StudentSelector({ onStudentSelect, onClose }: StudentSel
                         {student.courseTitle && (
                           <p className="text-xs text-[#6b7280] truncate">
                             Course: {student.courseTitle}
+                          </p>
+                        )}
+                        {student.level && (
+                          <p className="text-xs text-[#10b981] truncate">
+                            Level: {student.level}
                           </p>
                         )}
                         {student.lastMessage && (

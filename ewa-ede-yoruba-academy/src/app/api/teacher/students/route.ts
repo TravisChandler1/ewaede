@@ -24,6 +24,13 @@ export async function GET() {
             name: true,
             email: true,
           },
+          include: {
+            studentProfile: {
+              select: {
+                level: true,
+              },
+            },
+          },
         },
         course: {
           select: {
@@ -68,6 +75,7 @@ export async function GET() {
         name: enrollment.user.name,
         email: enrollment.user.email,
         courseTitle: enrollment.course.title,
+        level: enrollment.user.studentProfile?.level || 'NOVICE',
         lastMessage: lastMessage?.content,
         lastMessageTime: lastMessage?.timestamp,
       };

@@ -8,6 +8,7 @@ interface Student {
   name: string;
   email: string;
   courseTitle?: string;
+  level?: string;
 }
 
 interface Message {
@@ -122,6 +123,9 @@ export default function ChatModal({ student, onClose }: ChatModalProps) {
               <div>
                 <h3 className="text-lg font-medium text-white">{student.name}</h3>
                 <p className="text-sm text-[#a1a1aa]">{student.email}</p>
+                {student.level && (
+                  <p className="text-xs text-[#10b981]">Level: {student.level}</p>
+                )}
               </div>
             </div>
             <button onClick={onClose} className="text-[#a1a1aa] hover:text-white">
