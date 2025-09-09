@@ -13,7 +13,8 @@ import {
   Bell,
   Search,
   LogOut,
-  MessageSquare
+  MessageSquare,
+  Home
 } from 'lucide-react';
 import { Loading } from '@/components/ui/loading';
 import { CourseCard } from '@/components/dashboard/CourseCard';
@@ -263,6 +264,15 @@ export default function StudentDashboard() {
             <p className="text-[#a1a1aa] mt-1">Track your progress and continue learning Yoruba.</p>
           </div>
           <div className="flex items-center space-x-4">
+            <button
+              type="button"
+              onClick={() => setActiveTab('overview')}
+              className="text-[#a1a1aa] hover:text-white"
+              title="Back to Overview"
+            >
+              <span className="sr-only">Back to Overview</span>
+              <Home className="h-6 w-6" />
+            </button>
             <button
               type="button"
               onClick={() => setShowNotifications(true)}

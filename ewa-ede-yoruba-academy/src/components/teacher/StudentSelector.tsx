@@ -42,8 +42,8 @@ export default function StudentSelector({ onStudentSelect, onClose }: StudentSel
 
   const loadStudents = async () => {
     try {
-      // Get real students from the database
-      const response = await fetch('/api/teacher/students');
+      // Get all students with STUDENT role from the database
+      const response = await fetch('/api/students');
       if (response.ok) {
         const data = await response.json();
         setStudents(data.students || []);

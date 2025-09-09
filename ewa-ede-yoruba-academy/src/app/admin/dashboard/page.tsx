@@ -1,5 +1,5 @@
 import prisma from '@/lib/prisma';
-import { Users, BookOpen, CheckCircle, Clock, Calendar } from 'lucide-react';
+import { Users, BookOpen, CheckCircle, Clock, Calendar, Home } from 'lucide-react';
 import { auth } from '@/auth';
 
 interface ApprovalLog {
@@ -98,9 +98,19 @@ export default async function AdminDashboard() {
 
   return (
     <div className="space-y-6 bg-[#0f0f0f] min-h-screen p-6">
-      <div>
-        <h1 className="text-2xl font-bold text-white">Admin Dashboard</h1>
-        <p className="text-[#a1a1aa]">Welcome back, {user.name || 'Admin'}!</p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-white">Admin Dashboard</h1>
+          <p className="text-[#a1a1aa]">Welcome back, {user.name || 'Admin'}!</p>
+        </div>
+        <button
+          onClick={() => window.location.href = '/admin/dashboard'}
+          className="flex items-center space-x-2 px-4 py-2 bg-[#4f46e5] text-white rounded-lg hover:bg-[#4338ca] transition-colors"
+          title="Back to Dashboard Home"
+        >
+          <Home className="h-4 w-4" />
+          <span>Dashboard Home</span>
+        </button>
       </div>
 
       {/* Stats Grid */}
