@@ -6,9 +6,9 @@ const prisma = new PrismaClient({
 });
 
 async function createAdmin() {
-  const email = 'admin@example.com';
+  const email = 'ewaede@gmail.com.ng';
   const password = 'admin123';
-  const name = 'Admin User';
+  const name = 'Ewaede Admin';
 
   try {
     // Check if admin already exists

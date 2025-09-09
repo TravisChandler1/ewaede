@@ -6,7 +6,7 @@ import { MobileNav } from "@/components/MobileNav";
 import BottomTabs from "@/components/BottomTabs";
 import { SessionProvider } from "next-auth/react";
 import ErrorBoundary from "@/components/ErrorBoundary";
-import RouteLoading from "@/components/ui/route-loading";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: {
@@ -75,12 +75,13 @@ function Providers({ children }: { children: React.ReactNode }) {
         disableTransitionOnChange
       >
         <ErrorBoundary>
-          <RouteLoading />
           {children}
         </ErrorBoundary>
         <Toaster />
         <MobileNav />
-        <BottomTabs />
+        <Suspense fallback={null}>
+          <BottomTabs />
+        </Suspense>
       </ThemeProvider>
     </SessionProvider>
   );
