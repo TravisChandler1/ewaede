@@ -86,8 +86,17 @@ export default function LiveSessionModal({ isOpen, onClose, onStartSession }: Li
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
-      <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto relative">
+    <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
+      <div
+        className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm"
+        style={{
+          background: 'rgba(0, 0, 0, 0.5)',
+          backdropFilter: 'blur(8px)',
+          WebkitBackdropFilter: 'blur(8px)'
+        }}
+        onClick={handleClose}
+      ></div>
+      <div className="bg-[#1a1a1a]/95 border border-[#2a2a2a] rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto relative backdrop-blur-md">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-[#2a2a2a]">
           <div className="flex items-center">

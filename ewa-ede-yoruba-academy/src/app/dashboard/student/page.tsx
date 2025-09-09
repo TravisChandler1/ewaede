@@ -12,11 +12,13 @@ import {
   ChevronRight,
   Bell,
   Search,
-  LogOut
+  LogOut,
+  MessageSquare
 } from 'lucide-react';
 import { Loading } from '@/components/ui/loading';
 import { CourseCard } from '@/components/dashboard/CourseCard';
 import NotificationCenter from '@/components/student/NotificationCenter';
+import StudentMessageModal from '@/components/student/StudentMessageModal';
 
 // Define interfaces for our data types
 interface StatItem {
@@ -100,6 +102,7 @@ export default function StudentDashboard() {
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
   const [showNotifications, setShowNotifications] = useState(false);
+  const [showMessages, setShowMessages] = useState(false);
   const [stats, setStats] = useState<Stats>({
     activeCourses: 0,
     hoursThisWeek: 0,
@@ -299,13 +302,14 @@ export default function StudentDashboard() {
             <div
               className="absolute top-1 left-1 h-8 bg-[#4f46e5] rounded-md transition-all duration-300 ease-in-out"
               style={{
-                width: `${100 / 5}%`,
+                width: `${100 / 6}%`,
                 transform: `translateX(${([
                   { id: 'overview', index: 0 },
                   { id: 'courses', index: 1 },
                   { id: 'progress', index: 2 },
                   { id: 'sessions', index: 3 },
-                  { id: 'achievements', index: 4 },
+                  { id: 'messages', index: 4 },
+                  { id: 'achievements', index: 5 },
                 ].find(item => item.id === activeTab)?.index ?? 0) * 100}%)`,
               }}
             />
@@ -315,6 +319,7 @@ export default function StudentDashboard() {
               { name: 'My Courses', icon: BookOpen, id: 'courses' },
               { name: 'Progress', icon: Award, id: 'progress' },
               { name: 'Sessions', icon: Calendar, id: 'sessions' },
+              { name: 'Messages', icon: MessageSquare, id: 'messages' },
               { name: 'Achievements', icon: Award, id: 'achievements' },
             ].map((item) => (
               <button
@@ -412,6 +417,36 @@ export default function StudentDashboard() {
                 </div>
               </div>
 
+              {/* Messages Section */}
+              {activeTab === 'messages' && (
+                <div className="bg-[#1a1a1a] border border-[#2a2a2a] shadow-lg overflow-hidden rounded-lg hover:border-[#4f46e5]/50 transition-all duration-300">
+                  <div className="px-4 py-5 sm:px-6 border-b border-[#2a2a2a] flex items-center justify-between">
+                    <h3 className="text-lg font-medium text-white">Messages</h3>
+                    <button
+                      onClick={() => setShowMessages(true)}
+                      className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-[#4f46e5] bg-[#4f46e5]/10 hover:bg-[#4f46e5]/20"
+                    >
+                      <MessageSquare className="h-4 w-4 mr-1" />
+                      New Message
+                    </button>
+                  </div>
+                  <div className="divide-y divide-[#2a2a2a]">
+                    <div className="p-8 text-center">
+                      <MessageSquare className="h-12 w-12 text-[#a1a1aa] mx-auto mb-4" />
+                      <p className="text-[#a1a1aa]">No messages yet</p>
+                      <p className="text-sm text-[#6b7280] mt-1">Start a conversation with your teachers!</p>
+                      <button
+                        onClick={() => setShowMessages(true)}
+                        className="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-[#4f46e5] hover:bg-[#4338ca]"
+                      >
+                        <MessageSquare className="h-4 w-4 mr-2" />
+                        Send Message
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {/* Recent Activity */}
               <div className="bg-[#1a1a1a] border border-[#2a2a2a] shadow-lg overflow-hidden rounded-lg hover:border-[#4f46e5]/50 transition-all duration-300">
                 <div className="px-4 py-5 sm:px-6 border-b border-[#2a2a2a]">
@@ -504,6 +539,12 @@ export default function StudentDashboard() {
       <NotificationCenter
         isOpen={showNotifications}
         onClose={() => setShowNotifications(false)}
+      />
+
+      {/* Student Message Modal */}
+      <StudentMessageModal
+        isOpen={showMessages}
+        onClose={() => setShowMessages(false)}
       />
     </div>
   );

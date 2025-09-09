@@ -12,13 +12,10 @@ export async function GET() {
     // Get teacher statistics
     const teacherId = session.user.id;
 
-    // Count total students across all teacher's courses
-    const totalStudents = await prisma.enrollment.count({
+    // Count total students (users with STUDENT role)
+    const totalStudents = await prisma.user.count({
       where: {
-        course: {
-          instructorId: teacherId,
-        },
-        status: 'ACTIVE',
+        role: 'STUDENT',
       },
     });
 
