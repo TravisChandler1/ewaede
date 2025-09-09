@@ -3,25 +3,23 @@ import prisma from '@/lib/prisma';
 
 export async function GET() {
   try {
-    // Test the database connection by making a simple query
-    const users = await prisma.user.findMany({
-      take: 5, // Limit to 5 users
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        role: true,
-      },
-    });
+    // Test database connection
+    const userCount = await prisma.user.count();
+    const sessionCount = await prisma.session.count();
 
-    return NextResponse.json({ success: true, users });
+    return NextResponse.json({
+      status: 'Database connection successful',
+      userCount,
+      sessionCount,
+      timestamp: new Date().toISOString(),
+    });
   } catch (error) {
     console.error('Database connection error:', error);
     return NextResponse.json(
-      { 
-        success: false, 
-        error: 'Failed to connect to the database',
-        details: error instanceof Error ? error.message : 'Unknown error'
+      {
+        status: 'Database connection failed',
+        error: error instanceof Error ? error.message : 'Unknown error',
+        timestamp: new Date().toISOString(),
       },
       { status: 500 }
     );

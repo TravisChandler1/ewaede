@@ -253,7 +253,7 @@ export default function HomePage() {
             backgroundAttachment: 'fixed'
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0f0f0f] via-[#0f0f0f]/80 to-[#0f0f0f]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0f0f0f] via-[#0f0f0f]/10 to-[#0f0f0f]" />
         <div className="relative z-10 max-w-7xl mx-auto px-6 text-center">
           <div className="inline-flex items-center px-4 py-2 rounded-full bg-[#4f46e5]/10 border border-[#4f46e5]/30 text-[#a78bfa] text-sm font-medium mb-6">
             <span className="relative flex h-3 w-3 mr-2">

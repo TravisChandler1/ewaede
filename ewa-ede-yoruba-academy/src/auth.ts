@@ -100,6 +100,7 @@ const authHandlers = NextAuth({
   },
   pages: authConfig.pages,
   debug: process.env.NODE_ENV === 'development',
+  secret: process.env.NEXTAUTH_SECRET,
 });
 
 // Export the handlers, auth function, and signIn/signOut functions

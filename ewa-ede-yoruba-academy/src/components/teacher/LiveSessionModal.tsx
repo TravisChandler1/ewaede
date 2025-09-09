@@ -2,11 +2,6 @@
 
 import { useState } from 'react';
 import { X, Calendar, Clock, Users, Link as LinkIcon, Lock, Play } from 'lucide-react';
-import { Button } from '../ui/button';
-import { Input } from '../ui/input';
-import { Label } from '../ui/label';
-import { Select } from '../ui/select';
-import { Textarea } from '../ui/textarea';
 
 interface LiveSessionModalProps {
   isOpen: boolean;
@@ -91,8 +86,8 @@ export default function LiveSessionModal({ isOpen, onClose, onStartSession }: Li
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
+      <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto relative">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-[#2a2a2a]">
           <div className="flex items-center">
@@ -111,31 +106,32 @@ export default function LiveSessionModal({ isOpen, onClose, onStartSession }: Li
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
           {/* Session Title */}
           <div>
-            <Label htmlFor="title" className="text-white flex items-center">
+            <label htmlFor="title" className="block text-sm font-medium text-white mb-1 flex items-center">
               <Play className="h-4 w-4 mr-2" />
               Session Title *
-            </Label>
-            <Input
+            </label>
+            <input
               id="title"
               type="text"
               value={sessionData.title}
               onChange={(e) => setSessionData({ ...sessionData, title: e.target.value })}
-              className="mt-1 bg-[#0f0f0f] border-[#374151] text-white focus:border-[#4f46e5]"
+              className="block w-full px-3 py-2 border border-[#374151] rounded-md shadow-sm bg-[#0f0f0f] text-white placeholder-[#6b7280] focus:outline-none focus:ring-[#4f46e5] focus:border-[#4f46e5]"
               placeholder="e.g., Yoruba Grammar Session"
+              required
             />
             {errors.title && <p className="text-red-400 text-sm mt-1">{errors.title}</p>}
           </div>
 
           {/* Description */}
           <div>
-            <Label htmlFor="description" className="text-white">
+            <label htmlFor="description" className="block text-sm font-medium text-white mb-1">
               Description
-            </Label>
-            <Textarea
+            </label>
+            <textarea
               id="description"
               value={sessionData.description}
-              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setSessionData({ ...sessionData, description: e.target.value })}
-              className="mt-1 bg-[#0f0f0f] border-[#374151] text-white focus:border-[#4f46e5]"
+              onChange={(e) => setSessionData({ ...sessionData, description: e.target.value })}
+              className="block w-full px-3 py-2 border border-[#374151] rounded-md shadow-sm bg-[#0f0f0f] text-white placeholder-[#6b7280] focus:outline-none focus:ring-[#4f46e5] focus:border-[#4f46e5]"
               placeholder="Brief description of the session content..."
               rows={3}
             />
@@ -143,110 +139,112 @@ export default function LiveSessionModal({ isOpen, onClose, onStartSession }: Li
 
           {/* Meeting Link */}
           <div>
-            <Label htmlFor="meetingLink" className="text-white flex items-center">
+            <label htmlFor="meetingLink" className="block text-sm font-medium text-white mb-1 flex items-center">
               <LinkIcon className="h-4 w-4 mr-2" />
               Meeting Link *
-            </Label>
-            <Input
+            </label>
+            <input
               id="meetingLink"
               type="url"
               value={sessionData.meetingLink}
               onChange={(e) => setSessionData({ ...sessionData, meetingLink: e.target.value })}
-              className="mt-1 bg-[#0f0f0f] border-[#374151] text-white focus:border-[#4f46e5]"
+              className="block w-full px-3 py-2 border border-[#374151] rounded-md shadow-sm bg-[#0f0f0f] text-white placeholder-[#6b7280] focus:outline-none focus:ring-[#4f46e5] focus:border-[#4f46e5]"
               placeholder="https://zoom.us/j/..."
+              required
             />
             {errors.meetingLink && <p className="text-red-400 text-sm mt-1">{errors.meetingLink}</p>}
           </div>
 
           {/* Password */}
           <div>
-            <Label htmlFor="password" className="text-white flex items-center">
+            <label htmlFor="password" className="block text-sm font-medium text-white mb-1 flex items-center">
               <Lock className="h-4 w-4 mr-2" />
               Meeting Password (Optional)
-            </Label>
-            <Input
+            </label>
+            <input
               id="password"
               type="text"
               value={sessionData.password}
               onChange={(e) => setSessionData({ ...sessionData, password: e.target.value })}
-              className="mt-1 bg-[#0f0f0f] border-[#374151] text-white focus:border-[#4f46e5]"
+              className="block w-full px-3 py-2 border border-[#374151] rounded-md shadow-sm bg-[#0f0f0f] text-white placeholder-[#6b7280] focus:outline-none focus:ring-[#4f46e5] focus:border-[#4f46e5]"
               placeholder="Enter meeting password if required"
             />
           </div>
 
           {/* Learning Level */}
           <div>
-            <Label htmlFor="level" className="text-white flex items-center">
+            <label htmlFor="level" className="block text-sm font-medium text-white mb-1 flex items-center">
               <Users className="h-4 w-4 mr-2" />
               Learning Level *
-            </Label>
-            <Select
+            </label>
+            <select
               id="level"
               value={sessionData.level}
-              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSessionData({ ...sessionData, level: e.target.value })}
-              className="mt-1"
+              onChange={(e) => setSessionData({ ...sessionData, level: e.target.value })}
+              className="block w-full px-3 py-2 border border-[#374151] rounded-md shadow-sm bg-[#0f0f0f] text-white focus:outline-none focus:ring-[#4f46e5] focus:border-[#4f46e5]"
+              required
             >
               <option value="">Select learning level</option>
               <option value="beginner">Beginner</option>
               <option value="intermediate">Intermediate</option>
               <option value="advanced">Advanced</option>
               <option value="all">All Levels</option>
-            </Select>
+            </select>
             {errors.level && <p className="text-red-400 text-sm mt-1">{errors.level}</p>}
           </div>
 
           {/* Start Time */}
           <div>
-            <Label htmlFor="startTime" className="text-white flex items-center">
+            <label htmlFor="startTime" className="block text-sm font-medium text-white mb-1 flex items-center">
               <Calendar className="h-4 w-4 mr-2" />
               Start Time *
-            </Label>
-            <Input
+            </label>
+            <input
               id="startTime"
               type="datetime-local"
               value={sessionData.startTime}
               onChange={(e) => setSessionData({ ...sessionData, startTime: e.target.value })}
-              className="mt-1 bg-[#0f0f0f] border-[#374151] text-white focus:border-[#4f46e5]"
+              className="block w-full px-3 py-2 border border-[#374151] rounded-md shadow-sm bg-[#0f0f0f] text-white focus:outline-none focus:ring-[#4f46e5] focus:border-[#4f46e5]"
+              required
             />
             {errors.startTime && <p className="text-red-400 text-sm mt-1">{errors.startTime}</p>}
           </div>
 
           {/* Duration */}
           <div>
-            <Label htmlFor="duration" className="text-white flex items-center">
+            <label htmlFor="duration" className="block text-sm font-medium text-white mb-1 flex items-center">
               <Clock className="h-4 w-4 mr-2" />
               Duration (minutes)
-            </Label>
-            <Select
+            </label>
+            <select
               id="duration"
               value={sessionData.duration.toString()}
-              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSessionData({ ...sessionData, duration: parseInt(e.target.value) })}
-              className="mt-1"
+              onChange={(e) => setSessionData({ ...sessionData, duration: parseInt(e.target.value) })}
+              className="block w-full px-3 py-2 border border-[#374151] rounded-md shadow-sm bg-[#0f0f0f] text-white focus:outline-none focus:ring-[#4f46e5] focus:border-[#4f46e5]"
             >
               <option value="30">30 minutes</option>
               <option value="60">1 hour</option>
               <option value="90">1.5 hours</option>
               <option value="120">2 hours</option>
-            </Select>
+            </select>
           </div>
 
           {/* Actions */}
           <div className="flex justify-end space-x-3 pt-4 border-t border-[#2a2a2a]">
-            <Button
+            <button
               type="button"
-              variant="outline"
               onClick={handleClose}
-              className="border-[#374151] text-[#a1a1aa] hover:bg-[#2a2a2a]"
+              className="px-4 py-2 border border-[#374151] rounded-md shadow-sm text-sm font-medium text-[#a1a1aa] bg-[#0f0f0f] hover:bg-[#2a2a2a] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#4f46e5]"
             >
               Cancel
-            </Button>
-            <Button
+            </button>
+            <button
               type="submit"
-              className="bg-[#4f46e5] hover:bg-[#4338ca] text-white"
+              className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#4f46e5] hover:bg-[#4338ca] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#4f46e5]"
             >
               <Play className="h-4 w-4 mr-2" />
               Start Live Session
-            </Button>
+            </button>
           </div>
         </form>
       </div>

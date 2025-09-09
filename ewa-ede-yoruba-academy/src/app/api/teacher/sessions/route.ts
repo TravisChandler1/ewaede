@@ -56,7 +56,7 @@ export async function GET(request: Request) {
       endTime: session.endTime.toISOString(),
       attendees: session.attendees?.length || 0,
       maxAttendees: 20, // Default max attendees
-      status: 'scheduled', // Default status
+      status: session.status || 'SCHEDULED',
       meetingUrl: session.meetingUrl,
       description: session.description,
     }));
@@ -112,6 +112,7 @@ export async function POST(request: Request) {
         endTime: new Date(endTime),
         meetingUrl,
         isRecurring: isRecurring || false,
+        status: 'SCHEDULED',
       },
       include: {
         course: {

@@ -41,7 +41,7 @@ export async function POST(request: Request) {
         meetingUrl: meetingLink,
         // meetingPassword: password, // Will be available after DB migration
         // level: level.toUpperCase(), // Will be available after DB migration
-        // status: 'SCHEDULED', // Will be available after DB migration
+        status: 'ONGOING', // Live sessions start immediately
         teacherId: session.user.id,
         startTime: startDateTime,
         endTime: endDateTime,
@@ -107,7 +107,7 @@ export async function POST(request: Request) {
         // level: liveSession.level, // Will be available after DB migration
         startTime: liveSession.startTime.toISOString(),
         endTime: liveSession.endTime.toISOString(),
-        // status: liveSession.status, // Will be available after DB migration
+        status: liveSession.status,
         notifiedStudents: targetStudents.length,
       },
     }, { status: 201 });
@@ -147,7 +147,7 @@ export async function GET(request: Request) {
       // level: session.level, // Will be available after DB migration
       startTime: session.startTime.toISOString(),
       endTime: session.endTime.toISOString(),
-      // status: session.status, // Will be available after DB migration
+      status: session.status,
     }));
 
     return NextResponse.json({ sessions: formattedSessions });
