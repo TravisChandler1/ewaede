@@ -23,7 +23,7 @@ interface Course {
 }
 
 export const metadata: Metadata = {
-  title: 'Browse Courses - Ewa Ede Yoruba Academy',
+  title: 'Browse Courses - Ẹwà Èdè Yorùbá Academy',
   description: 'Explore our collection of Yoruba language courses',
 };
 

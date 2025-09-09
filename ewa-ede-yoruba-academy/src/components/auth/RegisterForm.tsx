@@ -556,7 +556,7 @@ export default function RegisterForm() {
             </div>
             <h3 className="mt-4 text-lg font-medium text-gray-900">Registration Complete!</h3>
             <p className="mt-2 text-sm text-gray-500">
-              Thank you for registering with Ewa Ede Yoruba Academy. Your account has been created successfully.
+              Thank you for registering with Ẹwà Èdè Yorùbá Academy. Your account has been created successfully.
             </p>
             <div className="mt-6">
               <Link

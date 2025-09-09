@@ -31,7 +31,7 @@ interface CoursePageProps {
 export async function generateMetadata({ params }: CoursePageProps): Promise<Metadata> {
   const course = await getCourse(params.id);
   return {
-    title: `${course?.title || 'Course'} - Ewa Ede Yoruba Academy`,
+    title: `${course?.title || 'Course'} - Ẹwà Èdè Yorùbá Academy`,
     description: course?.description,
   };
 }

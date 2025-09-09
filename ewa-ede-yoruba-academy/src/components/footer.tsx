@@ -132,7 +132,7 @@ export function Footer() {
         
         <div className="mt-12 pt-8 border-t border-border/40">
           <p className="text-xs text-center text-muted-foreground">
-            &copy; {currentYear} Ewa Ede Yoruba Academy. All rights reserved.
+            &copy; {currentYear} Ẹwà Èdè Yorùbá Academy. All rights reserved.
           </p>
         </div>
       </div>

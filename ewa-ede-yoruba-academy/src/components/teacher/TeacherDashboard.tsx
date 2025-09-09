@@ -95,7 +95,7 @@ export default function TeacherDashboard() {
     setIsLoading(false);
   }, [session, status, router]);
 
-  const handleSessionCreated = (_session: Session) => {
+  const handleSessionCreated = () => {
     // Refresh the sessions list
     loadDashboardData();
     setShowSessionScheduler(false);

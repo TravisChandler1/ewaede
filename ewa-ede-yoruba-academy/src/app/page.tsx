@@ -228,7 +228,7 @@ export default function HomePage() {
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <BookOpen size={32} className="text-[#4f46e5] mr-3" />
-              <h1 className="font-bold text-xl text-white">Ewa Ede Yoruba Academy</h1>
+              <h1 className="font-bold text-xl text-white">Ẹwà Èdè Yorùbá Academy</h1>
             </div>
             <div className="hidden md:flex items-center space-x-8">
               <a href="#features" className="text-[#a1a1aa] hover:text-white transition-colors">Features</a>
@@ -260,7 +260,7 @@ export default function HomePage() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#4f46e5] opacity-75"></span>
               <span className="relative inline-flex rounded-full h-3 w-3 bg-[#4f46e5]"></span>
             </span>
-            E̩ kaabo̩! Welcome to Ewa Ede Yoruba Academy
+            E̩ kaabo̩! Welcome to Ẹwà Èdè Yorùbá Academy
           </div>
           <h1 className="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
             <span className="text-[#4f46e5]">Learn the Beautiful Yoruba Language</span>
@@ -440,7 +440,7 @@ export default function HomePage() {
       <section id="about" className="py-20">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <h2 className="text-3xl lg:text-4xl font-bold mb-8">
-            About Ewa Ede Yoruba Academy
+            About Ẹwà Èdè Yorùbá Academy
           </h2>
           <p className="text-lg text-[#a1a1aa] mb-8">
             {/* eslint-disable-next-line react/no-unescaped-entities */}
@@ -459,7 +459,7 @@ export default function HomePage() {
             <div>
               <div className="flex items-center mb-4">
                 <BookOpen size={24} className="text-[#4f46e5] mr-2" />
-                <span className="font-bold">Ewa Ede Yoruba Academy</span>
+                <span className="font-bold">Ẹwà Èdè Yorùbá Academy</span>
               </div>
               <p className="text-[#a1a1aa] text-sm">
                 Empowering learners worldwide to master the beautiful Yoruba language and culture.
@@ -494,7 +494,7 @@ export default function HomePage() {
             </div>
           </div>
           <div className="border-t border-[#2a2a2a] mt-8 pt-8 text-center text-[#a1a1aa] text-sm">
-            <p>&copy; 2024 Ewa Ede Yoruba Academy. All rights reserved.</p>
+            <p>&copy; 2024 Ẹwà Èdè Yorùbá Academy. All rights reserved.</p>
           </div>
         </div>
       </footer>

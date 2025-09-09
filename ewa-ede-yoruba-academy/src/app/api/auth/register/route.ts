@@ -14,14 +14,10 @@ export async function POST(request: Request) {
       firstName,
       lastName,
       dateOfBirth,
-      gender: _gender, // Not currently used but stored for future use
       educationLevel,
       institution,
       courseOfStudy,
       phoneNumber,
-      address: _address, // Not currently used but stored for future use
-      city: _city, // Not currently used but stored for future use
-      state: _state, // Not currently used but stored for future use
       country,
       newsletter
     } = await request.json();
@@ -90,9 +86,9 @@ export async function POST(request: Request) {
         data: {
           userId: user.id,
           bio: courseOfStudy ? `Specializes in ${courseOfStudy}` : null,
-          qualifications: educationLevel ? [educationLevel] : [],
+          qualifications: educationLevel ? educationLevel : '',
           experience: 0,
-          specialization: courseOfStudy ? [courseOfStudy] : [],
+          specialization: courseOfStudy ? courseOfStudy : '',
           isVerified: false, // Admin needs to verify teacher accounts
         },
       });

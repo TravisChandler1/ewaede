@@ -114,7 +114,7 @@ export default function SimpleRegisterForm() {
             <BookOpen size={32} className="text-[#4f46e5] mr-2" />
             <h1 className="font-bold text-2xl text-white">Create Account</h1>
           </div>
-          <p className="text-[#a1a1aa]">Join Ewa Ede Yoruba Academy</p>
+          <p className="text-[#a1a1aa]">Join Ẹwà Èdè Yorùbá Academy</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">

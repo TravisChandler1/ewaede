@@ -1,4 +1,4 @@
-# Ewa Ede Yoruba Academy
+# Ẹwà Èdè Yorùbá Academy
 
 A modern, comprehensive e-learning platform for Yoruba language education built with Next.js 15, TypeScript, and Tailwind CSS.
 

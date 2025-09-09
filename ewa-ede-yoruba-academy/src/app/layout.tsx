@@ -9,10 +9,10 @@ import ErrorBoundary from "@/components/ErrorBoundary";
 
 export const metadata: Metadata = {
   title: {
-    default: "Ewa Ede Yoruba Academy | Learn Yoruba Online",
-    template: "%s | Ewa Ede Yoruba Academy"
+    default: "Ẹwà Èdè Yorùbá Academy | Learn Yoruba Online",
+    template: "%s | Ẹwà Èdè Yorùbá Academy"
   },
-  description: "Join Ewa Ede Yoruba Academy to learn Yoruba language with expert tutors and interactive lessons. Master Yoruba through immersive courses, live sessions, and cultural content.",
+  description: "Join Ẹwà Èdè Yorùbá Academy to learn Yoruba language with expert tutors and interactive lessons. Master Yoruba through immersive courses, live sessions, and cultural content.",
   keywords: [
     "Yoruba",
     "Learn Yoruba",
@@ -25,9 +25,9 @@ export const metadata: Metadata = {
     "Online Education",
     "Cultural Education"
   ],
-  authors: [{ name: "Ewa Ede Yoruba Academy" }],
-  creator: "Ewa Ede Yoruba Academy",
-  publisher: "Ewa Ede Yoruba Academy",
+  authors: [{ name: "Ẹwà Èdè Yorùbá Academy" }],
+  creator: "Ẹwà Èdè Yorùbá Academy",
+  publisher: "Ẹwà Èdè Yorùbá Academy",
   formatDetection: {
     email: false,
     address: false,
@@ -38,16 +38,16 @@ export const metadata: Metadata = {
     canonical: '/',
   },
   openGraph: {
-    title: "Ewa Ede Yoruba Academy | Learn Yoruba Online",
+    title: "Ẹwà Èdè Yorùbá Academy | Learn Yoruba Online",
     description: "Master Yoruba language with expert tutors and interactive lessons. Join our immersive online learning platform.",
     url: "https://yorubaacademy.com",
-    siteName: "Ewa Ede Yoruba Academy",
+    siteName: "Ẹwà Èdè Yorùbá Academy",
     locale: "en_US",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Ewa Ede Yoruba Academy | Learn Yoruba Online",
+    title: "Ẹwà Èdè Yorùbá Academy | Learn Yoruba Online",
     description: "Master Yoruba language with expert tutors and interactive lessons.",
     creator: "@yorubaacademy",
   },

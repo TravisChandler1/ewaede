@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Production deployment script for Ewa Ede Yoruba Academy
+# Production deployment script for Ẹwà Èdè Yorùbá Academy
 # This script handles the deployment process for production
 
 set -e

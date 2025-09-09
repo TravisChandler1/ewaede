@@ -9,6 +9,9 @@ const nextConfig = {
   experimental: {
     // optimizeCss: true, // Temporarily disabled due to critters dependency issue
   },
+  turbopack: {
+    root: __dirname,
+  },
   webpack: (config, { isServer }) => {
     if (!isServer) {
       // Fixes npm packages that depend on `net` module

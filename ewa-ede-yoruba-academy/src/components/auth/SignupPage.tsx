@@ -85,7 +85,7 @@ export default function SignupPage() {
           <div className="text-center mb-8">
             <div className="flex items-center justify-center mb-4">
               <BookOpen size={32} className="text-[#4f46e5] mr-2" />
-              <h1 className="font-inter font-bold text-2xl text-white">Ewa Ede Yoruba Academy</h1>
+              <h1 className="font-inter font-bold text-2xl text-white">Ẹwà Èdè Yorùbá Academy</h1>
             </div>
             <p className="text-[#a1a1aa] font-inter">Join our community of Yoruba learners</p>
           </div>

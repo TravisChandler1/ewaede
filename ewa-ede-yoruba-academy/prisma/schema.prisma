@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -63,7 +63,7 @@ model StudentProfile {
   userId        String    @unique
   level         Level     @default(NOVICE)
   progress      Int       @default(0)
-  achievements  String[]  @default([])
+  achievements  String    @default("")
   bio           String?
   dateOfBirth   DateTime?
   phoneNumber   String?
@@ -82,9 +82,9 @@ model TeacherProfile {
   id              String      @id @default(cuid())
   userId          String      @unique
   bio             String?
-  qualifications  String[]
+  qualifications  String    @default("")
   experience      Int?        // Years of experience
-  specialization  String[]
+  specialization  String    @default("")
   rating          Float?      @default(0)
   totalRatings    Int         @default(0)
   isVerified      Boolean     @default(false)
@@ -123,7 +123,7 @@ model Course {
   id            String       @id @default(cuid())
   title         String
   slug          String       @unique
-  description   String       @db.Text
+  description String
   price         Float
   level         Level
   duration      Int          // in weeks
@@ -147,7 +147,7 @@ model Course {
 model Module {
   id          String    @id @default(cuid())
   title       String
-  description String    @db.Text
+  description   String
   order       Int
   isPublished Boolean   @default(false)
   courseId    String    @map("course_id")
@@ -162,8 +162,8 @@ model Module {
 model Lesson {
   id          String    @id @default(cuid())
   title       String
-  description String    @db.Text
-  content     String    @db.Text
+  description   String
+  content     String
   videoUrl    String?   @map("video_url")
   duration    Int?      // in minutes
   order       Int
@@ -182,7 +182,7 @@ model Lesson {
 model Assignment {
   id          String    @id @default(cuid())
   title       String
-  description String    @db.Text
+  description String
   dueDate     DateTime? @map("due_date")
   totalPoints Int       @default(100) @map("total_points")
   lessonId    String    @map("lesson_id")
@@ -196,9 +196,9 @@ model Assignment {
 
 model AssignmentSubmission {
   id            String    @id @default(cuid())
-  content       String    @db.Text
+  content     String
   grade         Int?
-  feedback      String?   @db.Text
+  feedback      String?
   submittedAt   DateTime  @default(now()) @map("submitted_at")
   gradedAt      DateTime? @map("graded_at")
   assignmentId  String    @map("assignment_id")
@@ -231,7 +231,7 @@ model Enrollment {
 model Session {
   id           String            @id @default(cuid())
   title        String
-  description  String?           @db.Text
+  description  String?
   startTime    DateTime          @map("start_time")
   endTime      DateTime          @map("end_time")
   meetingUrl   String?           @map("meeting_url")
@@ -269,7 +269,7 @@ model Book {
   id            String    @id @default(cuid())
   title         String
   author        String
-  description   String    @db.Text
+  description   String
   coverImage    String?   @map("cover_image")
   fileUrl       String?   @map("file_url")
   category      String
@@ -286,7 +286,7 @@ model Book {
 model BookClub {
   id            String           @id @default(cuid())
   name          String
-  description   String           @db.Text
+  description String
   coverImage    String?          @map("cover_image")
   isPublic      Boolean          @default(true) @map("is_public")
   maxMembers    Int?             @default(20) @map("max_members")
@@ -322,7 +322,7 @@ model BookClubMember {
 model Discussion {
   id          String       @id @default(cuid())
   title       String
-  content     String       @db.Text
+  content     String
   bookClubId  String       @map("book_club_id")
   authorId    String       @map("author_id")
   parentId    String?      @map("parent_id")
@@ -340,7 +340,7 @@ model Discussion {
 
 model Message {
   id          String    @id @default(cuid())
-  content     String    @db.Text
+  content     String
   senderId    String    @map("sender_id")
   recipientId String?   @map("recipient_id")
   roomId      String?   @map("room_id")
@@ -359,7 +359,7 @@ model Notification {
   userId      String    @map("user_id")
   type        NotificationType
   title       String
-  message     String    @db.Text
+  message     String
   isRead      Boolean   @default(false) @map("is_read")
   link        String?
   createdAt   DateTime  @default(now()) @map("created_at")

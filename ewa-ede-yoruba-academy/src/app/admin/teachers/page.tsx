@@ -10,9 +10,9 @@ import { TeacherApprovalButton } from '@/components/admin/TeacherApprovalButton'
 interface TeacherProfile {
   id: string;
   bio?: string | null;
-  qualifications: string[];
+  qualifications: string;
   experience?: number | null;
-  specialization: string[];
+  specialization: string;
   rating?: number | null;
   totalRatings: number;
   isVerified: boolean;
@@ -112,11 +112,9 @@ export default async function AdminTeachersPage() {
                     <p className="text-sm text-gray-600">{teacher.email}</p>
                     {teacher.teacherProfile?.specialization && (
                       <div className="flex flex-wrap gap-1 mt-1">
-                        {teacher.teacherProfile.specialization.map((skill: string) => (
-                          <Badge key={skill} variant="secondary">
-                            {skill}
-                          </Badge>
-                        ))}
+                        <Badge variant="secondary">
+                          {teacher.teacherProfile.specialization}
+                        </Badge>
                       </div>
                     )}
                   </div>

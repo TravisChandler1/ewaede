@@ -82,8 +82,7 @@ export async function POST(request: Request) {
       startTime,
       endTime,
       meetingUrl,
-      isRecurring,
-      recurringPattern: _recurringPattern
+      isRecurring
     } = await request.json();
 
     // Validate required fields

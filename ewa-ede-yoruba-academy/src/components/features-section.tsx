@@ -39,7 +39,7 @@ export function FeaturesSection() {
       <div className="container px-4">
         <div className="text-center mb-16">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-            Why Choose Ewa Ede Yoruba Academy?
+            Why Choose Ẹwà Èdè Yorùbá Academy?
           </h2>
           <p className="mt-4 text-lg text-muted-foreground">
             Experience the best way to learn Yoruba with our proven methodology and dedicated support.

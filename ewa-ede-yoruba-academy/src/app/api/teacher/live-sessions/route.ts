@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import prisma from '@/lib/prisma';
-import { Prisma } from '@prisma/client';
 
 export async function POST(request: Request) {
   try {
@@ -14,7 +13,6 @@ export async function POST(request: Request) {
       title,
       description,
       meetingLink,
-      password: _password,
       level,
       startTime,
       duration
@@ -128,7 +126,6 @@ export async function GET(request: Request) {
     }
 
     const { searchParams } = new URL(request.url);
-    const _status = searchParams.get('status') || 'SCHEDULED';
     const limit = parseInt(searchParams.get('limit') || '10');
 
     const liveSessions = await prisma.session.findMany({
