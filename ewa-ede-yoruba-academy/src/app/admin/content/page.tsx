@@ -156,7 +156,7 @@ export default function ContentManagementPage() {
           <div className="bg-[#1a1a1a] border border-[#2a2a2a] p-6 rounded-lg">
             <div className="flex items-center">
               <div className="p-2 bg-green-500/10 rounded-lg">
-                <Image className="h-6 w-6 text-green-500" role="img" aria-label="Images icon" />
+                <Image className="h-6 w-6 text-green-500" aria-hidden="true" />
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-[#a1a1aa]">Images</p>

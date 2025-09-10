@@ -3,7 +3,6 @@
 import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import Image from 'next/image';
 import { User } from 'next-auth';
 import { useState, useEffect } from 'react';
 import { FiMenu, FiX, FiHome, FiBook, FiMessageSquare, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
@@ -82,11 +81,9 @@ export default function DashboardSidebar({ user }: DashboardSidebarProps) {
     >
       <div className="flex items-center justify-between p-4 border-b border-gray-200">
         {!isCollapsed && (
-          <Image
+          <img
             src="/logo.png"
             alt="Ewa Ede Yoruba Academy"
-            width={32}
-            height={32}
             className="h-8 w-auto"
           />
         )}

@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import Image from "next/image";
 import { BookOpen, Users, Video, Library, Award, Star, Mail } from "lucide-react";
 
 interface NewsletterResponse {
@@ -241,11 +240,9 @@ export default function HomePage() {
           <div className="max-w-7xl mx-auto px-6 py-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center">
-                <Image
+                <img
                   src="/logo.png"
                   alt="Ẹwà Èdè Yorùbá Academy"
-                  width={64}
-                  height={64}
                   className="h-16 w-auto"
                 />
               </div>
@@ -465,11 +462,9 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
               <div className="flex items-center mb-4">
-                <Image
+                <img
                   src="/logo.png"
                   alt="Ẹwà Èdè Yorùbá Academy"
-                  width={64}
-                  height={64}
                   className="h-16 w-auto"
                 />
               </div>
