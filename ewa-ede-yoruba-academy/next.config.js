@@ -25,6 +25,7 @@ const nextConfig = {
   },
   experimental: {
     // optimizeCss: true, // Temporarily disabled due to critters dependency issue
+    serverComponentsExternalPackages: ['@prisma/client', 'bcryptjs'],
   },
   // Remove turbopack configuration to avoid conflicts
   // turbopack: {
