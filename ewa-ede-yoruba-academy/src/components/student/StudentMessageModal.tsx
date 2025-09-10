@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Send, X, User, MessageSquare } from 'lucide-react';
+import { Send, X, User } from 'lucide-react';
 
 interface Teacher {
   id: string;

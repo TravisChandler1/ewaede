@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 import { Facebook, Instagram, Twitter, Youtube } from "lucide-react"
 
 export function Footer() {
@@ -43,9 +44,13 @@ export function Footer() {
         <div className="grid grid-cols-2 gap-8 md:grid-cols-4 lg:grid-cols-5">
           <div className="col-span-2">
             <Link href="/" className="flex items-center space-x-2">
-              <span className="text-2xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
-                Ewa Ede
-              </span>
+              <Image
+                src="/logo.png"
+                alt="Ewa Ede Yoruba Academy"
+                width={32}
+                height={32}
+                className="h-8 w-auto"
+              />
             </Link>
             <p className="mt-4 text-sm text-muted-foreground">
               Empowering the world to learn Yoruba through immersive and engaging online education.

@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, BookOpen, Sparkles } from "lucide-react"
 import { useEffect, useState } from "react"
@@ -63,8 +64,14 @@ export function HeroSection() {
         {/* Animated Title */}
         <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl animate-fade-in-up">
           Learn Yoruba with
-          <span className="block bg-gradient-to-r from-primary via-purple-500 to-indigo-600 bg-clip-text text-transparent animate-gradient-x">
-            Ewa Ede Academy
+          <span className="block mt-4">
+            <Image
+              src="/logo.png"
+              alt="Ewa Ede Yoruba Academy"
+              width={80}
+              height={80}
+              className="h-12 md:h-16 lg:h-20 w-auto mx-auto"
+            />
           </span>
         </h1>
 

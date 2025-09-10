@@ -251,7 +251,7 @@ export default function TeacherDashboard() {
       {/* Tab Navigation */}
       <div className="bg-[#1a1a1a] border-b border-[#2a2a2a] px-4 py-3">
         <nav className="flex items-center">
-          <div className="relative flex items-center bg-[#0f0f0f] rounded-lg p-1">
+          <div className="relative flex items-center bg-[#0f0f0f] rounded-lg p-1 overflow-x-auto scrollbar-hide">
             {/* Active tab background indicator */}
             <div
               className="absolute top-1 left-1 h-8 bg-[#4f46e5] rounded-md transition-all duration-300 ease-in-out"
@@ -268,33 +268,35 @@ export default function TeacherDashboard() {
               }}
             />
 
-            {[
-              { name: 'Overview', icon: BarChart3, id: 'overview' },
-              { name: 'Courses', icon: BookOpen, id: 'courses' },
-              { name: 'Sessions', icon: Calendar, id: 'sessions' },
-              { name: 'Students', icon: Users, id: 'students' },
-              { name: 'Messages', icon: MessageSquare, id: 'messages' },
-              { name: 'Settings', icon: Settings, id: 'settings' },
-            ].map((item) => (
-              <button
-                key={item.id}
-                onClick={() => {
-                  if (item.id === 'messages') {
-                    setShowStudentSelector(true);
-                  } else {
-                    setActiveTab(item.id);
-                  }
-                }}
-                className={`relative z-10 px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 flex items-center ${
-                  activeTab === item.id
-                    ? 'text-white'
-                    : 'text-[#a1a1aa] hover:text-white hover:bg-[#2a2a2a]/50'
-                }`}
-              >
-                <item.icon className="h-4 w-4 mr-2" />
-                {item.name}
-              </button>
-            ))}
+            <div className="flex items-center min-w-max">
+              {[
+                { name: 'Overview', icon: BarChart3, id: 'overview' },
+                { name: 'Courses', icon: BookOpen, id: 'courses' },
+                { name: 'Sessions', icon: Calendar, id: 'sessions' },
+                { name: 'Students', icon: Users, id: 'students' },
+                { name: 'Messages', icon: MessageSquare, id: 'messages' },
+                { name: 'Settings', icon: Settings, id: 'settings' },
+              ].map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => {
+                    if (item.id === 'messages') {
+                      setShowStudentSelector(true);
+                    } else {
+                      setActiveTab(item.id);
+                    }
+                  }}
+                  className={`relative z-10 px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 flex items-center whitespace-nowrap ${
+                    activeTab === item.id
+                      ? 'text-white'
+                      : 'text-[#a1a1aa] hover:text-white hover:bg-[#2a2a2a]/50'
+                  }`}
+                >
+                  <item.icon className="h-4 w-4 mr-2" />
+                  {item.name}
+                </button>
+              ))}
+            </div>
           </div>
         </nav>
       </div>

@@ -19,10 +19,11 @@ interface StudentSelectorProps {
 }
 
 export default function StudentSelector({ onStudentSelect, onClose }: StudentSelectorProps) {
-  const [students, setStudents] = useState<Student[]>([]);
-  const [filteredStudents, setFilteredStudents] = useState<Student[]>([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
+   const [students, setStudents] = useState<Student[]>([]);
+   const [filteredStudents, setFilteredStudents] = useState<Student[]>([]);
+   const [searchTerm, setSearchTerm] = useState('');
+   const [isLoading, setIsLoading] = useState(true);
+   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     loadStudents();
@@ -42,6 +43,7 @@ export default function StudentSelector({ onStudentSelect, onClose }: StudentSel
 
   const loadStudents = async () => {
     try {
+      setError(null);
       // Get all students with STUDENT role from the database
       const response = await fetch('/api/students');
       if (response.ok) {
@@ -49,9 +51,14 @@ export default function StudentSelector({ onStudentSelect, onClose }: StudentSel
         setStudents(data.students || []);
         setFilteredStudents(data.students || []);
       } else {
+        const errorData = await response.json().catch(() => ({}));
+        const errorMessage = errorData.error || `Failed to load students (${response.status})`;
+        setError(errorMessage);
         console.error('Failed to load students:', response.statusText);
       }
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to load students';
+      setError(errorMessage);
       console.error('Error loading students:', error);
     } finally {
       setIsLoading(false);
@@ -100,6 +107,18 @@ export default function StudentSelector({ onStudentSelect, onClose }: StudentSel
               <div className="flex items-center justify-center py-8">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#4f46e5]"></div>
                 <span className="ml-2 text-[#a1a1aa]">Loading students...</span>
+              </div>
+            ) : error ? (
+              <div className="text-center py-8">
+                <X className="h-12 w-12 text-red-500 mx-auto mb-4" />
+                <p className="text-red-400 font-medium">Error loading students</p>
+                <p className="text-sm text-[#6b7280] mt-1">{error}</p>
+                <button
+                  onClick={loadStudents}
+                  className="mt-4 px-4 py-2 bg-[#4f46e5] text-white rounded-md hover:bg-[#4338ca] transition-colors"
+                >
+                  Try Again
+                </button>
               </div>
             ) : filteredStudents.length === 0 ? (
               <div className="text-center py-8">

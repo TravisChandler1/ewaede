@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { Menu, X } from "lucide-react"
@@ -37,9 +38,13 @@ export function MainNav() {
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between">
         <Link href="/" className="flex items-center space-x-2">
-          <span className="text-2xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
-            Ewa Ede
-          </span>
+          <Image
+            src="/logo.png"
+            alt="Ewa Ede Yoruba Academy"
+            width={32}
+            height={32}
+            className="h-8 w-auto"
+          />
         </Link>
 
         <nav className="hidden items-center md:flex">
