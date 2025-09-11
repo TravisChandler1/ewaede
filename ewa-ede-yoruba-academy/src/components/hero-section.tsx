@@ -52,6 +52,47 @@ export function HeroSection() {
       </div>
 
       <div className="container flex flex-col items-center px-4 py-20 text-center md:py-32 relative z-10">
+        {/* Navigation Links */}
+        <nav className="absolute top-8 left-1/2 transform -translate-x-1/2 hidden md:flex items-center bg-muted/50 rounded-lg p-1 backdrop-blur-sm">
+          <div className="relative flex items-center bg-muted/50 rounded-lg p-1">
+            <Link
+              href="/"
+              className="relative z-10 px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 text-primary-foreground"
+            >
+              Home
+            </Link>
+            <Link
+              href="/courses"
+              className="relative z-10 px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 text-muted-foreground hover:text-foreground hover:bg-muted/80"
+            >
+              Courses
+            </Link>
+            <Link
+              href="/about"
+              className="relative z-10 px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 text-muted-foreground hover:text-foreground hover:bg-muted/80"
+            >
+              About Us
+            </Link>
+            <Link
+              href="/contact"
+              className="relative z-10 px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 text-muted-foreground hover:text-foreground hover:bg-muted/80"
+            >
+              Contact
+            </Link>
+          </div>
+        </nav>
+
+        {/* Logo */}
+        <div className="mb-8">
+          <Link href="/" className="inline-block">
+            <img
+              src="/logo.png"
+              alt="Ẹwà Èdè Yorùbá Academy"
+              className="h-12 md:h-16 lg:h-20 w-auto mx-auto"
+            />
+          </Link>
+        </div>
+
         {/* Animated Icon */}
         <div className="mb-8 animate-bounce-slow">
           <div className="relative">
@@ -100,6 +141,22 @@ export function HeroSection() {
               Learn More
             </Link>
           </Button>
+        </div>
+
+        {/* Auth Buttons */}
+        <div className="mt-6 flex items-center justify-center gap-4 animate-fade-in-up animation-delay-700">
+          <Link
+            href="/auth/signin"
+            className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+          >
+            Sign In
+          </Link>
+          <Link
+            href="/auth/register"
+            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+          >
+            Get Started
+          </Link>
         </div>
       </div>
     </section>
