@@ -48,11 +48,10 @@ export function MainNav() {
           <div className="relative flex items-center bg-muted/50 rounded-lg p-1">
             {/* Active tab background indicator */}
             <div
-              className="absolute top-1 left-1 h-8 rounded-md transition-all duration-300 ease-in-out"
+              className="absolute top-1 left-1 h-8 bg-primary rounded-md transition-all duration-300 ease-in-out"
               style={{
                 width: `${100 / routes.length}%`,
                 transform: `translateX(${routes.findIndex(route => route.active) * 100}%)`,
-                backgroundColor: '#ff8f00',
               }}
             />
 
@@ -63,7 +62,7 @@ export function MainNav() {
                 className={cn(
                   "relative z-10 px-4 py-2 text-sm font-medium rounded-md transition-all duration-200",
                   route.active
-                    ? "text-accent-foreground"
+                    ? "text-primary-foreground"
                     : "text-muted-foreground hover:text-foreground hover:bg-muted/80"
                 )}
               >
@@ -108,10 +107,9 @@ export function MainNav() {
                   className={cn(
                     "py-3 px-4 rounded-lg transition-all duration-200",
                     route.active
-                      ? "text-white shadow-sm"
+                      ? "bg-primary text-primary-foreground shadow-sm"
                       : "text-foreground/60 hover:text-foreground hover:bg-muted/50"
                   )}
-                  style={route.active ? { backgroundColor: '#ff8f00' } : {}}
                   onClick={() => setIsOpen(false)}
                 >
                   {route.label}

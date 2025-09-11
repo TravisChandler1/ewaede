@@ -83,8 +83,8 @@ export function PricingSection() {
           {tiers.map((tier) => (
             <div
               key={tier.name}
-              className={`relative rounded-2xl border bg-card p-8 shadow-sm transition-all hover:shadow-md pricing-glow ${
-                tier.popular ? 'ring-2 ring-primary pricing-glow-border' : 'border-border'
+              className={`relative rounded-2xl border bg-card p-8 shadow-sm transition-all hover:shadow-md ${
+                tier.popular ? 'ring-2 ring-primary' : 'border-border'
               }`}
             >
               {tier.popular && (

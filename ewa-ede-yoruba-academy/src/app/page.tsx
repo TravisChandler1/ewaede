@@ -222,7 +222,27 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-[#0f0f0f] text-white">
-      {/* Hero Section with Navigation */}
+      {/* Navigation */}
+      <nav className="bg-[#1a1a1a] border-b border-[#2a2a2a] sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <BookOpen size={32} className="text-[#4f46e5] mr-3" />
+              <h1 className="font-bold text-xl text-white">Ẹwà Èdè Yorùbá Academy</h1>
+            </div>
+            <div className="hidden md:flex items-center space-x-8">
+              <a href="#features" className="text-[#a1a1aa] hover:text-white transition-colors">Features</a>
+              <a href="#pricing" className="text-[#a1a1aa] hover:text-white transition-colors">Pricing</a>
+              <a href="#about" className="text-[#a1a1aa] hover:text-white transition-colors">About</a>
+            </div>
+            <div className="flex items-center space-x-4">
+              {/* Navigation buttons moved to bottom tabs */}
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* Hero Section */}
       <section className="relative py-20 lg:py-32 overflow-hidden">
         <div
           className="absolute inset-0 opacity-20"
@@ -234,31 +254,7 @@ export default function HomePage() {
           }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-[#0f0f0f] via-[#0f0f0f]/10 to-[#0f0f0f]" />
-
-        {/* Navigation Overlay */}
-        <div className="absolute top-0 left-0 right-0 z-20">
-          <div className="max-w-7xl mx-auto px-6 py-6">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <img
-                  src="/logo.png"
-                  alt="Ẹwà Èdè Yorùbá Academy"
-                  className="h-16 w-auto"
-                />
-              </div>
-              <div className="hidden md:flex items-center space-x-8">
-                <a href="#features" className="text-white hover:text-[#4f46e5] transition-colors font-medium">Features</a>
-                <a href="#pricing" className="text-white hover:text-[#4f46e5] transition-colors font-medium">Pricing</a>
-                <a href="#about" className="text-white hover:text-[#4f46e5] transition-colors font-medium">About</a>
-              </div>
-              <div className="flex items-center space-x-4">
-                {/* Navigation buttons moved to bottom tabs */}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="relative z-10 max-w-7xl mx-auto px-6 text-center pt-24">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 text-center">
           <div className="inline-flex items-center px-4 py-2 rounded-full bg-[#4f46e5]/10 border border-[#4f46e5]/30 text-[#a78bfa] text-sm font-medium mb-6">
             <span className="relative flex h-3 w-3 mr-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#4f46e5] opacity-75"></span>
@@ -462,11 +458,8 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
               <div className="flex items-center mb-4">
-                <img
-                  src="/logo.png"
-                  alt="Ẹwà Èdè Yorùbá Academy"
-                  className="h-16 w-auto"
-                />
+                <BookOpen size={24} className="text-[#4f46e5] mr-2" />
+                <span className="font-bold">Ẹwà Èdè Yorùbá Academy</span>
               </div>
               <p className="text-[#a1a1aa] text-sm">
                 Empowering learners worldwide to master the beautiful Yoruba language and culture.
