@@ -258,10 +258,17 @@ export default function StudentDashboard() {
       {/* Header */}
       <div className="bg-[#1a1a1a] border-b border-[#2a2a2a] px-4 py-4">
         <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-lg font-medium text-[#4f46e5]">Welcome back, {session?.user?.name || 'Student'}!</h2>
-            <h1 className="text-2xl font-bold text-white">Student Dashboard</h1>
-            <p className="text-[#a1a1aa] mt-1">Track your progress and continue learning Yoruba.</p>
+          <div className="flex items-center space-x-4">
+            <img
+              src="/logo.png"
+              alt="Ewa Ede Yoruba Academy"
+              className="h-12 w-auto"
+            />
+            <div>
+              <h2 className="text-lg font-medium text-[#007bff]">Welcome back, {session?.user?.name || 'Student'}!</h2>
+              <h1 className="text-2xl font-bold text-white">Student Dashboard</h1>
+              <p className="text-[#a1a1aa] mt-1">Track your progress and continue learning Yoruba.</p>
+            </div>
           </div>
           <div className="flex items-center space-x-4">
             <button
@@ -310,7 +317,7 @@ export default function StudentDashboard() {
           <div className="relative flex items-center bg-[#0f0f0f] rounded-lg p-1 overflow-x-auto scrollbar-hide">
             {/* Active tab background indicator */}
             <div
-              className="absolute top-1 left-1 h-8 bg-[#4f46e5] rounded-md transition-all duration-300 ease-in-out"
+              className="absolute top-1 left-1 h-8 bg-[#007bff] rounded-md transition-all duration-300 ease-in-out"
               style={{
                 width: `${100 / 6}%`,
                 transform: `translateX(${([

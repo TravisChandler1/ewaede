@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+:root {
+  --primary: #0d47a1;
+  --primary-foreground: #ffffff;
+  --accent: #ff8f00;
+  --accent-foreground: #ffffff;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
@@ -49,19 +56,19 @@ body {
 
 @keyframes glow {
   0%, 100% {
-    box-shadow: 0 0 20px rgba(79, 70, 229, 0.3);
+    box-shadow: 0 0 20px rgba(13, 71, 161, 0.3);
   }
   50% {
-    box-shadow: 0 0 30px rgba(79, 70, 229, 0.6);
+    box-shadow: 0 0 30px rgba(13, 71, 161, 0.6);
   }
 }
 
 @keyframes glow-outline {
   0%, 100% {
-    box-shadow: 0 0 15px rgba(79, 70, 229, 0.2);
+    box-shadow: 0 0 15px rgba(13, 71, 161, 0.2);
   }
   50% {
-    box-shadow: 0 0 25px rgba(79, 70, 229, 0.4);
+    box-shadow: 0 0 25px rgba(13, 71, 161, 0.4);
   }
 }
 
@@ -165,7 +172,7 @@ body {
 }
 
 .hover-glow:hover {
-  box-shadow: 0 0 20px rgba(79, 70, 229, 0.3);
+  box-shadow: 0 0 20px rgba(13, 71, 161, 0.3);
 }
 
 /* Icon animations */
@@ -175,6 +182,35 @@ body {
 
 .icon-bounce:hover {
   transform: scale(1.1) rotate(5deg);
+}
+
+/* Pricing card glow animation */
+@keyframes pricing-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(255, 143, 0, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(255, 143, 0, 0.6), 0 0 60px rgba(255, 143, 0, 0.4);
+  }
+}
+
+@keyframes pricing-glow-border {
+  0%, 100% {
+    border-color: rgba(255, 143, 0, 0.3);
+    box-shadow: 0 0 15px rgba(255, 143, 0, 0.2);
+  }
+  50% {
+    border-color: rgba(255, 143, 0, 0.6);
+    box-shadow: 0 0 30px rgba(255, 143, 0, 0.4);
+  }
+}
+
+.pricing-glow {
+  animation: pricing-glow 3s ease-in-out infinite;
+}
+
+.pricing-glow-border {
+  animation: pricing-glow-border 3s ease-in-out infinite;
 }
 
 /* Scrollbar utilities */

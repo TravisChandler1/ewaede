@@ -203,7 +203,7 @@ export default function TeacherDashboard() {
   if (isLoading || status === 'loading') {
     return (
       <div className="min-h-screen bg-[#0f0f0f] flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-[#4f46e5]"></div>
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-[#007bff]"></div>
       </div>
     );
   }
@@ -217,10 +217,17 @@ export default function TeacherDashboard() {
       {/* Header */}
       <div className="bg-[#1a1a1a] border-b border-[#2a2a2a] px-4 py-4">
         <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-lg font-medium text-[#4f46e5]">Welcome back, {session?.user?.name || 'Teacher'}!</h2>
-            <h1 className="text-2xl font-bold text-white">Teacher Dashboard</h1>
-            <p className="text-[#a1a1aa] mt-1">Manage your courses, schedule sessions, and connect with students.</p>
+          <div className="flex items-center space-x-4">
+            <img
+              src="/logo.png"
+              alt="Ewa Ede Yoruba Academy"
+              className="h-12 w-auto"
+            />
+            <div>
+              <h2 className="text-lg font-medium text-[#007bff]">Welcome back, {session?.user?.name || 'Teacher'}!</h2>
+              <h1 className="text-2xl font-bold text-white">Teacher Dashboard</h1>
+              <p className="text-[#a1a1aa] mt-1">Manage your courses, schedule sessions, and connect with students.</p>
+            </div>
           </div>
           <div className="flex items-center space-x-4">
             <button
@@ -254,7 +261,7 @@ export default function TeacherDashboard() {
           <div className="relative flex items-center bg-[#0f0f0f] rounded-lg p-1 overflow-x-auto scrollbar-hide">
             {/* Active tab background indicator */}
             <div
-              className="absolute top-1 left-1 h-8 bg-[#4f46e5] rounded-md transition-all duration-300 ease-in-out"
+              className="absolute top-1 left-1 h-8 bg-[#007bff] rounded-md transition-all duration-300 ease-in-out"
               style={{
                 width: `${100 / 6}%`,
                 transform: `translateX(${([
@@ -337,7 +344,7 @@ export default function TeacherDashboard() {
                     <h3 className="text-lg font-medium text-white">Upcoming Sessions</h3>
                     <button
                       onClick={() => setShowSessionScheduler(true)}
-                      className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-[#4f46e5] bg-[#4f46e5]/10 hover:bg-[#4f46e5]/20"
+                      className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-[#007bff] bg-[#007bff]/10 hover:bg-[#007bff]/20"
                     >
                       <Plus className="h-4 w-4 mr-1" />
                       Schedule New
@@ -350,7 +357,7 @@ export default function TeacherDashboard() {
                           <div className="flex items-start justify-between">
                             <div className="flex items-start">
                               <div className="flex-shrink-0 h-10 w-10 rounded-full bg-[#2a2a2a] flex items-center justify-center">
-                                <Video className="h-5 w-5 text-[#4f46e5]" />
+                                <Video className="h-5 w-5 text-[#007bff]" />
                               </div>
                               <div className="ml-4">
                                 <p className="text-sm font-medium text-white">{session.title}</p>
@@ -400,7 +407,7 @@ export default function TeacherDashboard() {
                     <h3 className="text-lg font-medium text-white">My Courses</h3>
                     <button
                       onClick={() => setActiveTab('courses')}
-                      className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-[#4f46e5] bg-[#4f46e5]/10 hover:bg-[#4f46e5]/20"
+                      className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-[#007bff] bg-[#007bff]/10 hover:bg-[#007bff]/20"
                     >
                       <Plus className="h-4 w-4 mr-1" />
                       Create Course
@@ -422,7 +429,7 @@ export default function TeacherDashboard() {
                               Last activity: {course.lastActivity}
                             </p>
                           </div>
-                          <button className="text-[#4f46e5] hover:text-[#4338ca]">
+                          <button className="text-[#007bff] hover:text-[#0056b3]">
                             <ChevronRight className="h-5 w-5" />
                           </button>
                         </div>
@@ -492,7 +499,7 @@ export default function TeacherDashboard() {
                 <h2 className="text-2xl font-bold text-white">My Courses</h2>
                 <p className="text-[#a1a1aa] mt-1">Manage and create your courses</p>
               </div>
-              <button className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#4f46e5] hover:bg-[#4338ca]">
+              <button className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#007bff] hover:bg-[#0056b3]">
                 <Plus className="h-4 w-4 mr-2" />
                 Create New Course
               </button>
@@ -519,12 +526,12 @@ export default function TeacherDashboard() {
                         </div>
                       </div>
                     </div>
-                    <button className="text-[#4f46e5] hover:text-[#4338ca]">
+                    <button className="text-[#007bff] hover:text-[#0056b3]">
                       <ChevronRight className="h-5 w-5" />
                     </button>
                   </div>
                   <div className="mt-4 flex space-x-2">
-                    <button className="flex-1 px-3 py-2 text-sm font-medium text-[#4f46e5] bg-[#4f46e5]/10 rounded-md hover:bg-[#4f46e5]/20">
+                    <button className="flex-1 px-3 py-2 text-sm font-medium text-[#007bff] bg-[#007bff]/10 rounded-md hover:bg-[#007bff]/20">
                       Edit Course
                     </button>
                     <button className="flex-1 px-3 py-2 text-sm font-medium text-white bg-[#2a2a2a] rounded-md hover:bg-[#374151]">
@@ -560,7 +567,7 @@ export default function TeacherDashboard() {
               </div>
               <button
                 onClick={() => setShowSessionScheduler(true)}
-                className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#4f46e5] hover:bg-[#4338ca]"
+                className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#007bff] hover:bg-[#0056b3]"
               >
                 <Plus className="h-4 w-4 mr-2" />
                 Schedule Session
