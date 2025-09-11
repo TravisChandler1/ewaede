@@ -2,8 +2,6 @@ import { NextResponse } from 'next/server';
 import { auth } from './auth';
 import type { AuthUser } from './auth.config';
 
-export { auth as middleware } from './auth';
-
 declare module 'next/server' {
   interface NextRequest {
     auth?: {
