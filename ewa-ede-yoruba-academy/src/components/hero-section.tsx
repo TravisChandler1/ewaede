@@ -53,29 +53,29 @@ export function HeroSection() {
 
       <div className="container flex flex-col items-center px-4 py-20 text-center md:py-32 relative z-10">
         {/* Navigation Links */}
-        <nav className="absolute top-8 left-1/2 transform -translate-x-1/2 hidden md:flex items-center bg-muted/50 rounded-lg p-1 backdrop-blur-sm">
-          <div className="relative flex items-center bg-muted/50 rounded-lg p-1">
+        <nav className="absolute top-8 left-1/2 transform -translate-x-1/2 z-20 hidden md:flex items-center bg-white/90 backdrop-blur-md rounded-full px-6 py-3 shadow-lg border border-white/20">
+          <div className="flex items-center space-x-1">
             <Link
               href="/"
-              className="relative z-10 px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 text-primary-foreground"
+              className="px-4 py-2 text-sm font-medium rounded-full transition-all duration-200 text-gray-900 hover:text-white hover:bg-primary"
             >
               Home
             </Link>
             <Link
               href="/courses"
-              className="relative z-10 px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 text-muted-foreground hover:text-foreground hover:bg-muted/80"
+              className="px-4 py-2 text-sm font-medium rounded-full transition-all duration-200 text-gray-700 hover:text-white hover:bg-primary"
             >
               Courses
             </Link>
             <Link
               href="/about"
-              className="relative z-10 px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 text-muted-foreground hover:text-foreground hover:bg-muted/80"
+              className="px-4 py-2 text-sm font-medium rounded-full transition-all duration-200 text-gray-700 hover:text-white hover:bg-primary"
             >
               About Us
             </Link>
             <Link
               href="/contact"
-              className="relative z-10 px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 text-muted-foreground hover:text-foreground hover:bg-muted/80"
+              className="px-4 py-2 text-sm font-medium rounded-full transition-all duration-200 text-gray-700 hover:text-white hover:bg-primary"
             >
               Contact
             </Link>
