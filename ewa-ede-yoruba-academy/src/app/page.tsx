@@ -222,6 +222,25 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-[#0f0f0f] text-white">
+      {/* Navigation */}
+      <nav className="bg-[#1a1a1a] border-b border-[#2a2a2a] sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <BookOpen size={32} className="text-[#4f46e5] mr-3" />
+              <h1 className="font-bold text-xl text-white">Ẹwà Èdè Yorùbá Academy</h1>
+            </div>
+            <div className="hidden md:flex items-center space-x-8">
+              <a href="#features" className="text-[#a1a1aa] hover:text-white transition-colors">Features</a>
+              <a href="#pricing" className="text-[#a1a1aa] hover:text-white transition-colors">Pricing</a>
+              <a href="#about" className="text-[#a1a1aa] hover:text-white transition-colors">About</a>
+            </div>
+            <div className="flex items-center space-x-4">
+              {/* Navigation buttons moved to bottom tabs */}
+            </div>
+          </div>
+        </div>
+      </nav>
 
       {/* Hero Section */}
       <section className="relative py-20 lg:py-32 overflow-hidden">

@@ -51,48 +51,78 @@ export function HeroSection() {
         </div>
       </div>
 
-      <div className="container flex flex-col items-center px-4 py-20 text-center md:py-32 relative z-10">
-        {/* Navigation Links */}
-        <nav className="absolute top-8 left-1/2 transform -translate-x-1/2 z-20 hidden md:flex items-center bg-white/90 backdrop-blur-md rounded-full px-6 py-3 shadow-lg border border-white/20">
-          <div className="flex items-center space-x-1">
-            <Link
-              href="/"
-              className="px-4 py-2 text-sm font-medium rounded-full transition-all duration-200 text-gray-900 hover:text-white hover:bg-primary"
-            >
-              Home
+      {/* Header with Logo and Navigation */}
+      <div className="absolute top-0 left-0 right-0 z-20">
+        <div className="container mx-auto px-4 py-6">
+          <div className="flex items-center justify-between">
+            {/* Logo */}
+            <Link href="/" className="flex items-center">
+              <img
+                src="/logo.png"
+                alt="Ẹwà Èdè Yorùbá Academy"
+                className="h-10 md:h-12 w-auto"
+              />
             </Link>
-            <Link
-              href="/courses"
-              className="px-4 py-2 text-sm font-medium rounded-full transition-all duration-200 text-gray-700 hover:text-white hover:bg-primary"
-            >
-              Courses
-            </Link>
-            <Link
-              href="/about"
-              className="px-4 py-2 text-sm font-medium rounded-full transition-all duration-200 text-gray-700 hover:text-white hover:bg-primary"
-            >
-              About Us
-            </Link>
-            <Link
-              href="/contact"
-              className="px-4 py-2 text-sm font-medium rounded-full transition-all duration-200 text-gray-700 hover:text-white hover:bg-primary"
-            >
-              Contact
-            </Link>
+
+            {/* Navigation Links */}
+            <nav className="hidden md:flex items-center space-x-8">
+              <Link
+                href="/"
+                className="text-white font-medium hover:text-yellow-300 transition-colors duration-200 relative group"
+              >
+                Home
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-300 transition-all duration-200 group-hover:w-full"></span>
+              </Link>
+              <Link
+                href="/courses"
+                className="text-white font-medium hover:text-yellow-300 transition-colors duration-200 relative group"
+              >
+                Courses
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-300 transition-all duration-200 group-hover:w-full"></span>
+              </Link>
+              <Link
+                href="/about"
+                className="text-white font-medium hover:text-yellow-300 transition-colors duration-200 relative group"
+              >
+                About Us
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-300 transition-all duration-200 group-hover:w-full"></span>
+              </Link>
+              <Link
+                href="/contact"
+                className="text-white font-medium hover:text-yellow-300 transition-colors duration-200 relative group"
+              >
+                Contact
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-300 transition-all duration-200 group-hover:w-full"></span>
+              </Link>
+            </nav>
+
+            {/* Auth Buttons */}
+            <div className="hidden md:flex items-center space-x-4">
+              <Link
+                href="/auth/signin"
+                className="text-white font-medium hover:text-yellow-300 transition-colors duration-200"
+              >
+                Sign In
+              </Link>
+              <Link
+                href="/auth/register"
+                className="bg-yellow-500 hover:bg-yellow-400 text-black font-medium px-4 py-2 rounded-full transition-colors duration-200"
+              >
+                Get Started
+              </Link>
+            </div>
+
+            {/* Mobile Menu Button */}
+            <button className="md:hidden text-white p-2">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
           </div>
-        </nav>
-
-        {/* Logo */}
-        <div className="mb-8">
-          <Link href="/" className="inline-block">
-            <img
-              src="/logo.png"
-              alt="Ẹwà Èdè Yorùbá Academy"
-              className="h-12 md:h-16 lg:h-20 w-auto mx-auto"
-            />
-          </Link>
         </div>
+      </div>
 
+      <div className="container flex flex-col items-center px-4 py-20 text-center md:py-32 relative z-10 pt-24 md:pt-32">
         {/* Animated Icon */}
         <div className="mb-8 animate-bounce-slow">
           <div className="relative">
@@ -104,12 +134,8 @@ export function HeroSection() {
         {/* Animated Title */}
         <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl animate-fade-in-up">
           Learn Yoruba with
-          <span className="block mt-4">
-            <img
-              src="/logo.png"
-              alt="Ewa Ede Yoruba Academy"
-              className="h-12 md:h-16 lg:h-20 w-auto mx-auto"
-            />
+          <span className="block mt-4 text-yellow-300">
+            Ẹwà Èdè Yorùbá Academy
           </span>
         </h1>
 
@@ -141,22 +167,6 @@ export function HeroSection() {
               Learn More
             </Link>
           </Button>
-        </div>
-
-        {/* Auth Buttons */}
-        <div className="mt-6 flex items-center justify-center gap-4 animate-fade-in-up animation-delay-700">
-          <Link
-            href="/auth/signin"
-            className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-          >
-            Sign In
-          </Link>
-          <Link
-            href="/auth/register"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-          >
-            Get Started
-          </Link>
         </div>
       </div>
     </section>
