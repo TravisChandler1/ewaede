@@ -14,12 +14,14 @@ import {
   Search,
   LogOut,
   MessageSquare,
-  Home
+  Home,
+  User
 } from 'lucide-react';
 import { Loading } from '@/components/ui/loading';
 import { CourseCard } from '@/components/dashboard/CourseCard';
 import NotificationCenter from '@/components/student/NotificationCenter';
 import StudentMessageModal from '@/components/student/StudentMessageModal';
+import DashboardBottomTabs from '@/components/student/DashboardBottomTabs';
 
 // Define interfaces for our data types
 interface StatItem {
@@ -90,10 +92,37 @@ interface Activity {
 }
 
 interface Session {
-  id: number;
+  id: string;
   title: string;
-  time: string;
-  type: string;
+  description: string;
+  courseTitle: string;
+  instructorName: string;
+  instructorEmail?: string;
+  startTime: string;
+  endTime: string;
+  duration: number;
+  level: string;
+  maxAttendees: number;
+  currentAttendees: number;
+  meetingUrl?: string;
+  isLive: boolean;
+  status: string;
+  category?: string; // Added for UI categorization
+}
+
+interface Message {
+  id: string;
+  content: string;
+  senderId: string;
+  recipientId: string;
+  senderName: string;
+  senderEmail: string;
+  senderRole: string;
+  recipientName?: string;
+  recipientEmail?: string;
+  recipientRole?: string;
+  isRead: boolean;
+  createdAt: string;
 }
 
 export default function StudentDashboard() {
@@ -110,6 +139,9 @@ export default function StudentDashboard() {
     currentStreak: 0,
     overallProgress: 0,
   });
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [liveSessions, setLiveSessions] = useState<Session[]>([]);
+  const [scheduledSessions, setScheduledSessions] = useState<Session[]>([]);
 
   const fetchEnrolledCourses = async () => {
     try {
@@ -175,7 +207,8 @@ export default function StudentDashboard() {
         fetchEnrolledCourses(),
         fetchDashboardStats(),
         fetchRecentActivities(),
-        fetchUpcomingSessions()
+        fetchUpcomingSessions(),
+        fetchMessages()
       ]);
       setIsLoading(false);
     };
@@ -235,14 +268,32 @@ export default function StudentDashboard() {
       const response = await fetch('/api/students/sessions');
       if (!response.ok) {
         // If API doesn't exist yet, show empty state
-        setUpcomingSessions([]);
+        setLiveSessions([]);
+        setScheduledSessions([]);
         return;
       }
       const data = await response.json();
-      setUpcomingSessions(data.sessions || []);
+      setLiveSessions(data.live || []);
+      setScheduledSessions(data.scheduled || []);
     } catch (error) {
       console.error('Error fetching sessions:', error);
-      setUpcomingSessions([]);
+      setLiveSessions([]);
+      setScheduledSessions([]);
+    }
+  };
+
+  const fetchMessages = async () => {
+    try {
+      const response = await fetch('/api/student/messages');
+      if (!response.ok) {
+        setMessages([]);
+        return;
+      }
+      const data = await response.json();
+      setMessages(data.messages || []);
+    } catch (error) {
+      console.error('Error fetching messages:', error);
+      setMessages([]);
     }
   };
 
@@ -305,52 +356,6 @@ export default function StudentDashboard() {
         </div>
       </div>
 
-      {/* Tab Navigation */}
-      <div className="bg-[#1a1a1a] border-b border-[#2a2a2a] px-4 py-3">
-        <nav className="flex items-center">
-          <div className="relative flex items-center bg-[#0f0f0f] rounded-lg p-1 overflow-x-auto scrollbar-hide">
-            {/* Active tab background indicator */}
-            <div
-              className="absolute top-1 left-1 h-8 bg-[#4f46e5] rounded-md transition-all duration-300 ease-in-out"
-              style={{
-                width: `${100 / 6}%`,
-                transform: `translateX(${([
-                  { id: 'overview', index: 0 },
-                  { id: 'courses', index: 1 },
-                  { id: 'progress', index: 2 },
-                  { id: 'sessions', index: 3 },
-                  { id: 'messages', index: 4 },
-                  { id: 'achievements', index: 5 },
-                ].find(item => item.id === activeTab)?.index ?? 0) * 100}%)`,
-              }}
-            />
-
-            <div className="flex items-center min-w-max">
-              {[
-                { name: 'Overview', icon: BarChart2, id: 'overview' },
-                { name: 'My Courses', icon: BookOpen, id: 'courses' },
-                { name: 'Progress', icon: Award, id: 'progress' },
-                { name: 'Sessions', icon: Calendar, id: 'sessions' },
-                { name: 'Messages', icon: MessageSquare, id: 'messages' },
-                { name: 'Achievements', icon: Award, id: 'achievements' },
-              ].map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => setActiveTab(item.id)}
-                  className={`relative z-10 px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 flex items-center whitespace-nowrap ${
-                    activeTab === item.id
-                      ? 'text-white'
-                      : 'text-[#a1a1aa] hover:text-white hover:bg-[#2a2a2a]/50'
-                  }`}
-                >
-                  <item.icon className="h-4 w-4 mr-2" />
-                  {item.name}
-                </button>
-              ))}
-            </div>
-          </div>
-        </nav>
-      </div>
 
       <div className="pt-0">
         <main className="py-6 px-4 sm:px-6 lg:px-8 bg-[#0f0f0f]">
@@ -412,9 +417,9 @@ export default function StudentDashboard() {
                           </div>
                           <div className="ml-4">
                             <p className="text-sm font-medium text-white">{session.title}</p>
-                            <p className="text-sm text-[#a1a1aa]">{session.time}</p>
+                            <p className="text-sm text-[#a1a1aa]">{new Date(session.startTime).toLocaleString()}</p>
                             <span className="mt-1 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#4f46e5]/20 text-[#4f46e5] border border-[#4f46e5]/30">
-                              {session.type}
+                              {session.level}
                             </span>
                           </div>
                         </div>
@@ -430,11 +435,119 @@ export default function StudentDashboard() {
                 </div>
               </div>
 
-              {/* Messages Section */}
+              {/* Sessions Tab */}
+              {activeTab === 'sessions' && (
+                <div className="space-y-6">
+                  {/* Live Sessions */}
+                  <div className="bg-[#1a1a1a] border border-[#2a2a2a] shadow-lg overflow-hidden rounded-lg hover:border-[#ef4444]/50 transition-all duration-300">
+                    <div className="px-4 py-5 sm:px-6 border-b border-[#2a2a2a]">
+                      <div className="flex items-center">
+                        <div className="w-3 h-3 bg-[#ef4444] rounded-full animate-pulse mr-3"></div>
+                        <h3 className="text-lg font-medium text-white">Live Sessions</h3>
+                      </div>
+                    </div>
+                    <div className="divide-y divide-[#2a2a2a]">
+                      {liveSessions.length > 0 ? (
+                        liveSessions.map((session) => (
+                          <div key={session.id} className="p-4 hover:bg-[#2a2a2a]/50 transition-colors duration-150">
+                            <div className="flex items-start justify-between">
+                              <div className="flex items-start">
+                                <div className="flex-shrink-0 h-12 w-12 rounded-full bg-[#ef4444] flex items-center justify-center">
+                                  <Calendar className="h-6 w-6 text-white" />
+                                </div>
+                                <div className="ml-4">
+                                  <h4 className="text-sm font-medium text-white">{session.title}</h4>
+                                  <p className="text-sm text-[#a1a1aa]">{session.courseTitle}</p>
+                                  <p className="text-sm text-[#a1a1aa]">Instructor: {session.instructorName}</p>
+                                  <p className="text-sm text-[#a1a1aa]">Duration: {session.duration} minutes</p>
+                                  <div className="flex items-center mt-2">
+                                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#ef4444]/20 text-[#ef4444] border border-[#ef4444]/30">
+                                      LIVE NOW
+                                    </span>
+                                    <span className="ml-2 text-xs text-[#a1a1aa]">
+                                      {session.currentAttendees}/{session.maxAttendees} attendees
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="ml-4">
+                                {session.meetingUrl && (
+                                  <button className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-[#ef4444] hover:bg-[#dc2626]">
+                                    Join Live
+                                  </button>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        ))
+                      ) : (
+                        <div className="p-8 text-center">
+                          <Calendar className="h-12 w-12 text-[#a1a1aa] mx-auto mb-4" />
+                          <p className="text-[#a1a1aa]">No live sessions at the moment</p>
+                          <p className="text-sm text-[#6b7280] mt-1">Check back later for live classes!</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Scheduled Sessions */}
+                  <div className="bg-[#1a1a1a] border border-[#2a2a2a] shadow-lg overflow-hidden rounded-lg hover:border-[#4f46e5]/50 transition-all duration-300">
+                    <div className="px-4 py-5 sm:px-6 border-b border-[#2a2a2a]">
+                      <div className="flex items-center">
+                        <div className="w-3 h-3 bg-[#4f46e5] rounded-full mr-3"></div>
+                        <h3 className="text-lg font-medium text-white">Scheduled Sessions</h3>
+                      </div>
+                    </div>
+                    <div className="divide-y divide-[#2a2a2a]">
+                      {scheduledSessions.length > 0 ? (
+                        scheduledSessions.map((session) => (
+                          <div key={session.id} className="p-4 hover:bg-[#2a2a2a]/50 transition-colors duration-150">
+                            <div className="flex items-start justify-between">
+                              <div className="flex items-start">
+                                <div className="flex-shrink-0 h-12 w-12 rounded-full bg-[#4f46e5] flex items-center justify-center">
+                                  <Calendar className="h-6 w-6 text-white" />
+                                </div>
+                                <div className="ml-4">
+                                  <h4 className="text-sm font-medium text-white">{session.title}</h4>
+                                  <p className="text-sm text-[#a1a1aa]">{session.courseTitle}</p>
+                                  <p className="text-sm text-[#a1a1aa]">Instructor: {session.instructorName}</p>
+                                  <p className="text-sm text-[#a1a1aa]">Starts: {new Date(session.startTime).toLocaleString()}</p>
+                                  <p className="text-sm text-[#a1a1aa]">Duration: {session.duration} minutes</p>
+                                  <div className="flex items-center mt-2">
+                                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#4f46e5]/20 text-[#4f46e5] border border-[#4f46e5]/30">
+                                      {session.level}
+                                    </span>
+                                    <span className="ml-2 text-xs text-[#a1a1aa]">
+                                      {session.currentAttendees}/{session.maxAttendees} enrolled
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="ml-4">
+                                <button className="inline-flex items-center px-3 py-1.5 border border-[#4f46e5]/30 text-xs font-medium rounded-md text-[#4f46e5] bg-[#4f46e5]/10 hover:bg-[#4f46e5]/20">
+                                  Set Reminder
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        ))
+                      ) : (
+                        <div className="p-8 text-center">
+                          <Calendar className="h-12 w-12 text-[#a1a1aa] mx-auto mb-4" />
+                          <p className="text-[#a1a1aa]">No scheduled sessions</p>
+                          <p className="text-sm text-[#6b7280] mt-1">Upcoming sessions will appear here!</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Messages Tab */}
               {activeTab === 'messages' && (
                 <div className="bg-[#1a1a1a] border border-[#2a2a2a] shadow-lg overflow-hidden rounded-lg hover:border-[#4f46e5]/50 transition-all duration-300">
                   <div className="px-4 py-5 sm:px-6 border-b border-[#2a2a2a] flex items-center justify-between">
-                    <h3 className="text-lg font-medium text-white">Messages</h3>
+                    <h3 className="text-lg font-medium text-white">Messages from Teachers</h3>
                     <button
                       onClick={() => setShowMessages(true)}
                       className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-[#4f46e5] bg-[#4f46e5]/10 hover:bg-[#4f46e5]/20"
@@ -444,18 +557,56 @@ export default function StudentDashboard() {
                     </button>
                   </div>
                   <div className="divide-y divide-[#2a2a2a]">
-                    <div className="p-8 text-center">
-                      <MessageSquare className="h-12 w-12 text-[#a1a1aa] mx-auto mb-4" />
-                      <p className="text-[#a1a1aa]">No messages yet</p>
-                      <p className="text-sm text-[#6b7280] mt-1">Start a conversation with your teachers!</p>
-                      <button
-                        onClick={() => setShowMessages(true)}
-                        className="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-[#4f46e5] hover:bg-[#4338ca]"
-                      >
-                        <MessageSquare className="h-4 w-4 mr-2" />
-                        Send Message
-                      </button>
-                    </div>
+                    {messages.length > 0 ? (
+                      messages
+                        .filter(message => message.senderRole === 'TEACHER') // Only show teacher messages
+                        .map((message) => (
+                          <div key={message.id} className={`p-4 hover:bg-[#2a2a2a]/50 transition-colors duration-150 ${!message.isRead ? 'bg-[#4f46e5]/5 border-l-4 border-[#4f46e5]' : ''}`}>
+                            <div className="flex items-start justify-between">
+                              <div className="flex items-start">
+                                <div className="flex-shrink-0 h-10 w-10 rounded-full bg-[#4f46e5] flex items-center justify-center">
+                                  <User className="h-5 w-5 text-white" />
+                                </div>
+                                <div className="ml-4 flex-1">
+                                  <div className="flex items-center justify-between">
+                                    <h4 className="text-sm font-medium text-white">{message.senderName}</h4>
+                                    <span className="text-xs text-[#a1a1aa]">{new Date(message.createdAt).toLocaleString()}</span>
+                                  </div>
+                                  <p className="text-sm text-[#a1a1aa] mt-1">{message.content}</p>
+                                  {!message.isRead && (
+                                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-[#4f46e5] text-white mt-2">
+                                      New
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                              <div className="ml-4 flex flex-col space-y-2">
+                                <button className="inline-flex items-center px-2 py-1 border border-[#4f46e5]/30 text-xs font-medium rounded-md text-[#4f46e5] bg-[#4f46e5]/10 hover:bg-[#4f46e5]/20">
+                                  Reply
+                                </button>
+                                {!message.isRead && (
+                                  <button className="inline-flex items-center px-2 py-1 border border-transparent text-xs font-medium rounded-md text-[#a1a1aa] hover:text-white">
+                                    Mark Read
+                                  </button>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        ))
+                    ) : (
+                      <div className="p-8 text-center">
+                        <MessageSquare className="h-12 w-12 text-[#a1a1aa] mx-auto mb-4" />
+                        <p className="text-[#a1a1aa]">No messages from teachers yet</p>
+                        <p className="text-sm text-[#6b7280] mt-1">Your teachers will send you messages here!</p>
+                        <button
+                          onClick={() => setShowMessages(true)}
+                          className="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-[#4f46e5] hover:bg-[#4338ca]"
+                        >
+                          <MessageSquare className="h-4 w-4 mr-2" />
+                          Send First Message
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
               )}
@@ -512,9 +663,9 @@ export default function StudentDashboard() {
                         </div>
                         <div className="ml-4">
                           <p className="text-sm font-medium text-white">{session.title}</p>
-                          <p className="text-sm text-[#a1a1aa]">{session.time}</p>
+                          <p className="text-sm text-[#a1a1aa]">{new Date(session.startTime).toLocaleString()}</p>
                           <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#4f46e5]/20 text-[#4f46e5] border border-[#4f46e5]/30 mt-1">
-                            {session.type}
+                            {session.level}
                           </span>
                         </div>
                         <button className="ml-auto text-[#4f46e5] hover:text-[#4338ca]">
@@ -558,6 +709,12 @@ export default function StudentDashboard() {
       <StudentMessageModal
         isOpen={showMessages}
         onClose={() => setShowMessages(false)}
+      />
+
+      {/* Bottom Navigation */}
+      <DashboardBottomTabs
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
       />
     </div>
   );

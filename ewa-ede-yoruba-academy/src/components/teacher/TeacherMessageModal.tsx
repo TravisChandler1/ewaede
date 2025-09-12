@@ -3,11 +3,12 @@
 import { useState, useEffect, useRef } from 'react';
 import { Send, X, User, MoreVertical, Smile, MessageSquare } from 'lucide-react';
 
-interface Teacher {
+interface Student {
   id: string;
   name: string;
   email: string;
-  courseTitle: string;
+  courseTitle?: string;
+  level?: string;
   avatar?: string;
   isOnline?: boolean;
   lastSeen?: string;
@@ -23,15 +24,15 @@ interface Message {
   messageType: 'text' | 'image' | 'file';
 }
 
-interface FacebookChatModalProps {
+interface TeacherMessageModalProps {
   isOpen: boolean;
   onClose: () => void;
-  selectedTeacher?: Teacher | null;
+  selectedStudent?: Student | null;
 }
 
-export default function FacebookChatModal({ isOpen, onClose, selectedTeacher }: FacebookChatModalProps) {
-  const [teachers, setTeachers] = useState<Teacher[]>([]);
-  const [currentTeacher, setCurrentTeacher] = useState<Teacher | null>(selectedTeacher || null);
+export default function TeacherMessageModal({ isOpen, onClose, selectedStudent }: TeacherMessageModalProps) {
+  const [students, setStudents] = useState<Student[]>([]);
+  const [currentStudent, setCurrentStudent] = useState<Student | null>(selectedStudent || null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -41,39 +42,39 @@ export default function FacebookChatModal({ isOpen, onClose, selectedTeacher }: 
 
   useEffect(() => {
     if (isOpen) {
-      loadTeachers();
-      if (selectedTeacher) {
-        setCurrentTeacher(selectedTeacher);
-        loadMessages(selectedTeacher.id);
+      loadStudents();
+      if (selectedStudent) {
+        setCurrentStudent(selectedStudent);
+        loadMessages(selectedStudent.id);
       }
     }
-  }, [isOpen, selectedTeacher]);
+  }, [isOpen, selectedStudent]);
 
   useEffect(() => {
-    if (currentTeacher) {
-      loadMessages(currentTeacher.id);
+    if (currentStudent) {
+      loadMessages(currentStudent.id);
     }
-  }, [currentTeacher]);
+  }, [currentStudent]);
 
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
 
-  const loadTeachers = async () => {
+  const loadStudents = async () => {
     try {
-      const response = await fetch('/api/student/teachers');
+      const response = await fetch('/api/students');
       if (response.ok) {
         const data = await response.json();
-        setTeachers(data.teachers || []);
+        setStudents(data.students || []);
       }
     } catch (error) {
-      console.error('Error loading teachers:', error);
+      console.error('Error loading students:', error);
     }
   };
 
-  const loadMessages = async (teacherId: string) => {
+  const loadMessages = async (studentId: string) => {
     try {
-      const response = await fetch(`/api/student/messages?teacherId=${teacherId}`);
+      const response = await fetch(`/api/teacher/messages?studentId=${studentId}`);
       if (response.ok) {
         const data = await response.json();
         setMessages(data.messages || []);
@@ -88,10 +89,10 @@ export default function FacebookChatModal({ isOpen, onClose, selectedTeacher }: 
   };
 
   const sendMessage = async () => {
-    if (!currentTeacher || !newMessage.trim()) return;
+    if (!currentStudent || !newMessage.trim()) return;
 
     const messageData = {
-      recipientId: currentTeacher.id,
+      recipientId: currentStudent.id,
       content: newMessage.trim(),
       messageType: 'text' as const,
     };
@@ -100,7 +101,7 @@ export default function FacebookChatModal({ isOpen, onClose, selectedTeacher }: 
     const tempMessage: Message = {
       id: `temp-${Date.now()}`,
       content: newMessage,
-      senderId: 'student', // Current user
+      senderId: 'teacher', // Current user
       senderName: 'You',
       timestamp: new Date().toISOString(),
       isRead: false,
@@ -112,7 +113,7 @@ export default function FacebookChatModal({ isOpen, onClose, selectedTeacher }: 
     setIsLoading(true);
 
     try {
-      const response = await fetch('/api/student/messages', {
+      const response = await fetch('/api/teacher/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(messageData),
@@ -181,16 +182,16 @@ export default function FacebookChatModal({ isOpen, onClose, selectedTeacher }: 
               <div className="w-10 h-10 rounded-full bg-[#4f46e5] flex items-center justify-center">
                 <User className="h-5 w-5 text-white" />
               </div>
-              {currentTeacher?.isOnline && (
+              {currentStudent?.isOnline && (
                 <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-[#1a1a1a] rounded-full"></div>
               )}
             </div>
             <div>
               <h3 className="text-white font-medium text-sm">
-                {currentTeacher?.name || 'Select a teacher'}
+                {currentStudent?.name || 'Select a student'}
               </h3>
               <p className="text-[#a1a1aa] text-xs">
-                {currentTeacher?.isOnline ? 'Active now' : currentTeacher?.lastSeen ? `Last seen ${currentTeacher.lastSeen}` : 'Offline'}
+                {currentStudent?.isOnline ? 'Active now' : currentStudent?.lastSeen ? `Last seen ${currentStudent.lastSeen}` : 'Offline'}
               </p>
             </div>
           </div>
@@ -209,7 +210,7 @@ export default function FacebookChatModal({ isOpen, onClose, selectedTeacher }: 
 
         {/* Messages Area */}
         <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-[#0f0f0f]">
-          {currentTeacher ? (
+          {currentStudent ? (
             <>
               {messages.length === 0 ? (
                 <div className="text-center py-8">
@@ -217,24 +218,24 @@ export default function FacebookChatModal({ isOpen, onClose, selectedTeacher }: 
                     <User className="h-8 w-8 text-[#4f46e5]" />
                   </div>
                   <p className="text-[#a1a1aa] text-sm mb-2">Start a conversation</p>
-                  <p className="text-[#6b7280] text-xs">Send a message to {currentTeacher.name}</p>
+                  <p className="text-[#6b7280] text-xs">Send a message to {currentStudent.name}</p>
                 </div>
               ) : (
                 messages.map((message) => (
                   <div
                     key={message.id}
-                    className={`flex ${message.senderId === 'student' ? 'justify-end' : 'justify-start'}`}
+                    className={`flex ${message.senderId === 'teacher' ? 'justify-end' : 'justify-start'}`}
                   >
                     <div
                       className={`max-w-xs lg:max-w-sm px-4 py-2 rounded-2xl ${
-                        message.senderId === 'student'
+                        message.senderId === 'teacher'
                           ? 'bg-[#4f46e5] text-white rounded-br-md'
                           : 'bg-[#2a2a2a] text-white rounded-bl-md'
                       }`}
                     >
                       <p className="text-sm">{message.content}</p>
                       <p className={`text-xs mt-1 ${
-                        message.senderId === 'student' ? 'text-blue-200' : 'text-[#a1a1aa]'
+                        message.senderId === 'teacher' ? 'text-blue-200' : 'text-[#a1a1aa]'
                       }`}>
                         {formatTime(message.timestamp)}
                       </p>
@@ -258,20 +259,23 @@ export default function FacebookChatModal({ isOpen, onClose, selectedTeacher }: 
           ) : (
             <div className="text-center py-8">
               <MessageSquare className="h-12 w-12 text-[#a1a1aa] mx-auto mb-4" />
-              <p className="text-[#a1a1aa] text-sm mb-2">Select a teacher to start chatting</p>
+              <p className="text-[#a1a1aa] text-sm mb-2">Select a student to start chatting</p>
               <div className="space-y-2 max-h-40 overflow-y-auto">
-                {teachers.map((teacher) => (
+                {students.map((student) => (
                   <button
-                    key={teacher.id}
-                    onClick={() => setCurrentTeacher(teacher)}
+                    key={student.id}
+                    onClick={() => setCurrentStudent(student)}
                     className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-[#2a2a2a] transition-colors"
                   >
                     <div className="w-8 h-8 rounded-full bg-[#4f46e5] flex items-center justify-center">
                       <User className="h-4 w-4 text-white" />
                     </div>
                     <div className="text-left">
-                      <p className="text-white text-sm font-medium">{teacher.name}</p>
-                      <p className="text-[#a1a1aa] text-xs">{teacher.courseTitle}</p>
+                      <p className="text-white text-sm font-medium">{student.name}</p>
+                      <p className="text-[#a1a1aa] text-xs">{student.email}</p>
+                      {student.courseTitle && (
+                        <p className="text-[#6b7280] text-xs">Course: {student.courseTitle}</p>
+                      )}
                     </div>
                   </button>
                 ))}
@@ -281,7 +285,7 @@ export default function FacebookChatModal({ isOpen, onClose, selectedTeacher }: 
         </div>
 
         {/* Message Input */}
-        {currentTeacher && (
+        {currentStudent && (
           <div className="p-4 bg-[#1a1a1a] border-t border-[#2a2a2a]">
             <div className="flex items-center space-x-2">
               <button className="text-[#a1a1aa] hover:text-white p-2">
@@ -294,7 +298,7 @@ export default function FacebookChatModal({ isOpen, onClose, selectedTeacher }: 
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
                   onKeyPress={handleKeyPress}
-                  placeholder={`Message ${currentTeacher.name}...`}
+                  placeholder={`Message ${currentStudent.name}...`}
                   className="w-full px-4 py-2 bg-[#0f0f0f] border border-[#374151] rounded-full text-white placeholder-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#4f46e5] focus:border-transparent"
                   disabled={isLoading}
                 />

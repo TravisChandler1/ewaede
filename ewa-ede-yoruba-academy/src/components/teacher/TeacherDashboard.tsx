@@ -21,7 +21,7 @@ import {
 import SessionScheduler from './SessionScheduler';
 import StudentSelector from './StudentSelector';
 import StudentList from './StudentList';
-import ChatModal from './ChatModal';
+import TeacherMessageModal from './TeacherMessageModal';
 import LiveSessionModal, { SessionData } from './LiveSessionModal';
 
 interface Session {
@@ -909,10 +909,11 @@ export default function TeacherDashboard() {
         />
       )}
 
-      {/* Chat Modal */}
-      {showChatModal && selectedStudent && (
-        <ChatModal
-          student={selectedStudent}
+      {/* Teacher Message Modal */}
+      {showChatModal && (
+        <TeacherMessageModal
+          isOpen={showChatModal}
+          selectedStudent={selectedStudent}
           onClose={() => {
             setShowChatModal(false);
             setSelectedStudent(null);

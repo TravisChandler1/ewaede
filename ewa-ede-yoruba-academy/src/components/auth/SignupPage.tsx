@@ -3,11 +3,14 @@
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { BookOpen, User, GraduationCap } from "lucide-react";
+import PasswordInput from "@/components/ui/PasswordInput";
 
 export default function SignupPage() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState(1);
+  const [emailError, setEmailError] = useState<string>("");
+  const [passwordValid, setPasswordValid] = useState<boolean>(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -19,6 +22,22 @@ export default function SignupPage() {
 
   const { signUpWithCredentials } = useAuth();
 
+  const validateEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    handleInputChange('email', value);
+
+    if (value && !validateEmail(value)) {
+      setEmailError('Please enter a valid email address');
+    } else {
+      setEmailError('');
+    }
+  };
+
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
@@ -27,6 +46,14 @@ export default function SignupPage() {
     if (step === 1) {
       if (!formData.email || !formData.password || !formData.name) {
         setError("Please fill in all fields");
+        return;
+      }
+      if (!validateEmail(formData.email)) {
+        setError("Please enter a valid email address");
+        return;
+      }
+      if (!passwordValid) {
+        setError("Please create a strong password that meets all requirements");
         return;
       }
     } else if (step === 2) {
@@ -132,21 +159,26 @@ export default function SignupPage() {
                   <input
                     type="email"
                     value={formData.email}
-                    onChange={(e) => handleInputChange('email', e.target.value)}
+                    onChange={handleEmailChange}
                     className="w-full px-4 py-3 bg-[#0f0f0f] border border-[#374151] rounded-lg text-white placeholder-[#6b7280] focus:border-[#4f46e5] focus:outline-none transition-colors"
                     placeholder="Enter your email"
                   />
+                  {emailError && (
+                    <p className="text-[#ef4444] text-sm mt-1">{emailError}</p>
+                  )}
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-[#d1d5db] mb-2">Password</label>
-                  <input
-                    type="password"
+                  <PasswordInput
+                    id="password"
+                    name="password"
                     value={formData.password}
                     onChange={(e) => handleInputChange('password', e.target.value)}
-                    className="w-full px-4 py-3 bg-[#0f0f0f] border border-[#374151] rounded-lg text-white placeholder-[#6b7280] focus:border-[#4f46e5] focus:outline-none transition-colors"
-                    placeholder="Create a password"
-                    autoComplete="new-password"
+                    placeholder="Create a strong password"
+                    required
+                    showStrengthIndicator={true}
+                    onValidationChange={setPasswordValid}
                   />
                 </div>
               </div>
