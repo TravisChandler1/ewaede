@@ -20,16 +20,19 @@ export default function middleware(req: NextRequest) {
   const { nextUrl } = req;
   const pathname = nextUrl.pathname;
 
+  console.log('Middleware - pathname:', pathname);
+
   // Skip middleware for public paths, API routes, and static files
   const isPublicPath = publicPaths.has(pathname) ||
-                      Array.from(publicPaths).some(path =>
-                        path !== '/' && pathname.startsWith(path)
-                      );
+                       Array.from(publicPaths).some(path =>
+                         path !== '/' && pathname.startsWith(path)
+                       );
 
   if (isPublicPath ||
       pathname.startsWith('/_next') ||
       pathname.startsWith('/api/') ||
       pathname.includes('.')) {
+    console.log('Middleware - skipping for public path');
     return NextResponse.next();
   }
 
@@ -38,6 +41,7 @@ export default function middleware(req: NextRequest) {
                 req.cookies.get('__Secure-next-auth.session-token');
 
   const isAuth = !!token;
+  console.log('Middleware - token found:', !!token, 'isAuth:', isAuth);
 
   // Handle auth routes
   if (authRoutes.has(pathname)) {
@@ -50,15 +54,19 @@ export default function middleware(req: NextRequest) {
 
   // Handle dashboard routes
   if (pathname === '/' || pathname.startsWith('/dashboard')) {
+    console.log('Middleware - handling dashboard route, isAuth:', isAuth);
     if (!isAuth) {
+      console.log('Middleware - not authenticated, redirecting to signin');
       return NextResponse.redirect(new URL('/auth/signin', nextUrl));
     }
 
     // Redirect root to dashboard
     if (pathname === '/') {
+      console.log('Middleware - redirecting root to dashboard');
       return NextResponse.redirect(new URL('/dashboard', nextUrl));
     }
 
+    console.log('Middleware - allowing access to dashboard');
     return NextResponse.next();
   }
 

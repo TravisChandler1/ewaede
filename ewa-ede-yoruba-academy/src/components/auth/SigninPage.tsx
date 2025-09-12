@@ -40,19 +40,34 @@ export default function SigninPage() {
       } else if (result?.ok) {
         console.log('Sign in successful, redirecting to dashboard');
         // Get user role from session to determine redirect destination
+        console.log('Fetching session data...');
         const sessionResponse = await fetch('/api/auth/session');
+        console.log('Session response status:', sessionResponse.status);
+
+        if (!sessionResponse.ok) {
+          console.error('Failed to fetch session:', sessionResponse.status, sessionResponse.statusText);
+          setError('Failed to retrieve session. Please try again.');
+          return;
+        }
+
         const sessionData = await sessionResponse.json();
+        console.log('Session data received:', sessionData);
 
         if (sessionData?.user?.role) {
           const role = sessionData.user.role.toLowerCase();
+          console.log('User role found:', role);
           if (role === 'admin') {
+            console.log('Redirecting to admin dashboard');
             router.push('/admin/dashboard');
           } else if (role === 'teacher') {
+            console.log('Redirecting to teacher dashboard');
             router.push('/dashboard/teacher');
           } else {
+            console.log('Redirecting to student dashboard');
             router.push('/dashboard/student');
           }
         } else {
+          console.log('No role found in session, redirecting to generic dashboard');
           router.push('/dashboard');
         }
       } else {

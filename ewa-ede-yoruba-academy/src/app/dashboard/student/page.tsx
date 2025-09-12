@@ -162,12 +162,18 @@ export default function StudentDashboard() {
   };
 
   useEffect(() => {
+    console.log('Student dashboard useEffect - session status:', status);
+    console.log('Student dashboard - session data:', session);
+
     if (status === 'loading') return;
 
     if (!session?.user) {
+      console.log('No user session found, redirecting to signin');
       router.push('/auth/signin');
       return;
     }
+
+    console.log('User session found, proceeding to load dashboard data');
 
     const loadData = async () => {
       await Promise.all([

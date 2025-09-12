@@ -67,15 +67,20 @@ export default function SimpleRegisterForm() {
       }
 
       setSuccess(true);
+      console.log('Registration successful, user created with role:', formData.role);
 
       // Auto-redirect after 2 seconds
       setTimeout(() => {
         const role = formData.role.toLowerCase();
+        console.log('Redirecting after registration to role-based dashboard:', role);
         if (role === 'admin') {
+          console.log('Redirecting to admin dashboard');
           window.location.href = '/admin/dashboard';
         } else if (role === 'teacher') {
+          console.log('Redirecting to teacher dashboard');
           window.location.href = '/dashboard/teacher';
         } else {
+          console.log('Redirecting to student dashboard');
           window.location.href = '/dashboard/student';
         }
       }, 2000);
