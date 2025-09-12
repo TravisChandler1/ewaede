@@ -33,9 +33,9 @@ export default function ContentUpload({
   const getFileIcon = (file: File) => {
     const type = file.type;
     if (type.startsWith('image/')) return <Image className="h-8 w-8 text-blue-500" aria-hidden="true" />;
-    if (type.startsWith('video/')) return <Video className="h-8 w-8 text-red-500" />;
-    if (type.includes('pdf')) return <FileText className="h-8 w-8 text-red-600" />;
-    return <File className="h-8 w-8 text-gray-500" />;
+    if (type.startsWith('video/')) return <Video className="h-8 w-8 text-red-500" aria-hidden="true" />;
+    if (type.includes('pdf')) return <FileText className="h-8 w-8 text-red-600" aria-hidden="true" />;
+    return <File className="h-8 w-8 text-gray-500" aria-hidden="true" />;
   };
 
   const formatFileSize = (bytes: number) => {

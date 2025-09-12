@@ -22,9 +22,9 @@ export default function middleware(req: NextRequest) {
 
   // Skip middleware for public paths, API routes, and static files
   const isPublicPath = publicPaths.has(pathname) ||
-                      Array.from(publicPaths).some(path =>
-                        path !== '/' && pathname.startsWith(path)
-                      );
+                       Array.from(publicPaths).some(path =>
+                         path !== '/' && pathname.startsWith(path)
+                       );
 
   if (isPublicPath ||
       pathname.startsWith('/_next') ||
@@ -39,12 +39,9 @@ export default function middleware(req: NextRequest) {
 
   const isAuth = !!token;
 
-  // Handle auth routes
+  // Handle auth routes - don't redirect authenticated users immediately
+  // Let the client-side authentication handle the redirect
   if (authRoutes.has(pathname)) {
-    if (isAuth) {
-      // Redirect authenticated users away from auth pages to dashboard
-      return NextResponse.redirect(new URL('/dashboard', nextUrl));
-    }
     return NextResponse.next();
   }
 

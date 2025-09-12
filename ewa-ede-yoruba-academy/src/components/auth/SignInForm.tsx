@@ -5,6 +5,23 @@ import { signIn } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
+// Helper function to get role-based dashboard URL
+const getDashboardUrl = (role?: string): string => {
+  if (!role) return '/dashboard';
+
+  switch (role.toUpperCase()) {
+    case 'STUDENT':
+      return '/dashboard/student';
+    case 'TEACHER':
+    case 'PENDING_TEACHER':
+      return '/dashboard/teacher';
+    case 'ADMIN':
+      return '/admin/dashboard';
+    default:
+      return '/dashboard';
+  }
+};
+
 function SignInFormContent() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -20,19 +37,33 @@ function SignInFormContent() {
     setError('');
 
     try {
-      const result = await signIn('credentials', {
-        email,
-        password,
-        redirect: false,
+      // Get user role first to determine redirect URL
+      const userCheckResponse = await fetch('/api/auth/check-user', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
       });
 
-      if (result?.error) {
-        setError('Invalid email or password');
+      if (!userCheckResponse.ok) {
+        const errorData = await userCheckResponse.json();
+        setError(errorData.error || 'Invalid email or password');
         setIsLoading(false);
         return;
       }
 
-      router.push(callbackUrl);
+      const userData = await userCheckResponse.json();
+
+      // Determine redirect URL based on role
+      const dashboardUrl = getDashboardUrl(userData.role);
+
+      // Use NextAuth's built-in redirect functionality
+      await signIn('credentials', {
+        email,
+        password,
+        callbackUrl: dashboardUrl,
+        redirect: true,
+      });
+
     } catch {
       setError('An error occurred during sign in');
       setIsLoading(false);

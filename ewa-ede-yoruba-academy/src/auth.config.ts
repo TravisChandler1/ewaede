@@ -83,17 +83,18 @@ export const authConfig: AuthConfig = {
       return true;
     },
     redirect({ url, baseUrl }: { url: string; baseUrl: string }) {
-      // Ensure baseUrl is HTTPS in production
-      const secureBaseUrl = baseUrl.replace('http://', 'https://');
+      // Only use HTTPS in production, keep HTTP in development
+      const isProduction = process.env.NODE_ENV === 'production';
+      const finalBaseUrl = isProduction ? baseUrl.replace('http://', 'https://') : baseUrl;
 
-      // If the URL is relative, prepend the secure base URL
-      if (url.startsWith('/')) return `${secureBaseUrl}${url}`;
+      // If the URL is relative, prepend the base URL
+      if (url.startsWith('/')) return `${finalBaseUrl}${url}`;
 
       // If the URL is already absolute, return it as is
-      if (url.startsWith(secureBaseUrl)) return url;
+      if (url.startsWith(finalBaseUrl)) return url;
 
-      // Default to secure base URL
-      return secureBaseUrl;
+      // Default to base URL
+      return finalBaseUrl;
     },
   },
   session: {

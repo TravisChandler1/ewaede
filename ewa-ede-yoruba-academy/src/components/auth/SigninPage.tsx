@@ -26,58 +26,47 @@ export default function SigninPage() {
     try {
       console.log('Attempting sign in for:', email);
 
-      const result = await signIn("credentials", {
-        email,
-        password,
-        redirect: false,
+      // Get user role first to determine redirect URL
+      console.log('Fetching user data to determine redirect...');
+      const userCheckResponse = await fetch('/api/auth/check-user', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
       });
 
-      console.log('Sign in result:', result);
-
-      if (result?.error) {
-        console.error('Sign in error:', result.error);
-        setError("Invalid email or password. Please try again.");
-      } else if (result?.ok) {
-        console.log('Sign in successful, redirecting to dashboard');
-        // Get user role from session to determine redirect destination
-        console.log('Fetching session data...');
-        const sessionResponse = await fetch('/api/auth/session');
-        console.log('Session response status:', sessionResponse.status);
-
-        if (!sessionResponse.ok) {
-          console.error('Failed to fetch session:', sessionResponse.status, sessionResponse.statusText);
-          setError('Failed to retrieve session. Please try again.');
-          return;
-        }
-
-        const sessionData = await sessionResponse.json();
-        console.log('Session data received:', sessionData);
-
-        if (sessionData?.user?.role) {
-          const role = sessionData.user.role.toLowerCase();
-          console.log('User role found:', role);
-          if (role === 'admin') {
-            console.log('Redirecting to admin dashboard');
-            router.push('/admin/dashboard');
-          } else if (role === 'teacher') {
-            console.log('Redirecting to teacher dashboard');
-            router.push('/dashboard/teacher');
-          } else {
-            console.log('Redirecting to student dashboard');
-            router.push('/dashboard/student');
-          }
-        } else {
-          console.log('No role found in session, redirecting to generic dashboard');
-          router.push('/dashboard');
-        }
-      } else {
-        console.log('Sign in result:', result);
-        setError("An unexpected error occurred. Please try again.");
+      if (!userCheckResponse.ok) {
+        const errorData = await userCheckResponse.json();
+        setError(errorData.error || "Invalid email or password. Please try again.");
+        setLoading(false);
+        return;
       }
+
+      const userData = await userCheckResponse.json();
+      console.log('User data received:', userData);
+
+      // Determine redirect URL based on role
+      let redirectUrl = '/dashboard';
+      if (userData.role === 'ADMIN') {
+        redirectUrl = '/admin/dashboard';
+      } else if (userData.role === 'TEACHER') {
+        redirectUrl = '/dashboard/teacher';
+      } else {
+        redirectUrl = '/dashboard/student';
+      }
+
+      console.log('Redirecting to:', redirectUrl);
+
+      // Use NextAuth's built-in redirect functionality
+      await signIn("credentials", {
+        email,
+        password,
+        callbackUrl: redirectUrl,
+        redirect: true,
+      });
+
     } catch (err) {
       console.error('Sign in exception:', err);
       setError("An error occurred. Please try again.");
-    } finally {
       setLoading(false);
     }
   };
