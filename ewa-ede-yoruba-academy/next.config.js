@@ -6,22 +6,27 @@ const nextConfig = {
     domains: ['localhost', 'supabase.co', 'vercel.app'],
     formats: ['image/webp', 'image/avif'],
   },
-  // Force HTTPS redirects
+  // Force HTTPS redirects only in production
   async redirects() {
-    return [
-      {
-        source: '/:path*',
-        has: [
-          {
-            type: 'header',
-            key: 'x-forwarded-proto',
-            value: 'http',
-          },
-        ],
-        destination: 'https://:host/:path*',
-        permanent: true,
-      },
-    ];
+    // Only apply HTTPS redirects in production
+    if (process.env.NODE_ENV === 'production') {
+      return [
+        {
+          source: '/:path*',
+          has: [
+            {
+              type: 'header',
+              key: 'x-forwarded-proto',
+              value: 'http',
+            },
+          ],
+          destination: 'https://:host/:path*',
+          permanent: true,
+        },
+      ];
+    }
+    // No redirects in development
+    return [];
   },
   experimental: {
     // optimizeCss: true, // Temporarily disabled due to critters dependency issue

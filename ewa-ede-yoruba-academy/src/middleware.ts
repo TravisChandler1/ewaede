@@ -33,48 +33,60 @@ export default function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  // Check for NextAuth session token
+  // Check for NextAuth session token - try multiple cookie names
   const token = req.cookies.get('next-auth.session-token') ||
-                req.cookies.get('__Secure-next-auth.session-token');
+                req.cookies.get('__Secure-next-auth.session-token') ||
+                req.cookies.get('next-auth.session-token.0') ||
+                req.cookies.get('__Secure-next-auth.session-token.0');
 
   const isAuth = !!token;
+
+  console.log(`Middleware: ${pathname}, isAuth: ${isAuth}, token: ${!!token}`);
 
   // Handle auth routes - don't redirect authenticated users immediately
   // Let the client-side authentication handle the redirect
   if (authRoutes.has(pathname)) {
+    console.log(`Middleware: Auth route ${pathname}, allowing access`);
     return NextResponse.next();
   }
 
   // Handle dashboard routes
   if (pathname === '/' || pathname.startsWith('/dashboard')) {
+    console.log(`Middleware: Dashboard route ${pathname}, isAuth: ${isAuth}`);
     if (!isAuth) {
+      console.log(`Middleware: Redirecting to signin from ${pathname}`);
       return NextResponse.redirect(new URL('/auth/signin', nextUrl));
     }
 
     // Redirect root to dashboard
     if (pathname === '/') {
+      console.log(`Middleware: Redirecting root to /dashboard`);
       return NextResponse.redirect(new URL('/dashboard', nextUrl));
     }
 
+    console.log(`Middleware: Allowing access to ${pathname}`);
     return NextResponse.next();
   }
 
   // Handle admin routes
   if (pathname.startsWith('/admin')) {
+    console.log(`Middleware: Admin route ${pathname}, isAuth: ${isAuth}`);
     if (!isAuth) {
+      console.log(`Middleware: Redirecting to signin from ${pathname}`);
       return NextResponse.redirect(new URL('/auth/signin', nextUrl));
     }
 
-    // For now, allow access to admin routes if authenticated
-    // Role-based access can be handled in the admin components themselves
+    console.log(`Middleware: Allowing access to ${pathname}`);
     return NextResponse.next();
   }
 
   // For all other routes, allow access but require authentication
   if (!isAuth) {
+    console.log(`Middleware: Redirecting to signin from ${pathname}`);
     return NextResponse.redirect(new URL('/auth/signin', nextUrl));
   }
 
+  console.log(`Middleware: Allowing access to ${pathname}`);
   return NextResponse.next();
 }
 

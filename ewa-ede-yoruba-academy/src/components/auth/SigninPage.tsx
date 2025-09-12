@@ -55,13 +55,15 @@ export default function SigninPage() {
       }
 
       console.log('Redirecting to:', redirectUrl);
+      console.log('Full redirect URL:', `${window.location.origin}${redirectUrl}`);
 
       // Use NextAuth's built-in redirect functionality
+      console.log('Calling NextAuth signIn with redirect...');
       await signIn("credentials", {
         email,
         password,
         callbackUrl: redirectUrl,
-        redirect: true,
+        redirect: true, // Let NextAuth handle the redirect
       });
 
     } catch (err) {

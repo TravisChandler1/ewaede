@@ -57,12 +57,21 @@ function SignInFormContent() {
       const dashboardUrl = getDashboardUrl(userData.role);
 
       // Use NextAuth's built-in redirect functionality
-      await signIn('credentials', {
+      const result = await signIn('credentials', {
         email,
         password,
         callbackUrl: dashboardUrl,
-        redirect: true,
+        redirect: false, // Don't redirect automatically
       });
+
+      // Handle the result manually
+      if (result?.error) {
+        setError(result.error);
+        setIsLoading(false);
+      } else {
+        // Manually redirect to the dashboard
+        window.location.href = dashboardUrl;
+      }
 
     } catch {
       setError('An error occurred during sign in');

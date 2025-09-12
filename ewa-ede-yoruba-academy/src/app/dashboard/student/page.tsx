@@ -117,7 +117,8 @@ export default function StudentDashboard() {
       if (!response.ok) {
         throw new Error('Failed to fetch enrolled courses');
       }
-      const data: CourseResponse[] = await response.json();
+      const responseData = await response.json();
+      const data: CourseResponse[] = responseData.courses || [];
       setCourses(data.map(course => ({
         id: course.id,
         title: course.title,
