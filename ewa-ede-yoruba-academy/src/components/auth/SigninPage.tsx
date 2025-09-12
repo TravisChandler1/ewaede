@@ -30,6 +30,7 @@ export default function SigninPage() {
         email,
         password,
         redirect: false,
+        callbackUrl: '/dashboard',
       });
 
       console.log('Sign in result:', result);
@@ -66,23 +67,16 @@ export default function SigninPage() {
           }
           console.log('Redirecting to:', redirectUrl);
           try {
-            // Add a small delay to ensure session is properly set
-            setTimeout(() => {
-              console.log('Executing redirect to:', redirectUrl);
-              window.location.href = redirectUrl;
-            }, 100);
+            router.push(redirectUrl);
           } catch (error) {
-            console.error('Error setting location.href:', error);
+            console.error('Error with router.push:', error);
           }
         } else {
           console.log('No role found in session, redirecting to generic dashboard');
           try {
-            setTimeout(() => {
-              console.log('Executing redirect to: /dashboard');
-              window.location.href = '/dashboard';
-            }, 100);
+            router.push('/dashboard');
           } catch (error) {
-            console.error('Error setting location.href:', error);
+            console.error('Error with router.push:', error);
           }
         }
       } else {
