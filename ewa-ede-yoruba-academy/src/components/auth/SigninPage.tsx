@@ -58,17 +58,17 @@ export default function SigninPage() {
           console.log('User role found:', role);
           if (role === 'admin') {
             console.log('Redirecting to admin dashboard');
-            router.push('/admin/dashboard');
+            window.location.href = '/admin/dashboard';
           } else if (role === 'teacher') {
             console.log('Redirecting to teacher dashboard');
-            router.push('/dashboard/teacher');
+            window.location.href = '/dashboard/teacher';
           } else {
             console.log('Redirecting to student dashboard');
-            router.push('/dashboard/student');
+            window.location.href = '/dashboard/student';
           }
         } else {
           console.log('No role found in session, redirecting to generic dashboard');
-          router.push('/dashboard');
+          window.location.href = '/dashboard';
         }
       } else {
         console.log('Sign in result:', result);
