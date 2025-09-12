@@ -44,7 +44,7 @@ export default function BottomTabs() {
               href={tab.href}
               className={`flex flex-col items-center justify-center py-2 px-3 rounded-lg transition-all duration-200 min-w-0 flex-1 ${
                 tab.active
-                  ? 'bg-[#4f46e5] text-white'
+                  ? 'bg-[#e69d2a] text-white'
                   : 'text-[#a1a1aa] hover:text-white hover:bg-[#2a2a2a]'
               }`}
             >

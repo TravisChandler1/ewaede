@@ -91,7 +91,7 @@ export default function SimpleRegisterForm() {
       <div className="min-h-screen bg-[#0f0f0f] flex items-center justify-center p-4">
         <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl p-8 shadow-2xl max-w-md w-full text-center">
           <div className="flex items-center justify-center mb-4">
-            <CheckCircle size={32} className="text-[#4f46e5] mr-2" />
+            <CheckCircle size={32} className="text-[#e69d2a] mr-2" />
             <h1 className="font-bold text-2xl text-white">Success!</h1>
           </div>
           <p className="text-[#a1a1aa] mb-6">Your account has been created successfully.</p>

@@ -281,7 +281,7 @@ export default function HomePage() {
               { text: 'Cultural Immersion', yoruba: 'Ìtẹ̀síwájú Ọ̀nà Àṣà' },
               { text: 'Flexible Schedule', yoruba: 'Àkókò Tí Ó Wọ́nù Fún Ẹ' }
             ].map((item, i) => (
-              <div key={i} className="bg-[#1a1a1a]/50 backdrop-blur-sm border border-[#2a2a2a] p-4 rounded-lg">
+              <div key={i} className="bg-[#1a1a1a]/50 backdrop-blur-sm border border-[#2a2a2a] p-4 rounded-lg hover:transform hover:-translate-y-2 transition-all duration-300 hover:shadow-lg hover:shadow-[#e69d2a]/20">
                 <p className="text-[#a1a1aa] text-sm">{item.text}</p>
                 <p className="text-[#a78bfa] font-medium mt-1">{item.yoruba}</p>
               </div>
@@ -304,7 +304,7 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {features.map((feature, index) => (
-              <div key={index} className="bg-[#0f0f0f] border border-[#2a2a2a] rounded-xl p-6 hover:border-[#e69d2a]/30 transition-colors">
+              <div key={index} className="bg-[#0f0f0f] border border-[#2a2a2a] rounded-xl p-6 hover:border-[#e69d2a]/30 transition-all duration-500 hover:transform hover:-translate-y-2 animate-fade-in-up" style={{ animationDelay: `${index * 0.1}s` }}>
                 <feature.icon size={48} className="text-[#e69d2a] mb-4" />
                 <h3 className="text-xl font-semibold mb-3">{feature.title}</h3>
                 <p className="text-[#a1a1aa]">{feature.description}</p>
@@ -321,7 +321,7 @@ export default function HomePage() {
           <div className="text-center mb-12">
             <h2 className="text-3xl lg:text-4xl font-bold mb-4">
               Ọ̀nà Tí A ń Kọ́ Ẹ̀kọ́
-              <span className="block text-[#e69d2a] mt-2">Our Teaching Approach</span>
+              <span className="block text-[#4f46e5] mt-2">Our <span className="text-[#e69d2a]">Teaching</span> Approach</span>
             </h2>
             <p className="text-xl text-[#a1a1aa] max-w-3xl mx-auto">
               We combine traditional Yoruba teaching methods with modern technology for effective learning
@@ -349,7 +349,7 @@ export default function HomePage() {
                 color: 'from-red-600 to-pink-500'
               }
             ].map((item, i) => (
-              <div key={i} className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl p-6 hover:border-[#e69d2a]/30 transition-all group">
+              <div key={i} className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl p-6 hover:border-[#e69d2a]/30 transition-all duration-500 group hover:transform hover:-translate-y-2 animate-fade-in-up" style={{ animationDelay: `${i * 0.2}s` }}>
                 <div className={`w-16 h-16 rounded-lg mb-6 flex items-center justify-center bg-gradient-to-br ${item.color} text-white text-2xl font-bold`}>
                   {item.title.charAt(0)}
                 </div>
@@ -366,7 +366,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-3xl lg:text-4xl font-bold mb-4">
-              Choose Your Learning Path
+              <span className="text-[#e69d2a]">Choose Your</span> <span className="text-[#4f46e5]">Learning</span> <span className="text-[#e69d2a]">Path</span>
             </h2>
             <p className="text-xl text-[#a1a1aa] max-w-2xl mx-auto">
               Select the level that matches your current knowledge and goals. All levels include both individual and group learning options.
@@ -474,33 +474,33 @@ export default function HomePage() {
             <div>
               <h3 className="font-semibold mb-4">Learning</h3>
               <ul className="space-y-2 text-sm text-[#a1a1aa]">
-                <li><a href="#" className="hover:text-white transition-colors">Courses</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Live Sessions</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">E-Library</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Book Club</a></li>
+                <li><a href="#" className="text-[#4f46e5] hover:text-[#e69d2a] transition-colors">Courses</a></li>
+                <li><a href="#" className="text-[#4f46e5] hover:text-[#e69d2a] transition-colors">Live Sessions</a></li>
+                <li><a href="#" className="text-[#4f46e5] hover:text-[#e69d2a] transition-colors">E-Library</a></li>
+                <li><a href="#" className="text-[#4f46e5] hover:text-[#e69d2a] transition-colors">Book Club</a></li>
               </ul>
             </div>
             <div>
               <h3 className="font-semibold mb-4">Community</h3>
               <ul className="space-y-2 text-sm text-[#a1a1aa]">
-                <li><a href="#" className="hover:text-white transition-colors">Learning Groups</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Forums</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Events</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Teachers</a></li>
+                <li><a href="#" className="text-[#4f46e5] hover:text-[#e69d2a] transition-colors">Learning Groups</a></li>
+                <li><a href="#" className="text-[#4f46e5] hover:text-[#e69d2a] transition-colors">Forums</a></li>
+                <li><a href="#" className="text-[#4f46e5] hover:text-[#e69d2a] transition-colors">Events</a></li>
+                <li><a href="#" className="text-[#4f46e5] hover:text-[#e69d2a] transition-colors">Teachers</a></li>
               </ul>
             </div>
             <div>
               <h3 className="font-semibold mb-4">Support</h3>
               <ul className="space-y-2 text-sm text-[#a1a1aa]">
-                <li><a href="#" className="hover:text-white transition-colors">Help Center</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Contact Us</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Privacy Policy</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Terms of Service</a></li>
+                <li><a href="#" className="text-[#4f46e5] hover:text-[#e69d2a] transition-colors">Help Center</a></li>
+                <li><a href="#" className="text-[#4f46e5] hover:text-[#e69d2a] transition-colors">Contact Us</a></li>
+                <li><a href="#" className="text-[#4f46e5] hover:text-[#e69d2a] transition-colors">Privacy Policy</a></li>
+                <li><a href="#" className="text-[#4f46e5] hover:text-[#e69d2a] transition-colors">Terms of Service</a></li>
               </ul>
             </div>
           </div>
           <div className="border-t border-[#2a2a2a] mt-8 pt-8 text-center text-[#a1a1aa] text-sm">
-            <p>&copy; 2024 Ẹwà Èdè Yorùbá Academy. All rights reserved.</p>
+            <p>&copy; 2025 Ẹwà Èdè Yorùbá Academy. All rights reserved.</p>
           </div>
         </div>
       </footer>
