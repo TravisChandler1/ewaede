@@ -69,14 +69,13 @@ export const authConfig: AuthConfig = {
 
       // Protected routes
       if (pathname.startsWith('/admin')) {
-        return isLoggedIn && auth.user?.role?.toUpperCase() === 'ADMIN';
+        return isLoggedIn && auth.user?.role === 'ADMIN';
       }
-
+      
       if (pathname.startsWith('/teacher')) {
-        const userRole = auth?.user?.role?.toUpperCase();
-        return isLoggedIn && (userRole === 'TEACHER' || userRole === 'ADMIN');
+        return isLoggedIn && (auth.user?.role === 'TEACHER' || auth.user?.role === 'ADMIN');
       }
-
+      
       if (pathname.startsWith('/dashboard')) {
         return isLoggedIn;
       }

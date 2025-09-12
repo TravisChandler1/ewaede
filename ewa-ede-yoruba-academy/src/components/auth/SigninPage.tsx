@@ -26,16 +26,54 @@ export default function SigninPage() {
     try {
       console.log('Attempting sign in for:', email);
 
-      await signIn("credentials", {
+      const result = await signIn("credentials", {
         email,
         password,
-        redirect: true,
-        callbackUrl: '/dashboard',
+        redirect: false,
       });
 
-      // If we reach here, sign in failed
-      console.log('Sign in failed - still on signin page');
-      setError("Invalid email or password. Please try again.");
+      console.log('Sign in result:', result);
+
+      if (result?.error) {
+        console.error('Sign in error:', result.error);
+        setError("Invalid email or password. Please try again.");
+      } else if (result?.ok) {
+        console.log('Sign in successful, redirecting to dashboard');
+        // Get user role from session to determine redirect destination
+        console.log('Fetching session data...');
+        const sessionResponse = await fetch('/api/auth/session');
+        console.log('Session response status:', sessionResponse.status);
+
+        if (!sessionResponse.ok) {
+          console.error('Failed to fetch session:', sessionResponse.status, sessionResponse.statusText);
+          setError('Failed to retrieve session. Please try again.');
+          return;
+        }
+
+        const sessionData = await sessionResponse.json();
+        console.log('Session data received:', sessionData);
+
+        if (sessionData?.user?.role) {
+          const role = sessionData.user.role.toLowerCase();
+          console.log('User role found:', role);
+          if (role === 'admin') {
+            console.log('Redirecting to admin dashboard');
+            router.push('/admin/dashboard');
+          } else if (role === 'teacher') {
+            console.log('Redirecting to teacher dashboard');
+            router.push('/dashboard/teacher');
+          } else {
+            console.log('Redirecting to student dashboard');
+            router.push('/dashboard/student');
+          }
+        } else {
+          console.log('No role found in session, redirecting to generic dashboard');
+          router.push('/dashboard');
+        }
+      } else {
+        console.log('Sign in result:', result);
+        setError("An unexpected error occurred. Please try again.");
+      }
     } catch (err) {
       console.error('Sign in exception:', err);
       setError("An error occurred. Please try again.");
