@@ -58,6 +58,7 @@ export async function GET() {
     );
 
     // Format sessions for the frontend
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const formatSession = (session: any) => ({
       id: session.id,
       title: session.title,

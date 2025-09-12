@@ -179,7 +179,7 @@ function SignInFormContent() {
 
           <div className="mt-6 text-center">
             <p className="text-[#6b7280] text-sm">
-              Don't have an account?{' '}
+              Don&apos;t have an account?{' '}
               <Link href="/auth/register" className="text-[#4f46e5] hover:text-[#4338ca] transition-colors">
                 Sign up
               </Link>
