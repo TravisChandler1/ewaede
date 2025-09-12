@@ -33,6 +33,12 @@ const authHandlers = NextAuth({
 
           console.log('Auth attempt for email:', email);
 
+          // Check if database connection is available
+          if (!process.env.DATABASE_URL) {
+            console.error('Auth error: DATABASE_URL not configured');
+            throw new Error('Database connection not configured');
+          }
+
           // Find user in database
           const user = await prisma.user.findUnique({
             where: { email },
@@ -72,6 +78,12 @@ const authHandlers = NextAuth({
           };
         } catch (error) {
           console.error('Auth error:', error);
+
+          // If it's a database connection error, provide a more specific message
+          if (error instanceof Error && error.message.includes('connect')) {
+            throw new Error('Database connection failed. Please try again later.');
+          }
+
           throw error;
         }
       },

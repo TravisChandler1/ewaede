@@ -29,7 +29,11 @@ export async function POST(request: Request) {
       firstName,
       lastName,
       educationLevel,
-      institution
+      institution,
+      courseOfStudy,
+      phoneNumber,
+      country,
+      newsletter
     });
 
     // Validate input
@@ -53,9 +57,12 @@ export async function POST(request: Request) {
     }
 
     // Hash password
+    console.log('Hashing password...');
     const hashedPassword = await bcrypt.hash(password, 12);
+    console.log('Password hashed successfully');
 
     // Create user
+    console.log('Creating user...');
     const user = await prisma.user.create({
       data: {
         name,
@@ -64,6 +71,7 @@ export async function POST(request: Request) {
         role: role.toUpperCase(),
       },
     });
+    console.log('User created successfully:', user.id);
 
     // Create corresponding profile based on role
     if (role.toUpperCase() === 'STUDENT') {

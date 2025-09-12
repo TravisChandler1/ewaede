@@ -63,10 +63,10 @@ function Newsletter() {
       <div className="max-w-4xl mx-auto px-6 text-center">
         <div className="flex flex-col items-center">
           <div className="w-16 h-16 rounded-full bg-[#4f46e5]/10 flex items-center justify-center mb-6">
-            <Mail className="w-8 h-8 text-[#4f46e5]" />
+            <Mail className="w-8 h-8 text-[#e69d2a]" />
           </div>
           <h2 className="text-3xl font-bold text-white mb-4">
-            <span className="block text-[#4f46e5] mt-2">Stay Updated</span>
+            <span className="block text-[#e69d2a] mt-2">Stay Updated</span>
           </h2>
           <p className="text-[#a1a1aa] text-lg mb-8 max-w-2xl">
             Gba àwọn ìmọ̀ tuntun nípa èdè àti àṣà Yorùbá, àwọn ìpèsè ẹ̀kọ́, àti àwọn ìròyìn tó ṣe pàtàkì.
@@ -84,7 +84,7 @@ function Newsletter() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
-                className="w-full px-5 py-3.5 bg-[#0f0f0f] border border-[#374151] rounded-lg text-white placeholder-[#6b7280] focus:border-[#4f46e5] focus:ring-2 focus:ring-[#4f46e5]/20 focus:outline-none transition-all duration-200"
+                className="w-full px-5 py-3.5 bg-[#0f0f0f] border border-[#374151] rounded-lg text-white placeholder-[#6b7280] focus:border-[#e69d2a] focus:ring-2 focus:ring-[#e69d2a]/20 focus:outline-none transition-all duration-200"
                 required
                 disabled={loading}
                 aria-label="Email address for newsletter subscription"
@@ -110,8 +110,8 @@ function Newsletter() {
               disabled={loading || !email.trim()}
               className={`px-6 py-3.5 rounded-lg font-medium transition-all duration-200 flex-shrink-0 ${
                 loading || !email.trim()
-                  ? 'bg-[#4f46e5]/50 cursor-not-allowed'
-                  : 'bg-[#4f46e5] hover:bg-[#4338ca] transform hover:-translate-y-0.5 shadow-lg hover:shadow-[#4f46e5]/20'
+                  ? 'bg-[#e69d2a]/50 cursor-not-allowed'
+                  : 'bg-[#e69d2a] hover:bg-[#d48a1f] transform hover:-translate-y-0.5 shadow-lg hover:shadow-[#e69d2a]/20'
               } text-white`}
               aria-busy={loading}
             >
@@ -222,27 +222,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-[#0f0f0f] text-white">
-      {/* Navigation */}
-      <nav className="bg-[#1a1a1a] border-b border-[#2a2a2a] sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <BookOpen size={32} className="text-[#4f46e5] mr-3" />
-              <h1 className="font-bold text-xl text-white">Ẹwà Èdè Yorùbá Academy</h1>
-            </div>
-            <div className="hidden md:flex items-center space-x-8">
-              <a href="#features" className="text-[#a1a1aa] hover:text-white transition-colors">Features</a>
-              <a href="#pricing" className="text-[#a1a1aa] hover:text-white transition-colors">Pricing</a>
-              <a href="#about" className="text-[#a1a1aa] hover:text-white transition-colors">About</a>
-            </div>
-            <div className="flex items-center space-x-4">
-              {/* Navigation buttons moved to bottom tabs */}
-            </div>
-          </div>
-        </div>
-      </nav>
-
-      {/* Hero Section */}
+      {/* Hero Section with Infused Navigation */}
       <section className="relative py-20 lg:py-32 overflow-hidden">
         <div
           className="absolute inset-0 opacity-20"
@@ -254,16 +234,39 @@ export default function HomePage() {
           }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-[#0f0f0f] via-[#0f0f0f]/10 to-[#0f0f0f]" />
-        <div className="relative z-10 max-w-7xl mx-auto px-6 text-center">
-          <div className="inline-flex items-center px-4 py-2 rounded-full bg-[#4f46e5]/10 border border-[#4f46e5]/30 text-[#a78bfa] text-sm font-medium mb-6">
+
+        {/* Navigation infused with hero background */}
+        <div className="absolute top-0 left-0 right-0 z-50">
+          <div className="max-w-7xl mx-auto px-6 py-6">
+            <nav className="flex items-center">
+              <div className="flex items-center">
+                <img
+                  src="/logo.png"
+                  alt="Ẹwà Èdè Yorùbá Academy"
+                  className="h-16 w-auto"
+                />
+              </div>
+              <div className="flex-1 flex justify-center">
+                <div className="hidden md:flex items-center space-x-8">
+                  <a href="#features" className="text-white hover:text-[#e69d2a] transition-colors font-medium">Features</a>
+                  <a href="#pricing" className="text-white hover:text-[#e69d2a] transition-colors font-medium">Pricing</a>
+                  <a href="#about" className="text-white hover:text-[#e69d2a] transition-colors font-medium">About</a>
+                </div>
+              </div>
+            </nav>
+          </div>
+        </div>
+
+        <div className="relative z-10 max-w-7xl mx-auto px-6 text-center pt-24">
+          <div className="inline-flex items-center px-4 py-2 rounded-full bg-[#e69d2a]/10 border border-[#e69d2a]/30 text-[#d48a1f] text-sm font-medium mb-6">
             <span className="relative flex h-3 w-3 mr-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#4f46e5] opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-[#4f46e5]"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#e69d2a] opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-[#e69d2a]"></span>
             </span>
             E̩ kaabo̩! Welcome to Ẹwà Èdè Yorùbá Academy
           </div>
           <h1 className="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
-            <span className="text-[#4f46e5]">Learn the Beautiful Yoruba Language</span>
+            <span className="text-[#4f46e5]">Learn the Beautiful <span className="text-[#e69d2a]">Yoruba</span> Language</span>
           </h1>
           <p className="text-xl lg:text-2xl text-[#a1a1aa] mb-8 max-w-3xl mx-auto">
             Immerse yourself in the rich culture and traditions of the Yoruba people through our interactive language programs. From greetings to proverbs, we make learning Yoruba engaging and meaningful.
@@ -301,8 +304,8 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {features.map((feature, index) => (
-              <div key={index} className="bg-[#0f0f0f] border border-[#2a2a2a] rounded-xl p-6 hover:border-[#4f46e5]/30 transition-colors">
-                <feature.icon size={48} className="text-[#4f46e5] mb-4" />
+              <div key={index} className="bg-[#0f0f0f] border border-[#2a2a2a] rounded-xl p-6 hover:border-[#e69d2a]/30 transition-colors">
+                <feature.icon size={48} className="text-[#e69d2a] mb-4" />
                 <h3 className="text-xl font-semibold mb-3">{feature.title}</h3>
                 <p className="text-[#a1a1aa]">{feature.description}</p>
               </div>
@@ -318,7 +321,7 @@ export default function HomePage() {
           <div className="text-center mb-12">
             <h2 className="text-3xl lg:text-4xl font-bold mb-4">
               Ọ̀nà Tí A ń Kọ́ Ẹ̀kọ́
-              <span className="block text-[#4f46e5] mt-2">Our Teaching Approach</span>
+              <span className="block text-[#e69d2a] mt-2">Our Teaching Approach</span>
             </h2>
             <p className="text-xl text-[#a1a1aa] max-w-3xl mx-auto">
               We combine traditional Yoruba teaching methods with modern technology for effective learning
@@ -346,7 +349,7 @@ export default function HomePage() {
                 color: 'from-red-600 to-pink-500'
               }
             ].map((item, i) => (
-              <div key={i} className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl p-6 hover:border-[#4f46e5]/30 transition-all group">
+              <div key={i} className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl p-6 hover:border-[#e69d2a]/30 transition-all group">
                 <div className={`w-16 h-16 rounded-lg mb-6 flex items-center justify-center bg-gradient-to-br ${item.color} text-white text-2xl font-bold`}>
                   {item.title.charAt(0)}
                 </div>
@@ -372,10 +375,10 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
             {levels.map((level, index) => (
-              <div key={index} className={`relative bg-[#1a1a1a] border rounded-xl p-6 ${level.popular ? 'border-[#4f46e5] ring-1 ring-[#4f46e5]/20' : 'border-[#2a2a2a]'}`}>
+              <div key={index} className={`relative bg-[#1a1a1a] border rounded-xl p-6 ${level.popular ? 'border-[#e69d2a] ring-1 ring-[#e69d2a]/20' : 'border-[#2a2a2a]'}`}>
                 {level.popular && (
                   <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                    <span className="bg-[#4f46e5] text-white px-3 py-1 text-sm rounded-full">
+                    <span className="bg-[#e69d2a] text-white px-3 py-1 text-sm rounded-full">
                       Most Popular
                     </span>
                   </div>
@@ -420,11 +423,11 @@ export default function HomePage() {
               <h3 className="text-xl font-semibold mb-3">Teaching Options</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
                 <div>
-                  <h4 className="font-medium text-[#4f46e5] mb-2">Individual Learning</h4>
+                  <h4 className="font-medium text-[#e69d2a] mb-2">Individual Learning</h4>
                   <p className="text-[#a1a1aa] text-sm">One-on-one sessions with dedicated teachers for personalized attention and faster progress.</p>
                 </div>
                 <div>
-                  <h4 className="font-medium text-[#4f46e5] mb-2">Group Learning</h4>
+                  <h4 className="font-medium text-[#e69d2a] mb-2">Group Learning</h4>
                   <p className="text-[#a1a1aa] text-sm">Learn alongside peers in small groups, fostering community and collaborative learning.</p>
                 </div>
               </div>
@@ -458,8 +461,11 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
               <div className="flex items-center mb-4">
-                <BookOpen size={24} className="text-[#4f46e5] mr-2" />
-                <span className="font-bold">Ẹwà Èdè Yorùbá Academy</span>
+                <img
+                  src="/logo.png"
+                  alt="Ẹwà Èdè Yorùbá Academy"
+                  className="h-10 w-auto"
+                />
               </div>
               <p className="text-[#a1a1aa] text-sm">
                 Empowering learners worldwide to master the beautiful Yoruba language and culture.

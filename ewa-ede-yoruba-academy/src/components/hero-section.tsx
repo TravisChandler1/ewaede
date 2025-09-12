@@ -56,12 +56,24 @@ export function HeroSection() {
         <div className="container mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             {/* Logo */}
-            <Link href="/" className="flex items-center">
-              <img
-                src="/logo.png"
-                alt="Ẹwà Èdè Yorùbá Academy"
-                className="h-10 md:h-12 w-auto"
-              />
+            <Link href="/" className="flex items-center group">
+              <div className="relative bg-white/10 backdrop-blur-sm rounded-lg p-2 border border-white/20 transition-all duration-200 group-hover:bg-white/20 group-hover:border-white/30">
+                <img
+                  src="/logo.png"
+                  alt="Ẹwà Èdè Yorùbá Academy Logo"
+                  className="h-14 md:h-18 lg:h-24 w-auto object-contain drop-shadow-lg transition-transform duration-200 group-hover:scale-105"
+                  onError={(e) => {
+                    console.error('Logo failed to load:', e);
+                    e.currentTarget.style.display = 'none';
+                    // Show fallback text
+                    const fallback = e.currentTarget.parentElement?.querySelector('.logo-fallback');
+                    if (fallback) (fallback as HTMLElement).style.display = 'block';
+                  }}
+                />
+                <div className="logo-fallback hidden text-white font-bold text-lg md:text-xl">
+                  Ẹwà Èdè Yorùbá
+                </div>
+              </div>
             </Link>
 
             {/* Navigation Links */}
@@ -135,7 +147,7 @@ export function HeroSection() {
         <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl animate-fade-in-up">
           Learn Yoruba with
           <span className="block mt-4 text-yellow-300">
-            Ẹwà Èdè Yorùbá Academy
+            Expert Tutors
           </span>
         </h1>
 
