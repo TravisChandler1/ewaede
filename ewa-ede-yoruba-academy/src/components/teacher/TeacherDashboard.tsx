@@ -89,7 +89,7 @@ export default function TeacherDashboard() {
   useEffect(() => {
     if (status === 'loading') return;
 
-    if (!session?.user || session.user.role !== 'TEACHER') {
+    if (!session?.user || session.user.role?.toUpperCase() !== 'TEACHER') {
       router.push('/auth/signin');
       return;
     }

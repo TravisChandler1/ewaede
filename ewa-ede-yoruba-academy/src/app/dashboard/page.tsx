@@ -13,7 +13,8 @@ export default async function DashboardPage() {
 
   // Redirect based on user role
   console.log('Main dashboard page - user role:', user.role);
-  if (user.role === 'TEACHER' || user.role === 'ADMIN') {
+  const userRole = user.role?.toUpperCase();
+  if (userRole === 'TEACHER' || userRole === 'ADMIN') {
     console.log('Main dashboard page - redirecting to teacher dashboard');
     redirect('/dashboard/teacher');
   } else {

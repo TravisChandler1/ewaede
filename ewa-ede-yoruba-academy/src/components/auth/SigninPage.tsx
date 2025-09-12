@@ -26,63 +26,16 @@ export default function SigninPage() {
     try {
       console.log('Attempting sign in for:', email);
 
-      const result = await signIn("credentials", {
+      await signIn("credentials", {
         email,
         password,
-        redirect: false,
+        redirect: true,
         callbackUrl: '/dashboard',
       });
 
-      console.log('Sign in result:', result);
-
-      if (result?.error) {
-        console.error('Sign in error:', result.error);
-        setError("Invalid email or password. Please try again.");
-      } else if (result?.ok) {
-        console.log('Sign in successful, redirecting to dashboard');
-        // Get user role from session to determine redirect destination
-        console.log('Fetching session data...');
-        const sessionResponse = await fetch('/api/auth/session');
-        console.log('Session response status:', sessionResponse.status);
-
-        if (!sessionResponse.ok) {
-          console.error('Failed to fetch session:', sessionResponse.status, sessionResponse.statusText);
-          setError('Failed to retrieve session. Please try again.');
-          return;
-        }
-
-        const sessionData = await sessionResponse.json();
-        console.log('Session data received:', sessionData);
-
-        if (sessionData?.user?.role) {
-          const role = sessionData.user.role.toLowerCase();
-          console.log('User role found:', role);
-          let redirectUrl = '/dashboard';
-          if (role === 'admin') {
-            redirectUrl = '/admin/dashboard';
-          } else if (role === 'teacher') {
-            redirectUrl = '/dashboard/teacher';
-          } else {
-            redirectUrl = '/dashboard/student';
-          }
-          console.log('Redirecting to:', redirectUrl);
-          try {
-            router.push(redirectUrl);
-          } catch (error) {
-            console.error('Error with router.push:', error);
-          }
-        } else {
-          console.log('No role found in session, redirecting to generic dashboard');
-          try {
-            router.push('/dashboard');
-          } catch (error) {
-            console.error('Error with router.push:', error);
-          }
-        }
-      } else {
-        console.log('Sign in result:', result);
-        setError("An unexpected error occurred. Please try again.");
-      }
+      // If we reach here, sign in failed
+      console.log('Sign in failed - still on signin page');
+      setError("Invalid email or password. Please try again.");
     } catch (err) {
       console.error('Sign in exception:', err);
       setError("An error occurred. Please try again.");
