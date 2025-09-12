@@ -56,19 +56,27 @@ export default function SigninPage() {
         if (sessionData?.user?.role) {
           const role = sessionData.user.role.toLowerCase();
           console.log('User role found:', role);
+          let redirectUrl = '/dashboard';
           if (role === 'admin') {
-            console.log('Redirecting to admin dashboard');
-            window.location.href = '/admin/dashboard';
+            redirectUrl = '/admin/dashboard';
           } else if (role === 'teacher') {
-            console.log('Redirecting to teacher dashboard');
-            window.location.href = '/dashboard/teacher';
+            redirectUrl = '/dashboard/teacher';
           } else {
-            console.log('Redirecting to student dashboard');
-            window.location.href = '/dashboard/student';
+            redirectUrl = '/dashboard/student';
+          }
+          console.log('Redirecting to:', redirectUrl);
+          try {
+            window.location.href = redirectUrl;
+          } catch (error) {
+            console.error('Error setting location.href:', error);
           }
         } else {
           console.log('No role found in session, redirecting to generic dashboard');
-          window.location.href = '/dashboard';
+          try {
+            window.location.href = '/dashboard';
+          } catch (error) {
+            console.error('Error setting location.href:', error);
+          }
         }
       } else {
         console.log('Sign in result:', result);
