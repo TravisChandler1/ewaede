@@ -66,14 +66,21 @@ export default function SigninPage() {
           }
           console.log('Redirecting to:', redirectUrl);
           try {
-            window.location.href = redirectUrl;
+            // Add a small delay to ensure session is properly set
+            setTimeout(() => {
+              console.log('Executing redirect to:', redirectUrl);
+              window.location.href = redirectUrl;
+            }, 100);
           } catch (error) {
             console.error('Error setting location.href:', error);
           }
         } else {
           console.log('No role found in session, redirecting to generic dashboard');
           try {
-            window.location.href = '/dashboard';
+            setTimeout(() => {
+              console.log('Executing redirect to: /dashboard');
+              window.location.href = '/dashboard';
+            }, 100);
           } catch (error) {
             console.error('Error setting location.href:', error);
           }
