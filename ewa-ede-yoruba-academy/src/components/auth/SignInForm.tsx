@@ -2,7 +2,6 @@
 
 import { useState, Suspense } from 'react';
 import { signIn } from 'next-auth/react';
-import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import PasswordInput from '@/components/ui/PasswordInput';
 
@@ -29,9 +28,6 @@ function SignInFormContent() {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [emailError, setEmailError] = useState('');
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get('callbackUrl') || '/dashboard';
 
   const validateEmail = (email: string): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

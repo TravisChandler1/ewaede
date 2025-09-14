@@ -36,7 +36,7 @@ export default function TeacherMessageModal({ isOpen, onClose, selectedStudent }
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [isTyping, setIsTyping] = useState(false);
+  const [isTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -92,7 +92,7 @@ export default function TeacherMessageModal({ isOpen, onClose, selectedStudent }
     if (!currentStudent || !newMessage.trim()) return;
 
     const messageData = {
-      recipientId: currentStudent.id,
+      receiverId: currentStudent.id,
       content: newMessage.trim(),
       messageType: 'text' as const,
     };
@@ -154,6 +154,11 @@ export default function TeacherMessageModal({ isOpen, onClose, selectedStudent }
 
   const formatTime = (timestamp: string) => {
     const date = new Date(timestamp);
+
+    if (isNaN(date.getTime())) {
+      return 'Invalid Date';
+    }
+
     const now = new Date();
     const diff = now.getTime() - date.getTime();
 
@@ -230,12 +235,12 @@ export default function TeacherMessageModal({ isOpen, onClose, selectedStudent }
                       className={`max-w-xs lg:max-w-sm px-4 py-2 rounded-2xl ${
                         message.senderId === 'teacher'
                           ? 'bg-[#4f46e5] text-white rounded-br-md'
-                          : 'bg-[#2a2a2a] text-white rounded-bl-md'
+                          : 'bg-[#f59e0b] text-white rounded-bl-md'
                       }`}
                     >
                       <p className="text-sm">{message.content}</p>
                       <p className={`text-xs mt-1 ${
-                        message.senderId === 'teacher' ? 'text-blue-200' : 'text-[#a1a1aa]'
+                        message.senderId === 'teacher' ? 'text-blue-200' : 'text-orange-900'
                       }`}>
                         {formatTime(message.timestamp)}
                       </p>

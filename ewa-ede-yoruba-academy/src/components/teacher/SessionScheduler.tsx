@@ -80,12 +80,6 @@ export default function SessionScheduler({ onSessionCreated, onClose }: SessionS
     }));
   };
 
-  const generateMeetingUrl = () => {
-    // Generate Google Meet URL
-    const meetingId = Math.random().toString(36).substring(2, 15).toUpperCase();
-    const url = `https://meet.google.com/${meetingId}`;
-    setFormData(prev => ({ ...prev, meetingUrl: url }));
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -316,26 +310,20 @@ export default function SessionScheduler({ onSessionCreated, onClose }: SessionS
 
                 <div>
                   <label htmlFor="meetingUrl" className="block text-sm font-medium text-white mb-1">
-                    Meeting URL
+                    Meeting URL (Optional)
                   </label>
-                  <div className="flex">
-                    <input
-                      type="url"
-                      id="meetingUrl"
-                      name="meetingUrl"
-                      value={formData.meetingUrl}
-                      onChange={handleInputChange}
-                      className="flex-1 px-3 py-2 border border-[#374151] rounded-l-md shadow-sm bg-[#0f0f0f] text-white placeholder-[#6b7280] focus:outline-none focus:ring-[#4f46e5] focus:border-[#4f46e5]"
-                      placeholder="https://meet.google.com/abc-defg-hij"
-                    />
-                    <button
-                      type="button"
-                      onClick={generateMeetingUrl}
-                      className="px-3 py-2 border border-l-0 border-[#374151] bg-[#2a2a2a] text-[#a1a1aa] rounded-r-md hover:bg-[#374151] hover:text-white transition-colors"
-                    >
-                      Generate
-                    </button>
-                  </div>
+                  <input
+                    type="url"
+                    id="meetingUrl"
+                    name="meetingUrl"
+                    value={formData.meetingUrl}
+                    onChange={handleInputChange}
+                    className="block w-full px-3 py-2 border border-[#374151] rounded-md shadow-sm bg-[#0f0f0f] text-white placeholder-[#6b7280] focus:outline-none focus:ring-[#4f46e5] focus:border-[#4f46e5]"
+                    placeholder="https://meet.google.com/abc-defg-hij or https://zoom.us/..."
+                  />
+                  <p className="text-xs text-[#6b7280] mt-1">
+                    Enter your meeting link if you have one (Google Meet, Zoom, etc.)
+                  </p>
                 </div>
               </div>
             </div>

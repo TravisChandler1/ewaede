@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import prisma from '@/lib/prisma';
+import { Prisma } from '@prisma/client';
 
 export async function GET(request: Request) {
   try {
@@ -11,14 +12,27 @@ export async function GET(request: Request) {
 
     const { searchParams } = new URL(request.url);
     const limit = parseInt(searchParams.get('limit') || '20');
+    const studentId = searchParams.get('studentId');
+
+    const whereCondition: Prisma.MessageWhereInput = {
+      OR: [
+        { senderId: session.user.id },
+        { recipientId: session.user.id }
+      ]
+    };
+
+    // If studentId is provided, filter messages for that specific student
+    if (studentId) {
+      whereCondition.AND = {
+        OR: [
+          { senderId: session.user.id, recipientId: studentId },
+          { senderId: studentId, recipientId: session.user.id }
+        ]
+      };
+    }
 
     const messages = await prisma.message.findMany({
-      where: {
-        OR: [
-          { senderId: session.user.id },
-          { recipientId: session.user.id }
-        ]
-      },
+      where: whereCondition,
       include: {
         sender: {
           select: {
@@ -78,18 +92,16 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Receiver ID and content are required' }, { status: 400 });
     }
 
-    // Verify the receiver is a student enrolled in teacher's courses
-    const enrollment = await prisma.enrollment.findFirst({
+    // Verify the receiver is a student
+    const receiver = await prisma.user.findFirst({
       where: {
-        userId: receiverId,
-        course: {
-          instructorId: session.user.id,
-        },
+        id: receiverId,
+        role: 'STUDENT',
       },
     });
 
-    if (!enrollment) {
-      return NextResponse.json({ error: 'Unauthorized to message this student' }, { status: 403 });
+    if (!receiver) {
+      return NextResponse.json({ error: 'Invalid student' }, { status: 400 });
     }
 
     const message = await prisma.message.create({

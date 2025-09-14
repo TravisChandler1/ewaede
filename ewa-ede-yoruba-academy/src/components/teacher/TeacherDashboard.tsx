@@ -22,6 +22,9 @@ import SessionScheduler from './SessionScheduler';
 import StudentSelector from './StudentSelector';
 import StudentList from './StudentList';
 import TeacherMessageModal from './TeacherMessageModal';
+import BulkMessageModal from './BulkMessageModal';
+import ChangePasswordModal from './ChangePasswordModal';
+import DeleteAccountModal from './DeleteAccountModal';
 import LiveSessionModal, { SessionData } from './LiveSessionModal';
 
 interface Session {
@@ -73,6 +76,18 @@ export default function TeacherDashboard() {
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
   const [showChatModal, setShowChatModal] = useState(false);
   const [showLiveSessionModal, setShowLiveSessionModal] = useState(false);
+  const [showBulkMessageModal, setShowBulkMessageModal] = useState(false);
+  const [selectedStudentsForBulk, setSelectedStudentsForBulk] = useState<Student[]>([]);
+  const [studentSelectorMode, setStudentSelectorMode] = useState<'single' | 'bulk'>('single');
+  const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
+  const [showDeleteAccountModal, setShowDeleteAccountModal] = useState(false);
+  const [showSignOutConfirm, setShowSignOutConfirm] = useState(false);
+      const [userProfile, setUserProfile] = useState<{ id: string; name: string; email: string; createdAt: string; teacherProfile?: { bio?: string } } | null>(null);
+  const [profileFormData, setProfileFormData] = useState({
+    name: '',
+    email: '',
+    bio: '',
+  });
 
   const [stats, setStats] = useState<TeacherStats>({
     totalStudents: 0,
@@ -108,6 +123,76 @@ export default function TeacherDashboard() {
     setSelectedStudent(student);
     setShowStudentSelector(false);
     setShowChatModal(true);
+  };
+
+  const handleBulkStudentSelect = (students: Student[]) => {
+    setSelectedStudentsForBulk(students);
+    setShowStudentSelector(false);
+    setShowBulkMessageModal(true);
+  };
+
+  const handleSendBulkMessage = async (message: string, students: Student[]) => {
+    try {
+      // Send message to each student
+      const promises = students.map(student =>
+        fetch('/api/teacher/messages', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            receiverId: student.id,
+            content: message,
+          }),
+        })
+      );
+
+      const results = await Promise.all(promises);
+      const failures = results.filter(result => !result.ok);
+
+      if (failures.length > 0) {
+        throw new Error(`${failures.length} messages failed to send`);
+      }
+
+      alert(`Bulk message sent successfully to ${students.length} student${students.length !== 1 ? 's' : ''}!`);
+      setShowBulkMessageModal(false);
+      setSelectedStudentsForBulk([]);
+    } catch (error) {
+      console.error('Error sending bulk message:', error);
+      throw error;
+    }
+  };
+
+  const handleSaveProfile = async () => {
+    try {
+      const response = await fetch('/api/user/profile', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(profileFormData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to update profile');
+      }
+
+      setUserProfile(data.user);
+      alert('Profile updated successfully!');
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      alert(error instanceof Error ? error.message : 'Failed to update profile');
+    }
+  };
+
+  const handlePasswordChanged = () => {
+    alert('Password changed successfully! Please log in again with your new password.');
+    // Sign out the user
+    signOut({ callbackUrl: '/auth/signin' });
+  };
+
+  const handleAccountDeleted = () => {
+    alert('Account deleted successfully.');
+    // Sign out the user
+    signOut({ callbackUrl: '/auth/signin' });
   };
 
   const handleStartLiveSession = () => {
@@ -168,6 +253,18 @@ export default function TeacherDashboard() {
         const coursesData = await coursesResponse.json();
         setCourses(coursesData.courses || []);
       }
+
+      // Load user profile
+      const profileResponse = await fetch('/api/user/profile');
+      if (profileResponse.ok) {
+        const profileData = await profileResponse.json();
+        setUserProfile(profileData.user);
+        setProfileFormData({
+          name: profileData.user.name || '',
+          email: profileData.user.email || '',
+          bio: profileData.user.teacherProfile?.bio || '',
+        });
+      }
     } catch (error) {
       console.error('Error loading dashboard data:', error);
     }
@@ -218,9 +315,9 @@ export default function TeacherDashboard() {
       <div className="bg-[#1a1a1a] border-b border-[#2a2a2a] px-4 py-4">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-medium text-[#4f46e5]">Welcome back, {session?.user?.name || 'Teacher'}!</h2>
-            <h1 className="text-2xl font-bold text-white">Teacher Dashboard</h1>
-            <p className="text-[#a1a1aa] mt-1">Manage your courses, schedule sessions, and connect with students.</p>
+            <h2 className="text-xl md:text-2xl font-medium text-[#4f46e5] font-['Dancing_Script']">
+              Welcome back, <span className="text-[#f59e0b]">{(session?.user?.name || 'Teacher').split(' ')[0]}!</span>
+            </h2>
           </div>
           <div className="flex items-center space-x-4">
             <button
@@ -238,7 +335,7 @@ export default function TeacherDashboard() {
             </button>
             <button
               type="button"
-              onClick={() => signOut({ callbackUrl: '/auth/signin' })}
+              onClick={() => setShowSignOutConfirm(true)}
               className="text-[#a1a1aa] hover:text-white"
             >
               <span className="sr-only">Sign out</span>
@@ -279,13 +376,7 @@ export default function TeacherDashboard() {
               ].map((item) => (
                 <button
                   key={item.id}
-                  onClick={() => {
-                    if (item.id === 'messages') {
-                      setShowStudentSelector(true);
-                    } else {
-                      setActiveTab(item.id);
-                    }
-                  }}
+                  onClick={() => setActiveTab(item.id)}
                   className={`relative z-10 px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 flex items-center whitespace-nowrap ${
                     activeTab === item.id
                       ? 'text-white'
@@ -727,23 +818,6 @@ export default function TeacherDashboard() {
                   </div>
                 </div>
 
-                <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg p-6">
-                  <h3 className="text-lg font-semibold text-white mb-4">Message Templates</h3>
-                  <div className="space-y-3">
-                    <button className="w-full text-left p-3 bg-[#0f0f0f] rounded-lg hover:bg-[#2a2a2a] transition-colors">
-                      <p className="text-white font-medium">Welcome Message</p>
-                      <p className="text-sm text-[#a1a1aa]">Welcome new students to your course</p>
-                    </button>
-                    <button className="w-full text-left p-3 bg-[#0f0f0f] rounded-lg hover:bg-[#2a2a2a] transition-colors">
-                      <p className="text-white font-medium">Assignment Reminder</p>
-                      <p className="text-sm text-[#a1a1aa]">Remind students about upcoming assignments</p>
-                    </button>
-                    <button className="w-full text-left p-3 bg-[#0f0f0f] rounded-lg hover:bg-[#2a2a2a] transition-colors">
-                      <p className="text-white font-medium">Session Reminder</p>
-                      <p className="text-sm text-[#a1a1aa]">Notify students about upcoming sessions</p>
-                    </button>
-                  </div>
-                </div>
               </div>
 
               <div className="space-y-6">
@@ -751,13 +825,22 @@ export default function TeacherDashboard() {
                   <h3 className="text-lg font-semibold text-white mb-4">Quick Actions</h3>
                   <div className="space-y-3">
                     <button
-                      onClick={() => setShowStudentSelector(true)}
+                      onClick={() => {
+                        setStudentSelectorMode('single');
+                        setShowStudentSelector(true);
+                      }}
                       className="w-full flex items-center justify-center px-4 py-2 bg-[#4f46e5] text-white rounded-lg hover:bg-[#4338ca] transition-colors"
                     >
                       <MessageSquare className="h-4 w-4 mr-2" />
                       New Message
                     </button>
-                    <button className="w-full flex items-center justify-center px-4 py-2 bg-[#2a2a2a] text-white rounded-lg hover:bg-[#374151] transition-colors">
+                    <button
+                      onClick={() => {
+                        setStudentSelectorMode('bulk');
+                        setShowStudentSelector(true);
+                      }}
+                      className="w-full flex items-center justify-center px-4 py-2 bg-[#2a2a2a] text-white rounded-lg hover:bg-[#374151] transition-colors"
+                    >
                       <Users className="h-4 w-4 mr-2" />
                       Bulk Message
                     </button>
@@ -804,7 +887,8 @@ export default function TeacherDashboard() {
                       <label className="block text-sm font-medium text-white mb-1">Full Name</label>
                       <input
                         type="text"
-                        defaultValue={session?.user?.name || ''}
+                        value={profileFormData.name}
+                        onChange={(e) => setProfileFormData(prev => ({ ...prev, name: e.target.value }))}
                         className="block w-full px-3 py-2 border border-[#374151] rounded-md shadow-sm bg-[#0f0f0f] text-white placeholder-[#6b7280] focus:outline-none focus:ring-[#4f46e5] focus:border-[#4f46e5]"
                       />
                     </div>
@@ -812,7 +896,8 @@ export default function TeacherDashboard() {
                       <label className="block text-sm font-medium text-white mb-1">Email</label>
                       <input
                         type="email"
-                        defaultValue={session?.user?.email || ''}
+                        value={profileFormData.email}
+                        onChange={(e) => setProfileFormData(prev => ({ ...prev, email: e.target.value }))}
                         className="block w-full px-3 py-2 border border-[#374151] rounded-md shadow-sm bg-[#0f0f0f] text-white placeholder-[#6b7280] focus:outline-none focus:ring-[#4f46e5] focus:border-[#4f46e5]"
                       />
                     </div>
@@ -820,6 +905,8 @@ export default function TeacherDashboard() {
                       <label className="block text-sm font-medium text-white mb-1">Bio</label>
                       <textarea
                         rows={3}
+                        value={profileFormData.bio}
+                        onChange={(e) => setProfileFormData(prev => ({ ...prev, bio: e.target.value }))}
                         className="block w-full px-3 py-2 border border-[#374151] rounded-md shadow-sm bg-[#0f0f0f] text-white placeholder-[#6b7280] focus:outline-none focus:ring-[#4f46e5] focus:border-[#4f46e5]"
                         placeholder="Tell students about yourself..."
                       />
@@ -854,13 +941,22 @@ export default function TeacherDashboard() {
                 <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg p-6">
                   <h3 className="text-lg font-semibold text-white mb-4">Account Actions</h3>
                   <div className="space-y-3">
-                    <button className="w-full px-4 py-2 bg-[#4f46e5] text-white rounded-lg hover:bg-[#4338ca] transition-colors">
+                    <button
+                      onClick={handleSaveProfile}
+                      className="w-full px-4 py-2 bg-[#4f46e5] text-white rounded-lg hover:bg-[#4338ca] transition-colors"
+                    >
                       Save Changes
                     </button>
-                    <button className="w-full px-4 py-2 bg-[#2a2a2a] text-white rounded-lg hover:bg-[#374151] transition-colors">
+                    <button
+                      onClick={() => setShowChangePasswordModal(true)}
+                      className="w-full px-4 py-2 bg-[#2a2a2a] text-white rounded-lg hover:bg-[#374151] transition-colors"
+                    >
                       Change Password
                     </button>
-                    <button className="w-full px-4 py-2 bg-[#dc2626] text-white rounded-lg hover:bg-[#b91c1c] transition-colors">
+                    <button
+                      onClick={() => setShowDeleteAccountModal(true)}
+                      className="w-full px-4 py-2 bg-[#dc2626] text-white rounded-lg hover:bg-[#b91c1c] transition-colors"
+                    >
                       Delete Account
                     </button>
                   </div>
@@ -875,7 +971,12 @@ export default function TeacherDashboard() {
                     </div>
                     <div className="flex justify-between">
                       <span className="text-[#a1a1aa]">Member Since</span>
-                      <span className="text-white">Jan 2024</span>
+                      <span className="text-white">
+                        {userProfile ? new Date(userProfile.createdAt).toLocaleDateString('en-US', {
+                          year: 'numeric',
+                          month: 'short'
+                        }) : 'Loading...'}
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-[#a1a1aa]">Courses Created</span>
@@ -904,8 +1005,10 @@ export default function TeacherDashboard() {
       {/* Student Selector Modal */}
       {showStudentSelector && (
         <StudentSelector
-          onStudentSelect={handleStudentSelect}
+          onStudentSelect={studentSelectorMode === 'single' ? handleStudentSelect : undefined}
+          onBulkSelect={studentSelectorMode === 'bulk' ? handleBulkStudentSelect : undefined}
           onClose={() => setShowStudentSelector(false)}
+          bulkMode={studentSelectorMode === 'bulk'}
         />
       )}
 
@@ -921,6 +1024,19 @@ export default function TeacherDashboard() {
         />
       )}
 
+      {/* Bulk Message Modal */}
+      {showBulkMessageModal && (
+        <BulkMessageModal
+          isOpen={showBulkMessageModal}
+          selectedStudents={selectedStudentsForBulk}
+          onClose={() => {
+            setShowBulkMessageModal(false);
+            setSelectedStudentsForBulk([]);
+          }}
+          onSend={handleSendBulkMessage}
+        />
+      )}
+
       {/* Live Session Modal */}
       {showLiveSessionModal && (
         <LiveSessionModal
@@ -928,6 +1044,68 @@ export default function TeacherDashboard() {
           onClose={() => setShowLiveSessionModal(false)}
           onStartSession={handleLiveSessionCreated}
         />
+      )}
+
+      {/* Change Password Modal */}
+      {showChangePasswordModal && (
+        <ChangePasswordModal
+          isOpen={showChangePasswordModal}
+          onClose={() => setShowChangePasswordModal(false)}
+          onPasswordChanged={handlePasswordChanged}
+        />
+      )}
+
+      {/* Delete Account Modal */}
+      {showDeleteAccountModal && (
+        <DeleteAccountModal
+          isOpen={showDeleteAccountModal}
+          onClose={() => setShowDeleteAccountModal(false)}
+          onAccountDeleted={handleAccountDeleted}
+        />
+      )}
+
+      {/* Sign Out Confirmation Modal */}
+      {showSignOutConfirm && (
+        <div className="fixed inset-0 z-50 overflow-y-auto">
+          <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+            {/* Backdrop with blur effect */}
+            <div
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
+              onClick={() => setShowSignOutConfirm(false)}
+            ></div>
+
+            <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-[#1a1a1a] border border-[#2a2a2a] shadow-xl rounded-lg">
+              <div className="flex items-center mb-4">
+                <LogOut className="h-6 w-6 text-[#f59e0b] mr-3" />
+                <h3 className="text-lg font-medium text-white">Sign Out</h3>
+              </div>
+
+              <div className="mb-6">
+                <p className="text-[#a1a1aa] text-sm">
+                  Are you sure you want to sign out? You&apos;ll need to sign in again to access your account.
+                </p>
+              </div>
+
+              <div className="flex justify-end space-x-3">
+                <button
+                  type="button"
+                  onClick={() => setShowSignOutConfirm(false)}
+                  className="px-4 py-2 border border-[#374151] rounded-md text-[#a1a1aa] hover:text-white hover:bg-[#2a2a2a] transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={() => signOut({ callbackUrl: '/auth/signin' })}
+                  className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#f59e0b] hover:bg-[#d97706] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#f59e0b] transition-colors"
+                >
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Sign Out
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

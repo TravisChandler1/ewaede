@@ -133,6 +133,7 @@ export default function StudentDashboard() {
   const [activeTab, setActiveTab] = useState('overview');
   const [showNotifications, setShowNotifications] = useState(false);
   const [showMessages, setShowMessages] = useState(false);
+  const [showSignOutConfirm, setShowSignOutConfirm] = useState(false);
   const [stats, setStats] = useState<Stats>({
     activeCourses: 0,
     hoursThisWeek: 0,
@@ -270,15 +271,18 @@ export default function StudentDashboard() {
         // If API doesn't exist yet, show empty state
         setLiveSessions([]);
         setScheduledSessions([]);
+        setUpcomingSessions([]);
         return;
       }
       const data = await response.json();
       setLiveSessions(data.live || []);
       setScheduledSessions(data.scheduled || []);
+      setUpcomingSessions(data.scheduled || []);
     } catch (error) {
       console.error('Error fetching sessions:', error);
       setLiveSessions([]);
       setScheduledSessions([]);
+      setUpcomingSessions([]);
     }
   };
 
@@ -311,9 +315,9 @@ export default function StudentDashboard() {
       <div className="bg-[#1a1a1a] border-b border-[#2a2a2a] px-4 py-4">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-medium text-[#4f46e5]">Welcome back, {session?.user?.name || 'Student'}!</h2>
-            <h1 className="text-2xl font-bold text-white">Student Dashboard</h1>
-            <p className="text-[#a1a1aa] mt-1">Track your progress and continue learning Yoruba.</p>
+            <h2 className="text-xl md:text-2xl font-medium text-[#4f46e5] font-['Dancing_Script']">
+              Welcome back, <span className="text-[#f59e0b]">{(session?.user?.name || 'Student').split(' ')[0]}!</span>
+            </h2>
           </div>
           <div className="flex items-center space-x-4">
             <button
@@ -335,7 +339,7 @@ export default function StudentDashboard() {
             </button>
             <button
               type="button"
-              onClick={() => signOut({ callbackUrl: '/auth/signin' })}
+              onClick={() => setShowSignOutConfirm(true)}
               className="text-[#a1a1aa] hover:text-white"
             >
               <span className="sr-only">Sign out</span>
@@ -716,6 +720,50 @@ export default function StudentDashboard() {
         activeTab={activeTab}
         onTabChange={setActiveTab}
       />
+
+      {/* Sign Out Confirmation Modal */}
+      {showSignOutConfirm && (
+        <div className="fixed inset-0 z-50 overflow-y-auto">
+          <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+            {/* Backdrop with blur effect */}
+            <div
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
+              onClick={() => setShowSignOutConfirm(false)}
+            ></div>
+
+            <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-[#1a1a1a] border border-[#2a2a2a] shadow-xl rounded-lg">
+              <div className="flex items-center mb-4">
+                <LogOut className="h-6 w-6 text-[#f59e0b] mr-3" />
+                <h3 className="text-lg font-medium text-white">Sign Out</h3>
+              </div>
+
+              <div className="mb-6">
+                <p className="text-[#a1a1aa] text-sm">
+                  Are you sure you want to sign out? You&apos;ll need to sign in again to access your account.
+                </p>
+              </div>
+
+              <div className="flex justify-end space-x-3">
+                <button
+                  type="button"
+                  onClick={() => setShowSignOutConfirm(false)}
+                  className="px-4 py-2 border border-[#374151] rounded-md text-[#a1a1aa] hover:text-white hover:bg-[#2a2a2a] transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={() => signOut({ callbackUrl: '/auth/signin' })}
+                  className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#f59e0b] hover:bg-[#d97706] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#f59e0b] transition-colors"
+                >
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Sign Out
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

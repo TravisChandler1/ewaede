@@ -51,17 +51,10 @@ export default function Messages({ onClose }: MessagesProps) {
 
   const loadStudents = async () => {
     try {
-      // Get students from enrolled courses
-      const response = await fetch('/api/teacher/courses');
+      const response = await fetch('/api/students');
       if (response.ok) {
         const data = await response.json();
-        // Extract unique students from all courses
-        const studentMap = new Map<string, Student>();
-        data.courses?.forEach(() => {
-          // This would need to be implemented in the API to get enrolled students
-          // For now, we'll use a placeholder
-        });
-        setStudents(Array.from(studentMap.values()));
+        setStudents(data.students || []);
       }
     } catch (error) {
       console.error('Error loading students:', error);
@@ -77,7 +70,7 @@ export default function Messages({ onClose }: MessagesProps) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          recipientId: selectedStudent,
+          receiverId: selectedStudent,
           content: newMessage,
         }),
       });

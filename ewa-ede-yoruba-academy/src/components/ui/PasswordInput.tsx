@@ -27,7 +27,7 @@ export default function PasswordInput({
   onValidationChange
 }: PasswordInputProps) {
   const [showPassword, setShowPassword] = useState(false);
-  const [isValid, setIsValid] = useState(false);
+  const [, setIsValid] = useState(false);
 
   const validatePassword = (password: string): boolean => {
     const minLength = password.length >= 8;
