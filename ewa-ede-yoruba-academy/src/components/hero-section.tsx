@@ -4,7 +4,6 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, BookOpen, Sparkles } from "lucide-react"
 import { useEffect, useState } from "react"
-import Image from "next/image"
 
 export function HeroSection() {
   const [mounted, setMounted] = useState(false)
@@ -59,11 +58,9 @@ export function HeroSection() {
             {/* Logo */}
             <Link href="/" className="flex items-center group">
               <div className="relative bg-white/10 backdrop-blur-sm rounded-lg p-2 border border-white/20 transition-all duration-200 group-hover:bg-white/20 group-hover:border-white/30">
-                <Image
+                <img
                   src="/logo.png"
                   alt="Ẹwà Èdè Yorùbá Academy Logo"
-                  width={96}
-                  height={96}
                   className="h-14 md:h-18 lg:h-24 w-auto object-contain drop-shadow-lg transition-transform duration-200 group-hover:scale-105"
                   onError={(e) => {
                     console.error('Logo failed to load:', e);
