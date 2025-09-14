@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import { User } from 'next-auth';
 import { useState, useEffect } from 'react';
 import { FiMenu, FiX, FiHome, FiBook, FiMessageSquare, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import Image from 'next/image';
 
 type NavItem = {
   name: string;
@@ -81,9 +82,11 @@ export default function DashboardSidebar({ user }: DashboardSidebarProps) {
     >
       <div className="flex items-center justify-between p-4 border-b border-gray-200">
         {!isCollapsed && (
-          <img
+          <Image
             src="/logo.png"
             alt="Ewa Ede Yoruba Academy"
+            width={32}
+            height={32}
             className="h-8 w-auto"
           />
         )}

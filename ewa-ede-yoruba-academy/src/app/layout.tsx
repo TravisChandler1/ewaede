@@ -7,6 +7,13 @@ import BottomTabs from "@/components/BottomTabs";
 import { SessionProvider } from "next-auth/react";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import { Suspense } from "react";
+import { Dancing_Script } from "next/font/google";
+
+const dancingScript = Dancing_Script({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-dancing-script',
+});
 
 export const metadata: Metadata = {
   title: {
@@ -98,11 +105,8 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" type="image/x-icon" />
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
         <link rel="apple-touch-icon" href="/logo.png" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet" />
       </head>
-      <body className="font-sans antialiased min-h-screen bg-background text-foreground pb-16">
+      <body className={`${dancingScript.variable} font-sans antialiased min-h-screen bg-background text-foreground pb-16`}>
         <Providers>{children}</Providers>
       </body>
     </html>
