@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import Image from "next/image";
 import { BookOpen, Users, Video, Library, Award, Star, Mail, GraduationCap, PenTool, Brain, Lightbulb, MessageCircle, X, Send } from "lucide-react";
 
 interface NewsletterResponse {
@@ -312,9 +313,11 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center">
-              <img
+              <Image
                 src="/logo.png"
                 alt="Ẹwà Èdè Yorùbá Academy"
+                width={48}
+                height={48}
                 className="h-10 sm:h-12 w-auto"
               />
             </div>
@@ -331,7 +334,13 @@ export default function HomePage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative py-12 md:py-16 lg:py-24 overflow-hidden bg-white">
+      <section className="relative py-12 md:py-16 lg:py-24 overflow-hidden" style={{
+        backgroundImage: "url('/hero-background.jpg')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed'
+      }}>
+        <div className="absolute inset-0 bg-black/50"></div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 items-center">
@@ -344,10 +353,10 @@ export default function HomePage() {
                 </span>
                 E̩ kaabo̩! Welcome to Ẹwà Èdè Yorùbá Academy
               </div>
-              <h1 className="text-4xl lg:text-6xl font-bold mb-6 leading-tight text-black">
+              <h1 className="text-4xl lg:text-6xl font-bold mb-6 leading-tight text-white">
                 Learn the Beautiful <span className="text-[#e69d2a]">Yoruba</span> Language
               </h1>
-              <p className="text-xl lg:text-2xl text-gray-700 mb-8 max-w-3xl">
+              <p className="text-xl lg:text-2xl text-white/90 mb-8 max-w-3xl">
                 Immerse yourself in the rich culture and traditions of the Yoruba people through our interactive language programs. From greetings to proverbs, we make learning Yoruba engaging and meaningful.
               </p>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl">
@@ -366,11 +375,13 @@ export default function HomePage() {
             </div>
 
             {/* Right Column - Image (1/3 width) */}
-            <div className="md:col-span-1 flex justify-center md:justify-end">
-              <div className="relative">
-                <img
+            <div className="md:col-span-1 flex justify-center md:justify-end relative">
+              <div className="relative blur-sm">
+                <Image
                   src="/heroside.jpg"
                   alt="Yoruba Learning Experience"
+                  width={400}
+                  height={300}
                   className="w-full max-w-sm h-auto rounded-xl shadow-2xl transform hover:scale-105 transition-transform duration-300"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-xl"></div>
@@ -735,9 +746,11 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             <div className="order-2 lg:order-1 animate-fade-in-up">
-              <img
+              <Image
                 src="/about.jpg"
                 alt="About Ẹwà Èdè Yorùbá Academy"
+                width={600}
+                height={400}
                 className="w-full h-auto rounded-xl shadow-lg transform transition-all duration-1000 hover:scale-105"
               />
             </div>
@@ -779,9 +792,11 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
               <div className="flex items-center mb-4">
-                <img
+                <Image
                   src="/logo.png"
                   alt="Ẹwà Èdè Yorùbá Academy"
+                  width={40}
+                  height={40}
                   className="h-10 w-auto"
                 />
               </div>
