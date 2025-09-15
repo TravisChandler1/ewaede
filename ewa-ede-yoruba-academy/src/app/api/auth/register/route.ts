@@ -11,6 +11,7 @@ export async function POST(request: Request) {
       email,
       password,
       role = 'STUDENT',
+      level = 'NOVICE',
       firstName,
       lastName,
       dateOfBirth,
@@ -79,7 +80,7 @@ export async function POST(request: Request) {
       await prisma.studentProfile.create({
         data: {
           userId: user.id,
-          level: 'NOVICE',
+          level: level.toUpperCase(),
           progress: 0,
           bio: courseOfStudy ? `Student of ${courseOfStudy}` : null,
           dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : null,

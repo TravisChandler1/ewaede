@@ -220,6 +220,9 @@ export default function HomePage() {
     }
   ];
 
+  // Debug log for homepage learning levels
+  console.log('Homepage learning levels:', levels.map(level => level.name));
+
   return (
     <div className="min-h-screen bg-[#0f0f0f] text-white">
       {/* Hero Section with Infused Navigation */}

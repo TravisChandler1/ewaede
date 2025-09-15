@@ -17,6 +17,15 @@ export default function SimpleRegisterForm() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
+  // Debug log for signup form learning levels
+  console.log('Signup form learning levels:', [
+    'NOVICE: Novice',
+    'BEGINNER: Beginner',
+    'ADVANCED: Advanced',
+    'PRO: Pro',
+    'INDIVIDUAL: Individual'
+  ]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -191,11 +200,11 @@ export default function SimpleRegisterForm() {
                 onChange={(e) => setFormData(prev => ({ ...prev, level: e.target.value }))}
                 className="w-full px-4 py-3 bg-[#0f0f0f] border border-[#374151] rounded-lg text-white focus:border-[#4f46e5] focus:outline-none transition-colors"
               >
-                <option value="NOVICE">Novice (Beginner)</option>
+                <option value="NOVICE">Novice</option>
                 <option value="BEGINNER">Beginner</option>
-                <option value="INTERMEDIATE">Intermediate</option>
                 <option value="ADVANCED">Advanced</option>
-                <option value="PRO">Pro (Expert)</option>
+                <option value="PRO">Pro</option>
+                <option value="INDIVIDUAL">Individual</option>
               </select>
             </div>
           )}

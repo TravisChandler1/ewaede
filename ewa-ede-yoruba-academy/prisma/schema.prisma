@@ -439,9 +439,9 @@ enum UserRole {
 enum Level {
   NOVICE
   BEGINNER
-  INTERMEDIATE
   ADVANCED
-  FLUENT
+  PRO
+  INDIVIDUAL
 }
 
 enum EnrollmentStatus {
