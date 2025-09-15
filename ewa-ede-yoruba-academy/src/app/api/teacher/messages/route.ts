@@ -94,6 +94,19 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    // Verify the sender exists in the database
+    console.log('Verifying sender exists:', session.user.id);
+    const sender = await prisma.user.findUnique({
+      where: { id: session.user.id },
+    });
+
+    if (!sender) {
+      console.log('Sender not found in database:', session.user.id);
+      return NextResponse.json({ error: 'Sender not found' }, { status: 400 });
+    }
+
+    console.log('Sender verified:', { id: sender.id, name: sender.name, role: sender.role });
+
     const body = await request.json();
     console.log('Request body:', body);
 

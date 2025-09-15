@@ -10,6 +10,7 @@ export async function GET() {
     }
 
     // Get all students with STUDENT role
+    console.log('Fetching students with profiles...');
     const students = await prisma.user.findMany({
       where: {
         role: 'STUDENT',
@@ -29,6 +30,11 @@ export async function GET() {
       },
     });
 
+    console.log(`Found ${students.length} students`);
+    students.forEach((student, index) => {
+      console.log(`Student ${index + 1}: ${student.name} - Profile: ${student.studentProfile ? 'EXISTS' : 'MISSING'} - Level: ${student.studentProfile?.level || 'DEFAULTING TO NOVICE'}`);
+    });
+
     // Format students with level information
     const formattedStudents = students.map(student => ({
       id: student.id,
@@ -36,6 +42,8 @@ export async function GET() {
       email: student.email,
       level: student.studentProfile?.level || 'NOVICE',
     }));
+
+    console.log('Formatted students levels:', formattedStudents.map(s => `${s.name}: ${s.level}`));
 
     return NextResponse.json({ students: formattedStudents });
   } catch (error) {
