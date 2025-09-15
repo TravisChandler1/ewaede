@@ -81,29 +81,55 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
+    console.log('POST /api/teacher/messages - Starting request');
+    console.log('Environment check - NODE_ENV:', process.env.NODE_ENV);
+    console.log('Environment check - DATABASE_URL exists:', !!process.env.DATABASE_URL);
+    console.log('Environment check - NEXTAUTH_SECRET exists:', !!process.env.NEXTAUTH_SECRET);
+
     const session = await auth();
+    console.log('Session retrieved:', { userId: session?.user?.id, role: session?.user?.role });
+
     if (!session?.user?.id || session.user.role !== 'TEACHER') {
+      console.log('Unauthorized: session invalid or not teacher');
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { receiverId, content } = await request.json();
+    const body = await request.json();
+    console.log('Request body:', body);
+
+    const { receiverId, content } = body;
 
     if (!receiverId || !content?.trim()) {
+      console.log('Validation failed: missing receiverId or content');
       return NextResponse.json({ error: 'Receiver ID and content are required' }, { status: 400 });
     }
 
+    console.log('Verifying receiver:', receiverId);
+
     // Verify the receiver is a student
+    console.log('Database check - Attempting to find receiver');
     const receiver = await prisma.user.findFirst({
       where: {
         id: receiverId,
         role: 'STUDENT',
       },
     });
+    console.log('Database check - Receiver query completed');
+
+    console.log('Receiver found:', receiver ? { id: receiver.id, name: receiver.name, role: receiver.role } : 'null');
 
     if (!receiver) {
+      console.log('Invalid student - receiver not found or not a student');
       return NextResponse.json({ error: 'Invalid student' }, { status: 400 });
     }
 
+    console.log('Creating message with data:', {
+      senderId: session.user.id,
+      recipientId: receiverId,
+      content: content.trim(),
+    });
+
+    console.log('Database check - Attempting to create message');
     const message = await prisma.message.create({
       data: {
         senderId: session.user.id,
@@ -130,6 +156,9 @@ export async function POST(request: Request) {
         },
       },
     });
+    console.log('Database check - Message creation completed');
+
+    console.log('Message created successfully:', { id: message.id, content: message.content });
 
     const formattedMessage = {
       id: message.id,
@@ -146,9 +175,15 @@ export async function POST(request: Request) {
       createdAt: message.createdAt.toISOString(),
     };
 
+    console.log('Returning formatted message');
     return NextResponse.json(formattedMessage, { status: 201 });
   } catch (error) {
     console.error('Error sending teacher message:', error);
+    console.error('Error details:', {
+      message: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+      name: error instanceof Error ? error.name : 'Unknown',
+    });
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
