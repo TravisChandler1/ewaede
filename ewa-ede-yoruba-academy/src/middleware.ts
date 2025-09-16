@@ -3,10 +3,20 @@ import type { NextRequest } from 'next/server';
 
 const publicPaths = new Set([
   '/',
-  '/auth/signin',
-  '/auth/register',
-  '/auth/forgot-password',
-  '/auth/unauthorized',
+  '/about',
+  '/contact',
+  '/help',
+  '/privacy',
+  '/terms',
+  '/services',
+  '/services/yoruba-language-lessons',
+  '/services/localization',
+  '/services/data-annotation',
+  '/services/cultural-education',
+  '/services/event-planning',
+  '/services/consulting',
+  '/api/newsletter',
+  '/api/courses',
   '/api/auth',
 ]);
 
@@ -50,41 +60,15 @@ export default function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  // Handle dashboard routes
-  if (pathname === '/' || pathname.startsWith('/dashboard')) {
-    console.log(`Middleware: Dashboard route ${pathname}, isAuth: ${isAuth}`);
-    if (!isAuth) {
-      console.log(`Middleware: Redirecting to signin from ${pathname}`);
-      return NextResponse.redirect(new URL('/auth/signin', nextUrl));
-    }
-
-    // Redirect root to dashboard
-    if (pathname === '/') {
-      console.log(`Middleware: Redirecting root to /dashboard`);
-      return NextResponse.redirect(new URL('/dashboard', nextUrl));
-    }
-
-    console.log(`Middleware: Allowing access to ${pathname}`);
-    return NextResponse.next();
+  // Handle auth routes - redirect to home since we don't want auth access
+  if (pathname.startsWith('/auth') || pathname.startsWith('/dashboard') || pathname.startsWith('/admin')) {
+    console.log(`Middleware: Protected route ${pathname}, redirecting to home`);
+    return NextResponse.redirect(new URL('/', nextUrl));
   }
 
-  // Handle admin routes
-  if (pathname.startsWith('/admin')) {
-    console.log(`Middleware: Admin route ${pathname}, isAuth: ${isAuth}`);
-    if (!isAuth) {
-      console.log(`Middleware: Redirecting to signin from ${pathname}`);
-      return NextResponse.redirect(new URL('/auth/signin', nextUrl));
-    }
-
-    console.log(`Middleware: Allowing access to ${pathname}`);
-    return NextResponse.next();
-  }
-
-  // For all other routes, allow access but require authentication
-  if (!isAuth) {
-    console.log(`Middleware: Redirecting to signin from ${pathname}`);
-    return NextResponse.redirect(new URL('/auth/signin', nextUrl));
-  }
+  // For all other routes, allow public access
+  console.log(`Middleware: Allowing public access to ${pathname}`);
+  return NextResponse.next();
 
   console.log(`Middleware: Allowing access to ${pathname}`);
   return NextResponse.next();

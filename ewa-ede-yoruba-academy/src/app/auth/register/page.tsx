@@ -1,11 +1,5 @@
-import SimpleRegisterForm from '@/components/auth/SimpleRegisterForm';
-import { Metadata } from 'next';
-
-export const metadata: Metadata = {
-  title: 'Register - Ẹwà Èdè Yorùbá Academy',
-  description: 'Create a new account to start learning Yoruba',
-};
+import { redirect } from 'next/navigation';
 
 export default function RegisterPage() {
-  return <SimpleRegisterForm />;
+  redirect('/');
 }

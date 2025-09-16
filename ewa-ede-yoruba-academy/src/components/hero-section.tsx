@@ -111,19 +111,13 @@ export function HeroSection() {
               </Link>
             </nav>
 
-            {/* Auth Buttons */}
+            {/* Contact Button */}
             <div className="hidden md:flex items-center space-x-4">
               <Link
-                href="/auth/signin"
-                className="text-white font-medium hover:text-yellow-300 transition-colors duration-200"
-              >
-                Sign In
-              </Link>
-              <Link
-                href="/auth/register"
+                href="/contact"
                 className="bg-yellow-500 hover:bg-yellow-400 text-black font-medium px-4 py-2 rounded-full transition-colors duration-200"
               >
-                Get Started
+                Contact Us
               </Link>
             </div>
 

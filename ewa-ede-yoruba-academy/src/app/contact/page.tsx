@@ -111,45 +111,32 @@ export default function ContactPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Navigation */}
-      <nav className="bg-white border-b-2 border-[#4f46e5] shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <Link href="/" className="flex items-center">
-                <Image
-                  src="/logo.png"
-                  alt="Ẹwà Èdè Yorùbá Academy"
-                  width={160}
-                  height={160}
-                  className="h-10 w-auto"
-                  quality={100}
-                />
-              </Link>
-            </div>
-            <div className="hidden md:flex items-center space-x-6">
-              <Link href="/" className="text-gray-700 hover:text-[#4f46e5] transition-colors font-medium">Home</Link>
-              <Link href="/help" className="text-gray-700 hover:text-[#4f46e5] transition-colors font-medium">Help</Link>
-              <Link href="#contact" className="text-gray-700 hover:text-[#4f46e5] transition-colors font-medium">Contact</Link>
-            </div>
-          </div>
-        </div>
-      </nav>
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-[#4f46e5] to-[#7c3aed] text-white py-16">
-        <div className="max-w-7xl mx-auto px-6 text-center">
-          <div className="flex justify-center mb-6">
-            <Mail size={64} className="text-white" />
+      <div className="relative py-16 md:py-24 overflow-hidden">
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{
+            backgroundImage: "url('/contact.jpg')",
+          }}
+        ></div>
+        <div className="absolute inset-0 bg-black/60"></div>
+
+        <div className="relative z-10 max-w-7xl mx-auto px-6">
+          {/* Glass Card */}
+          <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl p-8 md:p-12 shadow-2xl max-w-4xl mx-auto text-center">
+            <div className="flex justify-center mb-6">
+              <Mail size={64} className="text-white" />
+            </div>
+            <h1 className="text-4xl lg:text-5xl font-bold mb-4 text-white">
+              Contact Us
+            </h1>
+            <p className="text-xl text-white/90 max-w-2xl mx-auto">
+              We're here to help! Get in touch with our support team for any questions about your Yoruba learning journey.
+            </p>
           </div>
-          <h1 className="text-4xl lg:text-5xl font-bold mb-4">
-            Contact Us
-          </h1>
-          <p className="text-xl text-white/90 max-w-2xl mx-auto">
-            We're here to help! Get in touch with our support team for any questions about your Yoruba learning journey.
-          </p>
         </div>
-      </section>
+      </div>
 
       {/* Contact Information */}
       <section className="py-16 bg-white">
@@ -160,10 +147,10 @@ export default function ContactPage() {
             {contactInfo.map((info, index) => (
               <div key={index} className="bg-gray-50 border border-gray-200 rounded-xl p-6 text-center hover:shadow-lg transition-shadow duration-300">
                 <div className="flex justify-center mb-4">
-                  <info.icon size={32} className="text-[#4f46e5]" />
+                  <info.icon size={32} className="text-[#111827]" />
                 </div>
                 <h3 className="text-lg font-semibold mb-2">{info.title}</h3>
-                <p className="text-[#4f46e5] font-medium mb-2">{info.details}</p>
+                <p className="text-[#111827] font-medium mb-2">{info.details}</p>
                 <p className="text-gray-600 text-sm mb-3">{info.description}</p>
                 <p className="text-xs text-gray-500">{info.response}</p>
               </div>
@@ -201,7 +188,7 @@ export default function ContactPage() {
             </p>
           </div>
 
-          <div className="bg-gray-50 border border-gray-200 rounded-xl p-8">
+          <div className="bg-gray-50 border-2 border-[#e69d2a] rounded-xl p-8">
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
@@ -215,7 +202,7 @@ export default function ContactPage() {
                     value={formData.name}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4f46e5] focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#111827] focus:border-transparent"
                     placeholder="Enter your full name"
                   />
                 </div>
@@ -231,7 +218,7 @@ export default function ContactPage() {
                     value={formData.email}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4f46e5] focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#111827] focus:border-transparent"
                     placeholder="Enter your email address"
                   />
                 </div>
@@ -247,7 +234,7 @@ export default function ContactPage() {
                     name="category"
                     value={formData.category}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4f46e5] focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#111827] focus:border-transparent"
                   >
                     <option value="general">General Inquiry</option>
                     <option value="technical">Technical Support</option>
@@ -268,7 +255,7 @@ export default function ContactPage() {
                     value={formData.subject}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4f46e5] focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#111827] focus:border-transparent"
                     placeholder="Brief description of your inquiry"
                   />
                 </div>
@@ -285,7 +272,7 @@ export default function ContactPage() {
                   onChange={handleInputChange}
                   required
                   rows={6}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4f46e5] focus:border-transparent resize-vertical"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#111827] focus:border-transparent resize-vertical"
                   placeholder="Please provide details about your inquiry..."
                 />
               </div>
@@ -307,7 +294,7 @@ export default function ContactPage() {
                   className={`px-8 py-3 rounded-lg font-semibold transition-all duration-200 flex items-center ${
                     isSubmitting
                       ? 'bg-gray-400 cursor-not-allowed'
-                      : 'bg-[#4f46e5] hover:bg-[#3b35c7] text-white hover:transform hover:-translate-y-1 hover:shadow-lg'
+                      : 'bg-[#111827] hover:bg-[#3b35c7] text-white hover:transform hover:-translate-y-1 hover:shadow-lg'
                   }`}
                 >
                   {isSubmitting ? (
@@ -369,14 +356,6 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-gray-50 border-t border-gray-200 py-12">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center text-gray-600">
-            <p>&copy; 2025 Ẹwà Èdè Yorùbá Academy. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }

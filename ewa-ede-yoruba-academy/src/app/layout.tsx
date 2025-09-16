@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
-import { MobileNav } from "@/components/MobileNav";
+import Navigation from "@/components/Navigation";
+import Footer from "@/components/footer";
 import BottomTabs from "@/components/BottomTabs";
 import { SessionProvider } from "next-auth/react";
 import ErrorBoundary from "@/components/ErrorBoundary";
@@ -83,10 +84,11 @@ function Providers({ children }: { children: React.ReactNode }) {
         disableTransitionOnChange
       >
         <ErrorBoundary>
+          <Navigation />
           {children}
+          <Footer />
         </ErrorBoundary>
         <Toaster />
-        <MobileNav />
         <Suspense fallback={null}>
           <BottomTabs />
         </Suspense>

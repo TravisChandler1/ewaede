@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { BookOpen, Users, Video, Library, Award, Star, Mail, GraduationCap, Brain, Lightbulb, MessageCircle, X, Send } from "lucide-react";
+import { BookOpen, Users, Video, Library, Award, Star, Mail, GraduationCap, Brain, Lightbulb, MessageCircle, X, Send, ChevronRight } from "lucide-react";
 
 interface NewsletterResponse {
   message?: string;
@@ -126,21 +126,18 @@ function Newsletter() {
     <section className="py-20 bg-gradient-to-b from-gray-50 to-white border-t border-gray-200">
       <div className="max-w-4xl mx-auto px-6 text-center">
         <div className="flex flex-col items-center">
-          <div className="w-16 h-16 rounded-full bg-[#4f46e5]/10 flex items-center justify-center mb-6">
+          <div className="w-16 h-16 rounded-full bg-[#111827]/10 flex items-center justify-center mb-6">
             <Mail className="w-8 h-8 text-[#e69d2a]" />
           </div>
           <h2 className="text-3xl font-bold text-gray-800 mb-4">
             <span className="block text-[#e69d2a] mt-2">Stay Updated</span>
           </h2>
           <p className="text-gray-600 text-lg mb-8 max-w-2xl">
-            Gba àwọn ìmọ̀ tuntun nípa èdè àti àṣà Yorùbá, àwọn ìpèsè ẹ̀kọ́, àti àwọn ìròyìn tó ṣe pàtàkì.
-            <span className="block mt-2">
-              Get the latest Yoruba learning tips, cultural insights, and academy updates delivered to your inbox.
-            </span>
+            Get the latest Yoruba learning tips, cultural insights, and academy updates delivered to your inbox.
           </p>
         </div>
 
-        <div className="bg-gray-50 border-2 border-[#4f46e5] rounded-xl p-8 shadow-lg max-w-lg mx-auto">
+        <div className="bg-gray-50 border-2 border-[#111827] rounded-xl p-8 shadow-lg max-w-lg mx-auto">
           <form onSubmit={handleSubmit}>
             <div className="flex flex-col sm:flex-row gap-3">
               <div className="relative flex-1">
@@ -199,7 +196,7 @@ function Newsletter() {
               </button>
             </div>
             <p className="mt-6 text-sm text-gray-500 text-center">
-              A kì yóò ta àdíẹ ẹ̀rí rẹ. We respect your privacy. Unsubscribe at any time.
+              We respect your privacy. Unsubscribe at any time.
             </p>
           </form>
         </div>
@@ -211,6 +208,7 @@ function Newsletter() {
 export default function HomePage() {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isServicesDropdownOpen, setIsServicesDropdownOpen] = useState(false);
   const [userName, setUserName] = useState('');
   const [messages, setMessages] = useState([
     { id: 1, text: "Ẹ kaabo! I'm Bísọ̀lá, your Yoruba learning assistant. What's your name?", sender: 'bot', timestamp: new Date() }
@@ -376,93 +374,6 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-white text-black">
-      {/* Separate Navigation Bar */}
-      <nav className="bg-white border-b-2 border-[#4f46e5] shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <Image
-                src="/logo.png"
-                alt="Ẹwà Èdè Yorùbá Academy"
-                width={192}
-                height={192}
-                className="h-10 sm:h-12 w-auto"
-                quality={100}
-                priority
-              />
-            </div>
-            <div className="hidden md:flex items-center justify-center flex-1 space-x-6 lg:space-x-8">
-              <Link href="/" className="text-gray-700 hover:text-[#4f46e5] transition-colors font-medium text-sm lg:text-base">Home</Link>
-              <a href="#features" className="text-gray-700 hover:text-[#4f46e5] transition-colors font-medium text-sm lg:text-base">Features</a>
-              <a href="#pricing" className="text-gray-700 hover:text-[#4f46e5] transition-colors font-medium text-sm lg:text-base">Pricing</a>
-              <a href="#about" className="text-gray-700 hover:text-[#4f46e5] transition-colors font-medium text-sm lg:text-base">About</a>
-              <a href="/auth/register" className="bg-[#4f46e5] text-white px-3 lg:px-4 py-2 rounded-lg hover:bg-[#3b35c7] transition-colors font-medium text-sm lg:text-base">Get Started</a>
-            </div>
-            {/* Mobile menu button */}
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden p-2 rounded-md text-gray-700 hover:bg-gray-100 transition-colors"
-              aria-label="Toggle mobile menu"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            </button>
-          </div>
-        </div>
-      </nav>
-
-      {/* Mobile Menu Dropdown */}
-      {isMobileMenuOpen && (
-        <div className="md:hidden bg-white border-t border-gray-200 shadow-lg">
-          <div className="px-4 py-6 space-y-4">
-            <Link
-              href="/"
-              className="block text-gray-700 hover:text-[#4f46e5] transition-colors font-medium py-2"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Home
-            </Link>
-            <Link
-              href="#features"
-              className="block text-gray-700 hover:text-[#4f46e5] transition-colors font-medium py-2"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Features
-            </Link>
-            <Link
-              href="#pricing"
-              className="block text-gray-700 hover:text-[#4f46e5] transition-colors font-medium py-2"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Pricing
-            </Link>
-            <Link
-              href="#about"
-              className="block text-gray-700 hover:text-[#4f46e5] transition-colors font-medium py-2"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              About
-            </Link>
-            <div className="pt-4 border-t border-gray-200 space-y-3">
-              <Link
-                href="/auth/signin"
-                className="block text-gray-700 hover:text-[#4f46e5] transition-colors font-medium py-2"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Sign In
-              </Link>
-              <Link
-                href="/auth/register"
-                className="block bg-[#4f46e5] text-white px-4 py-2 rounded-lg hover:bg-[#3b35c7] transition-colors font-medium text-center"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Get Started
-              </Link>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Hero Section */}
       <section className="relative py-12 md:py-16 lg:py-24 overflow-hidden" style={{
@@ -482,24 +393,23 @@ export default function HomePage() {
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-3 w-3 bg-white"></span>
                 </span>
-                E̩ kaabo̩! Welcome to Ẹwà Èdè Yorùbá Academy
+                Welcome to Yorùbá Academy
               </div>
               <h1 className="text-4xl lg:text-6xl font-bold mb-6 leading-tight text-white">
-                Learn the Beautiful <span className="text-[#e69d2a]">Yoruba</span> Language
+                Learn the Beautiful <span className="text-[#e69d2a]">Yorùbá</span> Language
               </h1>
               <p className="text-xl lg:text-2xl text-white/90 mb-8 max-w-3xl">
                 Immerse yourself in the rich culture and traditions of the Yoruba people through our interactive language programs. From greetings to proverbs, we make learning Yoruba engaging and meaningful.
               </p>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl">
                 {[
-                  { text: 'Personalized Learning', yoruba: 'Ẹkọ Oníṣòwò' },
-                  { text: 'Native Teachers', yoruba: 'Ọ̀jọ̀gbọ́n Ọmọ Ilẹ̀ Yorùbá' },
-                  { text: 'Cultural Immersion', yoruba: 'Ìtẹ̀síwájú Ọ̀nà Àṣà' },
-                  { text: 'Flexible Schedule', yoruba: 'Àkókò Tí Ó Wọ́nù Fún Ẹ' }
+                  { text: 'Personalized Learning' },
+                  { text: 'Native Teachers' },
+                  { text: 'Cultural Immersion' },
+                  { text: 'Flexible Schedule' }
                 ].map((item, i) => (
                   <div key={i} className="bg-white/10 backdrop-blur-sm border border-[#e69d2a] p-4 rounded-lg hover:transform hover:-translate-y-2 transition-all duration-300 hover:shadow-lg hover:shadow-white/20">
                     <p className="text-white text-sm">{item.text}</p>
-                    <p className="text-[#e69d2a] font-medium mt-1">{item.yoruba}</p>
                   </div>
                 ))}
               </div>
@@ -571,8 +481,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-12">
             <h2 className="text-3xl lg:text-4xl font-bold mb-4">
-              Ọ̀nà Tí A ń Kọ́ Ẹ̀kọ́
-              <span className="block text-[#4f46e5] mt-2">Our <span className="text-[#e69d2a]">Teaching</span> Approach</span>
+              Our <span className="text-[#e69d2a]">Teaching</span> Approach
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               We combine traditional Yoruba teaching methods with modern technology for effective learning
@@ -582,20 +491,17 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               {
-                title: 'Ìtàn-Àròsọ',
-                eng: 'Storytelling',
+                title: 'Storytelling',
                 desc: 'Learn through traditional Yoruba folktales and proverbs',
                 image: '/storytelling.png'
               },
               {
-                title: 'Ìdánimọ̀ra',
-                eng: 'Interactive',
+                title: 'Interactive Learning',
                 desc: 'Engage in conversations and role-playing exercises',
                 image: '/interactive.png'
               },
               {
-                title: 'Ìṣẹ̀lú',
-                eng: 'Cultural',
+                title: 'Cultural Immersion',
                 desc: 'Immerse in Yoruba culture, music, and traditions',
                 image: '/culture.png'
               }
@@ -611,7 +517,7 @@ export default function HomePage() {
                     quality={100}
                   />
                 </div>
-                <h3 className="text-xl font-bold mb-2">{item.title} <span className="text-gray-600">({item.eng})</span></h3>
+                <h3 className="text-xl font-bold mb-2">{item.title}</h3>
                 <p className="text-gray-600">{item.desc}</p>
               </div>
             ))}
@@ -644,17 +550,17 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-3xl lg:text-4xl font-bold mb-4">
-              <span className="text-[#e69d2a]">Choose Your</span> <span className="text-[#4f46e5]">Learning</span> <span className="text-[#e69d2a]">Path</span>
+              <span className="text-[#e69d2a]">Choose Your</span> <span className="text-[#111827]">Learning</span> <span className="text-[#e69d2a]">Path</span>
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
               Select the level that matches your current knowledge and goals. All levels include both individual and group learning options.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 max-w-6xl mx-auto">
-            {/* Left Column: Novice, Beginner, Intermediate */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 max-w-4xl mx-auto">
+            {/* Left Column: Novice */}
             <div className="space-y-6">
-              {levels.filter(level => ["Novice", "Beginner", "Intermediate"].includes(level.name)).map((level, index) => (
+              {levels.filter(level => ["Novice"].includes(level.name)).map((level, index) => (
                 <div key={index} className={`relative bg-white border rounded-xl p-6 max-w-md mx-auto min-h-[400px] flex flex-col group hover:transform hover:-translate-y-2 transition-all duration-300 hover:shadow-xl ${level.popular ? 'border-[#e69d2a] ring-1 ring-[#e69d2a]/20' : 'border-gray-200'}`}>
                   {level.popular && (
                     <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
@@ -675,9 +581,9 @@ export default function HomePage() {
 
                   {/* Animated Study Icon */}
                   <div className="flex justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-                    {level.name === "Novice" && <BookOpen size={48} className="text-[#4f46e5] group-hover:text-[#e69d2a] animate-bounce transition-colors duration-300" />}
-                    {level.name === "Beginner" && <GraduationCap size={48} className="text-[#e69d2a] group-hover:text-[#4f46e5] animate-pulse transition-colors duration-300" />}
-                    {level.name === "Intermediate" && <Brain size={48} className="text-[#4f46e5] group-hover:text-[#e69d2a] animate-bounce transition-colors duration-300" />}
+                    {level.name === "Novice" && <BookOpen size={48} className="text-[#111827] group-hover:text-[#e69d2a] animate-bounce transition-colors duration-300" />}
+                    {level.name === "Beginner" && <GraduationCap size={48} className="text-[#e69d2a] group-hover:text-[#111827] animate-pulse transition-colors duration-300" />}
+                    {level.name === "Intermediate" && <Brain size={48} className="text-[#111827] group-hover:text-[#e69d2a] animate-bounce transition-colors duration-300" />}
                   </div>
 
                   <div className="text-center mb-6">
@@ -710,9 +616,9 @@ export default function HomePage() {
                   </ul>
 
                   <div className="mt-auto">
-                    <a href="/auth/register" className="block w-full">
-                      <button className="w-full bg-[#4f46e5] hover:bg-[#3b35c7] text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200 text-sm">
-                        Enroll Now
+                    <a href="/contact" className="block w-full">
+                      <button className="w-full bg-[#111827] hover:bg-[#3b35c7] text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200 text-sm">
+                        Contact Us
                       </button>
                     </a>
                   </div>
@@ -720,10 +626,10 @@ export default function HomePage() {
               ))}
             </div>
 
-            {/* Right Column: Advanced, Individual, Teaching Options */}
+            {/* Right Column: Beginner */}
             <div className="space-y-6">
-              {/* Advanced Card */}
-              {levels.filter(level => level.name === "Advanced").map((level, index) => (
+              {/* Beginner Card */}
+              {levels.filter(level => level.name === "Beginner").map((level, index) => (
                 <div key={index} className={`relative bg-white border rounded-xl p-6 max-w-md mx-auto min-h-[400px] flex flex-col group hover:transform hover:-translate-y-2 transition-all duration-300 hover:shadow-xl ${level.popular ? 'border-[#e69d2a] ring-1 ring-[#e69d2a]/20' : 'border-gray-200'}`}>
                   {level.popular && (
                     <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
@@ -735,7 +641,7 @@ export default function HomePage() {
 
                   {/* Animated Study Icon */}
                   <div className="flex justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-                    <Lightbulb size={48} className="text-[#e69d2a] group-hover:text-[#4f46e5] animate-pulse transition-colors duration-300" />
+                    <Lightbulb size={48} className="text-[#e69d2a] group-hover:text-[#111827] animate-pulse transition-colors duration-300" />
                   </div>
 
                   <div className="text-center mb-6">
@@ -768,82 +674,27 @@ export default function HomePage() {
                   </ul>
 
                   <div className="mt-auto">
-                    <a href="/auth/register" className="block w-full">
-                      <button className="w-full bg-[#4f46e5] hover:bg-[#3b35c7] text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200 text-sm">
-                        Enroll Now
+                    <a href="/contact" className="block w-full">
+                      <button className="w-full bg-[#111827] hover:bg-[#3b35c7] text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200 text-sm">
+                        Contact Us
                       </button>
                     </a>
                   </div>
                 </div>
               ))}
 
-              {/* Individual Card */}
-              {levels.filter(level => level.name === "Individual").map((level, index) => (
-                <div key={index} className={`relative bg-white border rounded-xl p-6 max-w-md mx-auto min-h-[400px] flex flex-col ${level.popular ? 'border-[#e69d2a] ring-1 ring-[#e69d2a]/20' : 'border-gray-200'}`}>
-                  {level.popular && (
-                    <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                      <span className="bg-[#e69d2a] text-black px-3 py-1 text-sm rounded-full">
-                        Most Popular
-                      </span>
-                    </div>
-                  )}
-
-                  {/* Animated Study Icon */}
-                  <div className="flex justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-                    <Users size={48} className="text-[#4f46e5] group-hover:text-[#e69d2a] animate-pulse transition-colors duration-300" />
+              {/* See More Button */}
+              <div className="bg-white border border-gray-200 rounded-xl p-6 max-w-md mx-auto w-full flex flex-col justify-center items-center min-h-[400px]">
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-[#111827] rounded-full flex items-center justify-center mx-auto mb-6">
+                    <BookOpen size={32} className="text-white" />
                   </div>
-
-                  <div className="text-center mb-6">
-                    <h3 className="text-xl font-bold mb-3">
-                    {level.name}
-                  </h3>
-                    <div className="mb-3">
-                      <p className="text-sm text-gray-600 leading-relaxed">{level.duration}</p>
-                    </div>
-                    <div className="flex flex-col items-center space-y-1 mb-4">
-                      <div className="flex items-baseline justify-center">
-                        <span className="text-2xl font-bold">{level.fullPrice}</span>
-                        <span className="text-gray-600 ml-1 text-xs">full course</span>
-                      </div>
-                      <div className="flex items-baseline justify-center">
-                        <span className="text-xl font-semibold text-[#a78bfa]">{level.flexiblePrice}</span>
-                        <span className="text-gray-600 ml-1 text-xs">per class</span>
-                      </div>
-                    </div>
-                    <p className="text-sm text-gray-600 mt-2 px-2 leading-relaxed">{level.description}</p>
-                  </div>
-
-                  <ul className="space-y-2 mb-6 flex-grow">
-                    {level.features.map((feature, fIndex) => (
-                      <li key={fIndex} className="flex items-start">
-                        <Star size={14} className="text-[#10b981] mr-2 mt-0.5 flex-shrink-0" />
-                        <span className="text-gray-600 text-xs leading-relaxed">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  <div className="mt-auto">
-                    <a href="/auth/register" className="block w-full">
-                      <button className="w-full bg-[#4f46e5] hover:bg-[#3b35c7] text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200 text-sm">
-                        Enroll Now
-                      </button>
-                    </a>
-                  </div>
-                </div>
-              ))}
-
-              {/* Teaching Options */}
-              <div className="bg-white border border-gray-200 rounded-xl p-6 max-w-md mx-auto w-full">
-                <h3 className="text-xl font-semibold mb-6 text-center">Teaching Options</h3>
-                <div className="grid grid-cols-1 gap-6">
-                  <div>
-                    <h4 className="font-medium text-[#e69d2a] mb-2">Individual Learning</h4>
-                    <p className="text-gray-600 text-sm">One-on-one sessions with dedicated teachers for personalized attention and faster progress.</p>
-                  </div>
-                  <div>
-                    <h4 className="font-medium text-[#e69d2a] mb-2">Group Learning</h4>
-                    <p className="text-gray-600 text-sm">Learn alongside peers in small groups, fostering community and collaborative learning.</p>
-                  </div>
+                  <h3 className="text-xl font-bold mb-4">Explore More Learning Options</h3>
+                  <p className="text-gray-600 mb-6">Discover all our comprehensive learning levels including Intermediate, Advanced, and Individual programs.</p>
+                  <Link href="/services/yoruba-language-lessons" className="inline-flex items-center bg-[#111827] hover:bg-[#3b35c7] text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200">
+                    See More Options
+                    <ChevronRight size={16} className="ml-2" />
+                  </Link>
                 </div>
               </div>
             </div>
@@ -902,14 +753,17 @@ export default function HomePage() {
             </div>
             <div className="order-1 lg:order-2 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
               <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-6 lg:mb-8 transform transition-all duration-1000 translate-y-0 opacity-100">
-                About Ẹwà Èdè Yorùbá Academy
+                About Yorùbá Academy
               </h2>
               <p className="text-base sm:text-lg text-gray-600 mb-4 lg:mb-6 transform transition-all duration-1000 translate-y-0 opacity-100" style={{ animationDelay: '0.5s' }}>
                 Founded with a passion for preserving and promoting the Yoruba language and culture, our academy brings together expert teachers and enthusiastic learners from around the world. Whether you're connecting with your heritage or discovering Yoruba for the first time, we provide the structure, community, and resources you need to succeed.
               </p>
-              <p className="text-base sm:text-lg text-gray-600 transform transition-all duration-1000 translate-y-0 opacity-100" style={{ animationDelay: '0.7s' }}>
-                Our platform combines traditional teaching methods with modern technology, creating an engaging and effective learning environment. Join our community of learners and discover the beauty of Yoruba language and culture.
-              </p>
+              <div className="mt-6">
+                <Link href="/about" className="inline-flex items-center bg-[#111827] hover:bg-[#3b35c7] text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200">
+                  Know More
+                  <ChevronRight size={16} className="ml-2" />
+                </Link>
+              </div>
             </div>
           </div>
         </div>
@@ -920,7 +774,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-3xl lg:text-4xl font-bold mb-4">
-              Our <span className="text-[#4f46e5]">Blog</span>
+              Our <span className="text-[#111827]">Blog</span>
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
               Discover insights, tips, and stories about Yoruba language and culture from our community of learners and teachers.
@@ -930,7 +784,7 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Blog Post 1 */}
             <article className="bg-gray-50 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
-              <div className="h-48 bg-gradient-to-br from-[#4f46e5] to-[#7c3aed] flex items-center justify-center">
+              <div className="h-48 bg-gradient-to-br from-[#111827] to-[#7c3aed] flex items-center justify-center">
                 <BookOpen size={48} className="text-white" />
               </div>
               <div className="p-6">
@@ -941,7 +795,7 @@ export default function HomePage() {
                 </p>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-500">March 15, 2024</span>
-                  <span className="text-[#4f46e5] font-medium text-sm hover:text-[#3b35c7] cursor-pointer">Read More →</span>
+                  <span className="text-[#111827] font-medium text-sm hover:text-[#3b35c7] cursor-pointer">Read More →</span>
                 </div>
               </div>
             </article>
@@ -952,14 +806,14 @@ export default function HomePage() {
                 <Users size={48} className="text-white" />
               </div>
               <div className="p-6">
-                <div className="text-sm text-[#4f46e5] font-medium mb-2">Cultural Insights</div>
+                <div className="text-sm text-[#111827] font-medium mb-2">Cultural Insights</div>
                 <h3 className="text-xl font-bold mb-3">Celebrating Yoruba Festivals</h3>
                 <p className="text-gray-600 mb-4">
                   Learn about the rich traditions and celebrations that define Yoruba culture, from Egungun to Durbar festivals.
                 </p>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-500">March 10, 2024</span>
-                  <span className="text-[#4f46e5] font-medium text-sm hover:text-[#3b35c7] cursor-pointer">Read More →</span>
+                  <span className="text-[#111827] font-medium text-sm hover:text-[#3b35c7] cursor-pointer">Read More →</span>
                 </div>
               </div>
             </article>
@@ -977,7 +831,7 @@ export default function HomePage() {
                 </p>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-500">March 5, 2024</span>
-                  <span className="text-[#4f46e5] font-medium text-sm hover:text-[#3b35c7] cursor-pointer">Read More →</span>
+                  <span className="text-[#111827] font-medium text-sm hover:text-[#3b35c7] cursor-pointer">Read More →</span>
                 </div>
               </div>
             </article>
@@ -988,14 +842,14 @@ export default function HomePage() {
                 <MessageCircle size={48} className="text-white" />
               </div>
               <div className="p-6">
-                <div className="text-sm text-[#4f46e5] font-medium mb-2">Student Stories</div>
+                <div className="text-sm text-[#111827] font-medium mb-2">Student Stories</div>
                 <h3 className="text-xl font-bold mb-3">From Beginner to Fluent</h3>
                 <p className="text-gray-600 mb-4">
                   Read inspiring stories from our students who have successfully mastered Yoruba and integrated it into their daily lives.
                 </p>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-500">February 28, 2024</span>
-                  <span className="text-[#4f46e5] font-medium text-sm hover:text-[#3b35c7] cursor-pointer">Read More →</span>
+                  <span className="text-[#111827] font-medium text-sm hover:text-[#3b35c7] cursor-pointer">Read More →</span>
                 </div>
               </div>
             </article>
@@ -1013,7 +867,7 @@ export default function HomePage() {
                 </p>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-500">February 20, 2024</span>
-                  <span className="text-[#4f46e5] font-medium text-sm hover:text-[#3b35c7] cursor-pointer">Read More →</span>
+                  <span className="text-[#111827] font-medium text-sm hover:text-[#3b35c7] cursor-pointer">Read More →</span>
                 </div>
               </div>
             </article>
@@ -1024,21 +878,21 @@ export default function HomePage() {
                 <Star size={48} className="text-white" />
               </div>
               <div className="p-6">
-                <div className="text-sm text-[#4f46e5] font-medium mb-2">Teacher Spotlight</div>
+                <div className="text-sm text-[#111827] font-medium mb-2">Teacher Spotlight</div>
                 <h3 className="text-xl font-bold mb-3">Meet Our Expert Instructors</h3>
                 <p className="text-gray-600 mb-4">
                   Get to know the passionate educators who make learning Yoruba an enjoyable and enriching experience for our students.
                 </p>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-500">February 15, 2024</span>
-                  <span className="text-[#4f46e5] font-medium text-sm hover:text-[#3b35c7] cursor-pointer">Read More →</span>
+                  <span className="text-[#111827] font-medium text-sm hover:text-[#3b35c7] cursor-pointer">Read More →</span>
                 </div>
               </div>
             </article>
           </div>
 
           <div className="text-center mt-12">
-            <button className="bg-[#4f46e5] hover:bg-[#3b35c7] text-white font-semibold py-3 px-8 rounded-lg transition-colors duration-200">
+            <button className="bg-[#111827] hover:bg-[#3b35c7] text-white font-semibold py-3 px-8 rounded-lg transition-colors duration-200">
               View All Blog Posts
             </button>
           </div>
@@ -1051,7 +905,7 @@ export default function HomePage() {
           <div className="flex items-center justify-center">
             <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
             <div className="mx-8">
-              <BookOpen size={48} className="text-[#4f46e5] animate-bounce" />
+              <BookOpen size={48} className="text-[#111827] animate-bounce" />
             </div>
             <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
           </div>
@@ -1060,59 +914,6 @@ export default function HomePage() {
 
       {/* Newsletter Section */}
       <Newsletter />
-
-      {/* Footer */}
-      <footer className="bg-gray-50 border-t border-gray-200 py-12">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-              <div className="flex items-center mb-4">
-                <Image
-                  src="/logo.png"
-                  alt="Ẹwà Èdè Yorùbá Academy"
-                  width={160}
-                  height={160}
-                  className="h-10 w-auto"
-                  quality={100}
-                />
-              </div>
-              <p className="text-gray-600 text-sm">
-                Empowering learners worldwide to master the beautiful Yoruba language and culture.
-              </p>
-            </div>
-            <div>
-              <h3 className="font-semibold mb-4">Learning</h3>
-              <ul className="space-y-2 text-sm text-gray-600">
-                <li><a href="#" className="text-[#4f46e5] hover:text-[#e69d2a] transition-colors">Courses</a></li>
-                <li><a href="#" className="text-[#4f46e5] hover:text-[#e69d2a] transition-colors">Live Sessions</a></li>
-                <li><a href="#" className="text-[#4f46e5] hover:text-[#e69d2a] transition-colors">E-Library</a></li>
-                <li><a href="#" className="text-[#4f46e5] hover:text-[#e69d2a] transition-colors">Book Club</a></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-semibold mb-4">Community</h3>
-              <ul className="space-y-2 text-sm text-gray-600">
-                <li><a href="#" className="text-[#4f46e5] hover:text-[#e69d2a] transition-colors">Learning Groups</a></li>
-                <li><a href="#" className="text-[#4f46e5] hover:text-[#e69d2a] transition-colors">Forums</a></li>
-                <li><a href="#" className="text-[#4f46e5] hover:text-[#e69d2a] transition-colors">Events</a></li>
-                <li><a href="#" className="text-[#4f46e5] hover:text-[#e69d2a] transition-colors">Teachers</a></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-semibold mb-4">Support</h3>
-              <ul className="space-y-2 text-sm text-gray-600">
-                <li><Link href="/help" className="text-[#4f46e5] hover:text-[#e69d2a] transition-colors">Help Center</Link></li>
-                <li><Link href="/contact" className="text-[#4f46e5] hover:text-[#e69d2a] transition-colors">Contact Us</Link></li>
-                <li><Link href="/privacy" className="text-[#4f46e5] hover:text-[#e69d2a] transition-colors">Privacy Policy</Link></li>
-                <li><Link href="/terms" className="text-[#4f46e5] hover:text-[#e69d2a] transition-colors">Terms of Service</Link></li>
-              </ul>
-            </div>
-          </div>
-          <div className="border-t border-gray-200 mt-8 pt-8 text-center text-gray-600 text-sm">
-            <p>&copy; 2025 Ẹwà Èdè Yorùbá Academy. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
 
       {/* Chat Widget */}
       <div className="fixed bottom-20 right-6 z-50">
@@ -1132,7 +933,7 @@ export default function HomePage() {
             <div className="bg-[#000080] text-white p-4 rounded-t-lg flex items-center justify-between">
               <div className="flex items-center">
                 <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center mr-3">
-                  <span className="text-[#4f46e5] font-bold text-sm">Bí</span>
+                  <span className="text-[#111827] font-bold text-sm">Bí</span>
                 </div>
                 <div>
                   <h3 className="font-semibold">Bísọ̀lá</h3>
@@ -1158,7 +959,7 @@ export default function HomePage() {
                   <div
                     className={`max-w-xs px-3 py-2 rounded-lg text-sm ${
                       message.sender === 'user'
-                        ? 'bg-[#4f46e5] text-white'
+                        ? 'bg-[#111827] text-white'
                         : 'bg-gray-100 text-gray-800'
                     }`}
                   >
@@ -1177,7 +978,7 @@ export default function HomePage() {
                   onChange={(e) => setInputMessage(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
                   placeholder="Ask me about Yoruba learning..."
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-[#4f46e5]"
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-[#111827]"
                 />
                 <button
                   onClick={handleSendMessage}

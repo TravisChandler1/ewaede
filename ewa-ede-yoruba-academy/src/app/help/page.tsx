@@ -109,7 +109,7 @@ export default function HelpCenterPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Navigation */}
-      <nav className="bg-white border-b-2 border-[#4f46e5] shadow-sm">
+      <nav className="bg-white border-b-2 border-[#111827] shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center">
@@ -125,16 +125,16 @@ export default function HelpCenterPage() {
               </Link>
             </div>
             <div className="hidden md:flex items-center space-x-6">
-              <Link href="/" className="text-gray-700 hover:text-[#4f46e5] transition-colors font-medium">Home</Link>
-              <Link href="#faq" className="text-gray-700 hover:text-[#4f46e5] transition-colors font-medium">FAQ</Link>
-              <Link href="/contact" className="text-gray-700 hover:text-[#4f46e5] transition-colors font-medium">Contact</Link>
+              <Link href="/" className="text-gray-700 hover:text-[#111827] transition-colors font-medium">Home</Link>
+              <Link href="#faq" className="text-gray-700 hover:text-[#111827] transition-colors font-medium">FAQ</Link>
+              <Link href="/contact" className="text-gray-700 hover:text-[#111827] transition-colors font-medium">Contact</Link>
             </div>
           </div>
         </div>
       </nav>
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-[#4f46e5] to-[#7c3aed] text-white py-16">
+      <section className="bg-gradient-to-br from-[#111827] to-[#7c3aed] text-white py-16">
         <div className="max-w-7xl mx-auto px-6 text-center">
           <div className="flex justify-center mb-6">
             <MessageCircle size={64} className="text-white" />
@@ -174,9 +174,9 @@ export default function HelpCenterPage() {
                 className="bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-xl p-6 transition-all duration-300 hover:transform hover:-translate-y-1 hover:shadow-lg group"
               >
                 <div className="flex items-center mb-4">
-                  <link.icon size={32} className="text-[#4f46e5] group-hover:text-[#e69d2a] transition-colors" />
+                  <link.icon size={32} className="text-[#111827] group-hover:text-[#e69d2a] transition-colors" />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 group-hover:text-[#4f46e5] transition-colors">
+                <h3 className="text-lg font-semibold text-gray-900 group-hover:text-[#111827] transition-colors">
                   {link.title}
                 </h3>
               </Link>
@@ -198,7 +198,7 @@ export default function HelpCenterPage() {
                   className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors"
                 >
                   <div>
-                    <span className="text-sm text-[#4f46e5] font-medium uppercase tracking-wide">
+                    <span className="text-sm text-[#111827] font-medium uppercase tracking-wide">
                       {faq.category}
                     </span>
                     <h3 className="text-lg font-semibold text-gray-900 mt-1">
@@ -244,7 +244,7 @@ export default function HelpCenterPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
             <Link
               href="/contact"
-              className="bg-[#4f46e5] hover:bg-[#3b35c7] text-white px-8 py-4 rounded-lg font-semibold transition-colors duration-200 flex items-center justify-center"
+              className="bg-[#111827] hover:bg-[#3b35c7] text-white px-8 py-4 rounded-lg font-semibold transition-colors duration-200 flex items-center justify-center"
             >
               <Mail size={20} className="mr-2" />
               Contact Support
@@ -252,7 +252,7 @@ export default function HelpCenterPage() {
 
             <button
               onClick={() => window.location.href = '/'}
-              className="border-2 border-[#4f46e5] text-[#4f46e5] hover:bg-[#4f46e5] hover:text-white px-8 py-4 rounded-lg font-semibold transition-colors duration-200 flex items-center justify-center"
+              className="border-2 border-[#111827] text-[#111827] hover:bg-[#111827] hover:text-white px-8 py-4 rounded-lg font-semibold transition-colors duration-200 flex items-center justify-center"
             >
               <MessageCircle size={20} className="mr-2" />
               Chat with Bísọ̀lá
@@ -261,14 +261,6 @@ export default function HelpCenterPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-gray-50 border-t border-gray-200 py-12">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center text-gray-600">
-            <p>&copy; 2025 Ẹwà Èdè Yorùbá Academy. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }

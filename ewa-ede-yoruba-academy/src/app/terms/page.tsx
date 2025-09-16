@@ -62,7 +62,7 @@ export default function TermsOfServicePage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Navigation */}
-      <nav className="bg-white border-b-2 border-[#4f46e5] shadow-sm">
+      <nav className="bg-white border-b-2 border-[#111827] shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center">
@@ -78,16 +78,16 @@ export default function TermsOfServicePage() {
               </Link>
             </div>
             <div className="hidden md:flex items-center space-x-6">
-              <Link href="/" className="text-gray-700 hover:text-[#4f46e5] transition-colors font-medium">Home</Link>
-              <Link href="/help" className="text-gray-700 hover:text-[#4f46e5] transition-colors font-medium">Help</Link>
-              <Link href="/contact" className="text-gray-700 hover:text-[#4f46e5] transition-colors font-medium">Contact</Link>
+              <Link href="/" className="text-gray-700 hover:text-[#111827] transition-colors font-medium">Home</Link>
+              <Link href="/help" className="text-gray-700 hover:text-[#111827] transition-colors font-medium">Help</Link>
+              <Link href="/contact" className="text-gray-700 hover:text-[#111827] transition-colors font-medium">Contact</Link>
             </div>
           </div>
         </div>
       </nav>
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-[#4f46e5] to-[#7c3aed] text-white py-16">
+      <section className="bg-gradient-to-br from-[#111827] to-[#7c3aed] text-white py-16">
         <div className="max-w-7xl mx-auto px-6 text-center">
           <div className="flex justify-center mb-6">
             <FileText size={64} className="text-white" />
@@ -132,14 +132,14 @@ export default function TermsOfServicePage() {
             {sections.map((section, index) => (
               <div key={index} className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow duration-300">
                 <div className="flex items-center mb-6">
-                  <section.icon size={32} className="text-[#4f46e5] mr-3" />
+                  <section.icon size={32} className="text-[#111827] mr-3" />
                   <h3 className="text-xl font-semibold">{section.title}</h3>
                 </div>
 
                 <ul className="space-y-3">
                   {section.content.map((item, itemIndex) => (
                     <li key={itemIndex} className="flex items-start">
-                      <div className="w-2 h-2 bg-[#4f46e5] rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                      <div className="w-2 h-2 bg-[#111827] rounded-full mt-2 mr-3 flex-shrink-0"></div>
                       <span className="text-gray-700">{item}</span>
                     </li>
                   ))}
@@ -322,14 +322,6 @@ export default function TermsOfServicePage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-gray-50 border-t border-gray-200 py-12">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center text-gray-600">
-            <p>&copy; 2025 Ẹwà Èdè Yorùbá Academy. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }
