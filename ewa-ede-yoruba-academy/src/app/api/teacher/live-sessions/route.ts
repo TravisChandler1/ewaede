@@ -52,6 +52,15 @@ export async function POST(request: Request) {
     // Find students based on the selected level
     let targetStudents: Array<{ id: string; name: string | null; email: string }>;
 
+    // Map frontend level names to database level names
+    const levelMapping: { [key: string]: string } = {
+      'beginner': 'BEGINNER',
+      'intermediate': 'ADVANCED', // Map intermediate to ADVANCED
+      'advanced': 'PRO', // Map advanced to PRO
+      'novice': 'NOVICE',
+      'individual': 'INDIVIDUAL'
+    };
+
     if (level.toLowerCase() === 'all') {
       // Get all students
       targetStudents = await prisma.user.findMany({
@@ -64,11 +73,15 @@ export async function POST(request: Request) {
           email: true,
         },
       });
+      console.log(`Found ${targetStudents.length} students for "all" level notification`);
     } else {
       // Get students with the specific level
+      const dbLevel = levelMapping[level.toLowerCase()] || level.toUpperCase();
+      console.log(`Looking for students with level: ${level} (mapped to: ${dbLevel})`);
+
       targetStudents = await prisma.studentProfile.findMany({
         where: {
-          level: level.toUpperCase(),
+          level: dbLevel as any,
         },
         include: {
           user: {
@@ -80,6 +93,8 @@ export async function POST(request: Request) {
           },
         },
       }).then(profiles => profiles.map(profile => profile.user));
+
+      console.log(`Found ${targetStudents.length} students for level ${dbLevel}`);
     }
 
     // Create notifications for target students

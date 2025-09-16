@@ -12,8 +12,11 @@ export async function GET() {
     const now = new Date();
     const fiveMinutesFromNow = new Date(now.getTime() + 5 * 60 * 1000);
 
-    // Get all sessions for courses the student is enrolled in
-    const sessions = await prisma.session.findMany({
+    // Get sessions in two parts:
+    // 1. Sessions for courses the student is enrolled in
+    // 2. Live sessions that are not course-specific (created by teachers for general audience)
+
+    const enrolledCourseSessions = await prisma.session.findMany({
       where: {
         course: {
           enrollments: {
@@ -37,6 +40,12 @@ export async function GET() {
             },
           },
         },
+        teacher: {
+          select: {
+            name: true,
+            email: true,
+          },
+        },
         _count: {
           select: {
             attendees: true,
@@ -47,6 +56,34 @@ export async function GET() {
         startTime: 'asc',
       },
     });
+
+    // Get live sessions that are not associated with specific courses
+    // These are general live sessions created by teachers
+    const generalLiveSessions = await prisma.session.findMany({
+      where: {
+        courseId: null, // No associated course
+        status: 'ONGOING', // Only live/ongoing sessions
+      },
+      include: {
+        teacher: {
+          select: {
+            name: true,
+            email: true,
+          },
+        },
+        _count: {
+          select: {
+            attendees: true,
+          },
+        },
+      },
+      orderBy: {
+        startTime: 'asc',
+      },
+    });
+
+    // Combine both types of sessions
+    const sessions = [...enrolledCourseSessions, ...generalLiveSessions];
 
     // Categorize sessions into live and scheduled
     const liveSessions = sessions.filter(session =>
@@ -59,23 +96,38 @@ export async function GET() {
 
     // Format sessions for the frontend
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const formatSession = (session: any) => ({
-      id: session.id,
-      title: session.title,
-      description: session.description || `Session for ${session.course.title}`,
-      courseTitle: session.course.title,
-      instructorName: session.course.instructor?.name || 'Unknown Instructor',
-      instructorEmail: session.course.instructor?.email,
-      startTime: session.startTime.toISOString(),
-      endTime: session.endTime.toISOString(),
-      duration: Math.round((session.endTime.getTime() - session.startTime.getTime()) / (1000 * 60)), // minutes
-      level: session.level || 'General',
-      maxAttendees: session.maxAttendees || 50,
-      currentAttendees: session._count.attendees,
-      meetingUrl: session.meetingUrl,
-      isLive: session.startTime <= fiveMinutesFromNow && session.endTime > now,
-      status: session.status || 'SCHEDULED',
-    });
+    const formatSession = (session: any) => {
+      // Handle sessions with courses vs general live sessions
+      const hasCourse = session.course;
+      const instructorName = hasCourse
+        ? (session.course.instructor?.name || 'Unknown Instructor')
+        : (session.teacher?.name || 'Unknown Instructor');
+      const instructorEmail = hasCourse
+        ? session.course.instructor?.email
+        : session.teacher?.email;
+      const courseTitle = hasCourse
+        ? session.course.title
+        : 'General Live Session';
+
+      return {
+        id: session.id,
+        title: session.title,
+        description: session.description || `Live session by ${instructorName}`,
+        courseTitle,
+        instructorName,
+        instructorEmail,
+        startTime: session.startTime.toISOString(),
+        endTime: session.endTime.toISOString(),
+        duration: Math.round((session.endTime.getTime() - session.startTime.getTime()) / (1000 * 60)), // minutes
+        level: session.level || 'General',
+        maxAttendees: session.maxAttendees || 50,
+        currentAttendees: session._count.attendees,
+        meetingUrl: session.meetingUrl,
+        isLive: session.startTime <= fiveMinutesFromNow && session.endTime > now,
+        status: session.status || 'SCHEDULED',
+        isGeneralSession: !hasCourse, // Flag to identify general sessions
+      };
+    };
 
     const formattedLiveSessions = liveSessions.map(formatSession);
     const formattedScheduledSessions = scheduledSessions.map(formatSession);

@@ -1067,11 +1067,15 @@ export default function TeacherDashboard() {
       {/* Sign Out Confirmation Modal */}
       {showSignOutConfirm && (
         <div className="fixed inset-0 z-50 overflow-y-auto">
+          {console.log('Sign out modal rendering')}
           <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
             {/* Backdrop with blur effect */}
             <div
-              className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
-              onClick={() => setShowSignOutConfirm(false)}
+              className="fixed inset-0 bg-black/60 transition-opacity"
+              onClick={() => {
+                console.log('Backdrop clicked, closing modal');
+                setShowSignOutConfirm(false);
+              }}
             ></div>
 
             <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-[#1a1a1a] border border-[#2a2a2a] shadow-xl rounded-lg">
@@ -1096,7 +1100,10 @@ export default function TeacherDashboard() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => signOut({ callbackUrl: '/auth/signin' })}
+                  onClick={() => {
+                    console.log('Sign out clicked, calling signOut');
+                    signOut({ callbackUrl: '/auth/signin' });
+                  }}
                   className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#f59e0b] hover:bg-[#d97706] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#f59e0b] transition-colors"
                 >
                   <LogOut className="h-4 w-4 mr-2" />

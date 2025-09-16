@@ -520,8 +520,6 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Student Counter */}
-          <StudentCounter />
         </div>
       </section>
 
@@ -560,6 +558,9 @@ export default function HomePage() {
               ))}
             </div>
           </div>
+
+          {/* Student Counter */}
+          <StudentCounter />
         </div>
       </section>
 
