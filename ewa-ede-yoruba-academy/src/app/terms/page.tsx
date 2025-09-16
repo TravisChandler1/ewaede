@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { FileText, Users, CreditCard, Shield, AlertTriangle, Scale, Calendar } from "lucide-react";
+import { FileText, Users, CreditCard, Shield, AlertTriangle, Calendar } from "lucide-react";
 
 export default function TermsOfServicePage() {
   const sections = [

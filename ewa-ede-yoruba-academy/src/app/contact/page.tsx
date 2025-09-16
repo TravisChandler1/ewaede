@@ -45,7 +45,7 @@ export default function ContactPage() {
         category: 'general',
         message: ''
       });
-    } catch (error) {
+    } catch {
       setSubmitMessage({
         type: 'error',
         text: 'Failed to send message. Please try again or contact us directly.'

@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Shield, Eye, Lock, Database, Users, Mail, FileText, Calendar } from "lucide-react";
+import { Shield, Eye, Lock, Database, Users, Calendar } from "lucide-react";
 
 export default function PrivacyPolicyPage() {
   const sections = [

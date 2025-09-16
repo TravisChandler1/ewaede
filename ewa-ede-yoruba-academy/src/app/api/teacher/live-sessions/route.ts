@@ -81,7 +81,7 @@ export async function POST(request: Request) {
 
       targetStudents = await prisma.studentProfile.findMany({
         where: {
-          level: dbLevel as any,
+          level: dbLevel,
         },
         include: {
           user: {

@@ -1067,7 +1067,6 @@ export default function TeacherDashboard() {
       {/* Sign Out Confirmation Modal */}
       {showSignOutConfirm && (
         <div className="fixed inset-0 z-50 overflow-y-auto">
-          {console.log('Sign out modal rendering')}
           <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
             {/* Backdrop with blur effect */}
             <div

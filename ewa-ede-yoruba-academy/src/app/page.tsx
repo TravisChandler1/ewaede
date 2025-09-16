@@ -15,6 +15,7 @@ function StudentCounter() {
   const counterRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const currentElement = counterRef.current;
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !isVisible) {
@@ -25,13 +26,13 @@ function StudentCounter() {
       { threshold: 0.3 }
     );
 
-    if (counterRef.current) {
-      observer.observe(counterRef.current);
+    if (currentElement) {
+      observer.observe(currentElement);
     }
 
     return () => {
-      if (counterRef.current) {
-        observer.unobserve(counterRef.current);
+      if (currentElement) {
+        observer.unobserve(currentElement);
       }
     };
   }, [isVisible]);
@@ -904,7 +905,6 @@ export default function HomePage() {
                 About Ẹwà Èdè Yorùbá Academy
               </h2>
               <p className="text-base sm:text-lg text-gray-600 mb-4 lg:mb-6 transform transition-all duration-1000 translate-y-0 opacity-100" style={{ animationDelay: '0.5s' }}>
-                {/* eslint-disable-next-line react/no-unescaped-entities */}
                 Founded with a passion for preserving and promoting the Yoruba language and culture, our academy brings together expert teachers and enthusiastic learners from around the world. Whether you're connecting with your heritage or discovering Yoruba for the first time, we provide the structure, community, and resources you need to succeed.
               </p>
               <p className="text-base sm:text-lg text-gray-600 transform transition-all duration-1000 translate-y-0 opacity-100" style={{ animationDelay: '0.7s' }}>
