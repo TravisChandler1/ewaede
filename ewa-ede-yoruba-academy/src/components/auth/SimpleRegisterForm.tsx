@@ -19,11 +19,11 @@ export default function SimpleRegisterForm() {
 
   // Debug log for signup form learning levels
   console.log('Signup form learning levels:', [
-    'NOVICE: Novice',
-    'BEGINNER: Beginner',
-    'ADVANCED: Advanced',
-    'PRO: Pro',
-    'INDIVIDUAL: Individual'
+    'NOVICE: Novice - $220 full course / $15 per class',
+    'BEGINNER: Beginner - $390 full course / $15 per class',
+    'INTERMEDIATE: Intermediate - $300 full course / $15 per class',
+    'ADVANCED: Advanced - $300 full course / $15 per class',
+    'INDIVIDUAL: Individual - $480 full course / $20 per class'
   ]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -200,11 +200,11 @@ export default function SimpleRegisterForm() {
                 onChange={(e) => setFormData(prev => ({ ...prev, level: e.target.value }))}
                 className="w-full px-4 py-3 bg-[#0f0f0f] border border-[#374151] rounded-lg text-white focus:border-[#4f46e5] focus:outline-none transition-colors"
               >
-                <option value="NOVICE">Novice</option>
-                <option value="BEGINNER">Beginner</option>
-                <option value="ADVANCED">Advanced</option>
-                <option value="PRO">Pro</option>
-                <option value="INDIVIDUAL">Individual</option>
+                <option value="NOVICE">Novice - $220 full course / $15 per class</option>
+                <option value="BEGINNER">Beginner - $390 full course / $15 per class</option>
+                <option value="INTERMEDIATE">Intermediate - $300 full course / $15 per class</option>
+                <option value="ADVANCED">Advanced - $300 full course / $15 per class</option>
+                <option value="INDIVIDUAL">Individual - $480 full course / $20 per class</option>
               </select>
             </div>
           )}

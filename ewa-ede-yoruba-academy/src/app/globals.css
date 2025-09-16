@@ -142,6 +142,20 @@ body {
   animation-delay: 0.6s;
 }
 
+/* Floating animation for cards */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
 /* Gradient utilities */
 .bg-gradient-radial {
   background: radial-gradient(circle, var(--tw-gradient-stops));
@@ -203,5 +217,5 @@ body {
 }
 
 .animate-scroll-up {
-  animation: scroll-up 60s linear infinite;
+  animation: scroll-up 30s linear infinite;
 }
