@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { BookOpen, Users, Video, Library, Award, Star, Mail, GraduationCap, Brain, Lightbulb, MessageCircle, X, Send } from "lucide-react";
@@ -7,6 +7,67 @@ import { BookOpen, Users, Video, Library, Award, Star, Mail, GraduationCap, Brai
 interface NewsletterResponse {
   message?: string;
   error?: string;
+}
+
+function StudentCounter() {
+  const [count, setCount] = useState(0);
+  const [isVisible, setIsVisible] = useState(false);
+  const counterRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !isVisible) {
+          setIsVisible(true);
+          animateCounter();
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    if (counterRef.current) {
+      observer.observe(counterRef.current);
+    }
+
+    return () => {
+      if (counterRef.current) {
+        observer.unobserve(counterRef.current);
+      }
+    };
+  }, [isVisible]);
+
+  const animateCounter = () => {
+    const target = 500;
+    const duration = 2000; // 2 seconds
+    const increment = target / (duration / 16); // 60fps
+    let current = 0;
+
+    const timer = setInterval(() => {
+      current += increment;
+      if (current >= target) {
+        setCount(target);
+        clearInterval(timer);
+      } else {
+        setCount(Math.floor(current));
+      }
+    }, 16);
+  };
+
+  return (
+    <div ref={counterRef} className="text-center py-12">
+      <div className="bg-white border border-gray-200 rounded-xl p-8 max-w-md mx-auto shadow-lg">
+        <div className="text-4xl font-bold text-[#e69d2a] mb-2">
+          {count}+
+        </div>
+        <div className="text-lg font-semibold text-gray-800 mb-1">
+          Satisfied Students
+        </div>
+        <div className="text-sm text-gray-600">
+          Join our growing community of Yoruba learners
+        </div>
+      </div>
+    </div>
+  );
 }
 
 function Newsletter() {
@@ -448,7 +509,7 @@ export default function HomePage() {
               <div className="absolute inset-0 backdrop-blur-sm bg-black/20 rounded-xl"></div>
               <div className="relative z-10">
                 <Image
-                  src="/heroside.jpg"
+                  src="/heroside.png"
                   alt="Yoruba Learning Experience"
                   width={400}
                   height={300}
@@ -458,6 +519,9 @@ export default function HomePage() {
               </div>
             </div>
           </div>
+
+          {/* Student Counter */}
+          <StudentCounter />
         </div>
       </section>
 
@@ -786,13 +850,13 @@ export default function HomePage() {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-gray-50 border-4 border-[#e69d2a] rounded-3xl mx-4 md:mx-8 lg:mx-16">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-3xl lg:text-4xl font-bold mb-4">
               What Our <span className="text-[#e69d2a]">Students</span> Say
             </h2>
-            <p className="text-xl text-white max-w-2xl mx-auto">
+            <p className="text-xl text-black max-w-2xl mx-auto">
               Hear from learners who have transformed their understanding of Yoruba language and culture.
             </p>
           </div>
