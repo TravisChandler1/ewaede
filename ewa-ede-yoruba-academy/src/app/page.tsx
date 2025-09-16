@@ -1,7 +1,8 @@
 "use client";
 import { useState } from "react";
+import Link from "next/link";
 import Image from "next/image";
-import { BookOpen, Users, Video, Library, Award, Star, Mail, GraduationCap, PenTool, Brain, Lightbulb, MessageCircle, X, Send } from "lucide-react";
+import { BookOpen, Users, Video, Library, Award, Star, Mail, GraduationCap, Brain, Lightbulb, MessageCircle, X, Send } from "lucide-react";
 
 interface NewsletterResponse {
   message?: string;
@@ -322,7 +323,7 @@ export default function HomePage() {
               />
             </div>
             <div className="hidden md:flex items-center justify-center flex-1 space-x-6 lg:space-x-8">
-              <a href="/" className="text-gray-700 hover:text-[#4f46e5] transition-colors font-medium text-sm lg:text-base">Home</a>
+              <Link href="/" className="text-gray-700 hover:text-[#4f46e5] transition-colors font-medium text-sm lg:text-base">Home</Link>
               <a href="#features" className="text-gray-700 hover:text-[#4f46e5] transition-colors font-medium text-sm lg:text-base">Features</a>
               <a href="#pricing" className="text-gray-700 hover:text-[#4f46e5] transition-colors font-medium text-sm lg:text-base">Pricing</a>
               <a href="#about" className="text-gray-700 hover:text-[#4f46e5] transition-colors font-medium text-sm lg:text-base">About</a>
@@ -376,7 +377,8 @@ export default function HomePage() {
 
             {/* Right Column - Image (1/3 width) */}
             <div className="md:col-span-1 flex justify-center md:justify-end relative">
-              <div className="relative blur-sm">
+              <div className="absolute inset-0 backdrop-blur-sm bg-black/20 rounded-xl"></div>
+              <div className="relative z-10">
                 <Image
                   src="/heroside.jpg"
                   alt="Yoruba Learning Experience"
@@ -482,9 +484,11 @@ export default function HomePage() {
           <div className="flex items-center justify-center">
             <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
             <div className="mx-8">
-              <img
+              <Image
                 src="/logo.png"
                 alt="Ẹwà Èdè Yorùbá Academy Logo"
+                width={64}
+                height={64}
                 className="h-16 w-auto animate-pulse"
               />
             </div>
