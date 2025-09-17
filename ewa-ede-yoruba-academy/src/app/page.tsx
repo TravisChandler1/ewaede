@@ -654,11 +654,7 @@ export default function HomePage() {
                   </ul>
 
                   <div className="mt-auto">
-                    <a href="/contact" className="block w-full">
-                      <button className="w-full bg-[#111827] hover:bg-[#3b35c7] text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200 text-sm">
-                        Contact Us
-                      </button>
-                    </a>
+                    {/* Contact button removed for Novice level */}
                   </div>
                 </div>
               ))}
@@ -721,9 +717,30 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Animated Divider */}
+      <div className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <div className="flex items-center justify-center">
+            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
+            <div className="mx-8">
+              <Lightbulb size={48} className="text-[#e69d2a] animate-pulse" />
+            </div>
+            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
+          </div>
+        </div>
+      </div>
+
       {/* About Section */}
-      <section id="about" className="py-20 bg-gray-50">
+      <section id="about" className="py-20 bg-gradient-to-b from-gray-100 to-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-800 mb-6">
+              About Yorùbá Academy
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Preserving and promoting the beauty of Yoruba heritage through education and cultural immersion
+            </p>
+          </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             <div className="order-2 lg:order-1 animate-fade-in-up">
               <Image
@@ -735,9 +752,6 @@ export default function HomePage() {
               />
             </div>
             <div className="order-1 lg:order-2 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-6 lg:mb-8 transform transition-all duration-1000 translate-y-0 opacity-100">
-                About Yorùbá Academy
-              </h2>
               <p className="text-base sm:text-lg text-gray-600 mb-4 lg:mb-6 transform transition-all duration-1000 translate-y-0 opacity-100" style={{ animationDelay: '0.5s' }}>
                 Founded with a passion for preserving and promoting the Yoruba language and culture, our academy brings together expert teachers and enthusiastic learners from around the world. Whether you're connecting with your heritage or discovering Yoruba for the first time, we provide the structure, community, and resources you need to succeed.
               </p>
@@ -764,7 +778,7 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             {/* Blog Post 1 */}
             <article className="bg-gray-50 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
               <div className="h-48 bg-gradient-to-br from-[#111827] to-[#7c3aed] flex items-center justify-center">
@@ -772,13 +786,15 @@ export default function HomePage() {
               </div>
               <div className="p-6">
                 <div className="text-sm text-[#e69d2a] font-medium mb-2">Yoruba Language</div>
-                <h3 className="text-xl font-bold mb-3">The Beauty of Yoruba Proverbs</h3>
+                <h3 className="text-xl font-bold mb-3">The Power of Yoruba Proverbs in Modern Life</h3>
                 <p className="text-gray-600 mb-4">
-                  Explore the wisdom and cultural significance of Yoruba proverbs, which serve as moral guides and reflections of traditional values.
+                  Yoruba proverbs, known as "Òwe Yorùbá," are timeless wisdom capsules that have guided generations. These concise sayings encapsulate deep cultural insights and moral teachings that remain relevant in today's world.
                 </p>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-500">March 15, 2024</span>
-                  <span className="text-[#111827] font-medium text-sm hover:text-[#3b35c7] cursor-pointer">Read More →</span>
+                  <Link href="/blog/yoruba-proverbs-modern-life" className="text-[#111827] font-medium text-sm hover:text-[#3b35c7] transition-colors">
+                    Read More →
+                  </Link>
                 </div>
               </div>
             </article>
@@ -789,95 +805,19 @@ export default function HomePage() {
                 <Users size={48} className="text-white" />
               </div>
               <div className="p-6">
-                <div className="text-sm text-[#111827] font-medium mb-2">Cultural Insights</div>
-                <h3 className="text-xl font-bold mb-3">Celebrating Yoruba Festivals</h3>
+                <div className="text-sm text-[#111827] font-medium mb-2">Cultural Heritage</div>
+                <h3 className="text-xl font-bold mb-3">Durbar Festival: Celebrating Yoruba Equestrian Tradition</h3>
                 <p className="text-gray-600 mb-4">
-                  Learn about the rich traditions and celebrations that define Yoruba culture, from Egungun to Durbar festivals.
+                  The Durbar Festival represents the pinnacle of Yoruba cultural celebration, showcasing the region's rich equestrian heritage and the enduring legacy of traditional horsemanship in Nigerian culture.
                 </p>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-500">March 10, 2024</span>
-                  <span className="text-[#111827] font-medium text-sm hover:text-[#3b35c7] cursor-pointer">Read More →</span>
+                  <Link href="/blog/durbar-festival-yoruba-tradition" className="text-[#111827] font-medium text-sm hover:text-[#3b35c7] transition-colors">
+                    Read More →
+                  </Link>
                 </div>
               </div>
             </article>
-
-            {/* Blog Post 3 */}
-            <article className="bg-gray-50 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
-              <div className="h-48 bg-gradient-to-br from-[#10b981] to-[#059669] flex items-center justify-center">
-                <GraduationCap size={48} className="text-white" />
-              </div>
-              <div className="p-6">
-                <div className="text-sm text-[#e69d2a] font-medium mb-2">Learning Tips</div>
-                <h3 className="text-xl font-bold mb-3">Effective Ways to Learn Yoruba</h3>
-                <p className="text-gray-600 mb-4">
-                  Discover proven strategies and techniques that our successful students use to master the Yoruba language quickly.
-                </p>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-500">March 5, 2024</span>
-                  <span className="text-[#111827] font-medium text-sm hover:text-[#3b35c7] cursor-pointer">Read More →</span>
-                </div>
-              </div>
-            </article>
-
-            {/* Blog Post 4 */}
-            <article className="bg-gray-50 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
-              <div className="h-48 bg-gradient-to-br from-[#f59e0b] to-[#d97706] flex items-center justify-center">
-                <MessageCircle size={48} className="text-white" />
-              </div>
-              <div className="p-6">
-                <div className="text-sm text-[#111827] font-medium mb-2">Student Stories</div>
-                <h3 className="text-xl font-bold mb-3">From Beginner to Fluent</h3>
-                <p className="text-gray-600 mb-4">
-                  Read inspiring stories from our students who have successfully mastered Yoruba and integrated it into their daily lives.
-                </p>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-500">February 28, 2024</span>
-                  <span className="text-[#111827] font-medium text-sm hover:text-[#3b35c7] cursor-pointer">Read More →</span>
-                </div>
-              </div>
-            </article>
-
-            {/* Blog Post 5 */}
-            <article className="bg-gray-50 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
-              <div className="h-48 bg-gradient-to-br from-[#8b5cf6] to-[#7c3aed] flex items-center justify-center">
-                <Lightbulb size={48} className="text-white" />
-              </div>
-              <div className="p-6">
-                <div className="text-sm text-[#e69d2a] font-medium mb-2">Cultural Heritage</div>
-                <h3 className="text-xl font-bold mb-3">Preserving Yoruba Traditions</h3>
-                <p className="text-gray-600 mb-4">
-                  Understanding the importance of cultural preservation and how learning Yoruba contributes to maintaining rich traditions.
-                </p>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-500">February 20, 2024</span>
-                  <span className="text-[#111827] font-medium text-sm hover:text-[#3b35c7] cursor-pointer">Read More →</span>
-                </div>
-              </div>
-            </article>
-
-            {/* Blog Post 6 */}
-            <article className="bg-gray-50 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
-              <div className="h-48 bg-gradient-to-br from-[#ef4444] to-[#dc2626] flex items-center justify-center">
-                <Star size={48} className="text-white" />
-              </div>
-              <div className="p-6">
-                <div className="text-sm text-[#111827] font-medium mb-2">Teacher Spotlight</div>
-                <h3 className="text-xl font-bold mb-3">Meet Our Expert Instructors</h3>
-                <p className="text-gray-600 mb-4">
-                  Get to know the passionate educators who make learning Yoruba an enjoyable and enriching experience for our students.
-                </p>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-500">February 15, 2024</span>
-                  <span className="text-[#111827] font-medium text-sm hover:text-[#3b35c7] cursor-pointer">Read More →</span>
-                </div>
-              </div>
-            </article>
-          </div>
-
-          <div className="text-center mt-12">
-            <button className="bg-[#111827] hover:bg-[#3b35c7] text-white font-semibold py-3 px-8 rounded-lg transition-colors duration-200">
-              View All Blog Posts
-            </button>
           </div>
         </div>
       </section>
