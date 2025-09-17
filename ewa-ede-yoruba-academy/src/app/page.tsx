@@ -246,27 +246,65 @@ export default function HomePage() {
     // If we don't have the user's name yet, treat this as their name
     if (!userName) {
       setUserName(userInput.trim());
-      return `Ẹ kaabo ${userInput.trim()}! 🎉 I'm Bísọ̀lá, your Yoruba learning assistant. How can I help you today?`;
+      return `Ẹ kaabo ${userInput.trim()}! 🎉 I'm Bísọ̀lá, your Ẹwà Èdè Virtual Assistant. How can I help you today?`;
     }
 
-    // FAQ responses
-    if (input.includes('course') || input.includes('pricing') || input.includes('price')) {
+    // Greeting responses
+    if (input.includes('hello') || input.includes('hi') || input.includes('hey') || input.includes('ẹ kaabo')) {
+      return `Ẹ kaabo ${userName}! 👋 How are you doing today? I'm here to help you with anything related to Ẹwà Èdè Yorùbá Academy!`;
+    }
+
+    // Course and pricing responses
+    if (input.includes('course') || input.includes('pricing') || input.includes('price') || input.includes('level')) {
       return `Great question, ${userName}! We offer 5 learning levels: Novice ($220 full/$15 per class), Beginner ($390 full/$15 per class), Intermediate ($300 full/$15 per class), Advanced ($300 full/$15 per class), and Individual ($480 full/$20 per class). Each level includes personalized learning plans and native teacher sessions!`;
     }
 
-    if (input.includes('price') || input.includes('cost') || input.includes('fee')) {
-      return "Our courses range from $15 per class to $480 for full individual packages. We also offer flexible payment options. Would you like me to explain the pricing for a specific level?";
+    if (input.includes('cost') || input.includes('fee') || input.includes('payment') || input.includes('pay')) {
+      return "Our courses range from $15 per class to $480 for full individual packages. We also offer flexible payment options and a 30-day money-back guarantee. Would you like me to explain the pricing for a specific level?";
     }
 
-    if (input.includes('teacher') || input.includes('instructor')) {
+    // Teacher and instruction responses
+    if (input.includes('teacher') || input.includes('instructor') || input.includes('tutor')) {
       return `Our expert teachers are native Yoruba speakers with years of teaching experience, ${userName}! They provide personalized instruction, cultural insights, and real-time feedback to help you master Yoruba effectively.`;
     }
 
-    if (input.includes('schedule') || input.includes('time') || input.includes('when')) {
+    // Schedule and timing responses
+    if (input.includes('schedule') || input.includes('time') || input.includes('when') || input.includes('session')) {
       return "Classes are typically held once weekly and last about 1-2 hours. We offer flexible scheduling to accommodate different time zones. Individual sessions can be arranged at your convenience.";
     }
 
-    return "That's interesting! I'm here to help with any questions about Yoruba learning, our courses, teachers, or the academy. What specific information are you looking for?";
+    // Registration and enrollment responses
+    if (input.includes('register') || input.includes('enroll') || input.includes('join') || input.includes('start')) {
+      return `Ready to start your Yoruba journey, ${userName}? You can register by visiting our courses page or contacting us directly. We offer both group and individual learning options!`;
+    }
+
+    // Cultural and language responses
+    if (input.includes('culture') || input.includes('tradition') || input.includes('yoruba') || input.includes('language')) {
+      return `Yoruba is a beautiful language with rich cultural traditions, ${userName}! At Ẹwà Èdè, we teach not just the language, but also the cultural context, proverbs, and traditions that make Yoruba so special.`;
+    }
+
+    // Contact and support responses
+    if (input.includes('contact') || input.includes('help') || input.includes('support') || input.includes('question')) {
+      return `I'm here to help, ${userName}! You can reach our support team through the contact page, email us at support@yorubaacademy.com, or use the contact form on our website.`;
+    }
+
+    // Location and accessibility responses
+    if (input.includes('location') || input.includes('online') || input.includes('remote') || input.includes('access')) {
+      return `Great news, ${userName}! All our courses are fully online, so you can learn from anywhere in the world. We use interactive platforms that work on computers, tablets, and mobile devices.`;
+    }
+
+    // Certificate and completion responses
+    if (input.includes('certificate') || input.includes('certification') || input.includes('complete') || input.includes('finish')) {
+      return `Yes, ${userName}! Upon completion of any level, you'll receive a certificate of achievement from Ẹwà Èdè Yorùbá Academy. Our certificates are recognized and demonstrate your Yoruba proficiency.`;
+    }
+
+    // Refund and guarantee responses
+    if (input.includes('refund') || input.includes('guarantee') || input.includes('money back')) {
+      return `We offer a 30-day money-back guarantee, ${userName}! If you're not satisfied with your learning experience within the first 30 days, you may request a full refund.`;
+    }
+
+    // Default response
+    return `That's interesting, ${userName}! I'm here to help with any questions about Yoruba learning, our courses, teachers, cultural insights, or the academy. What specific information are you looking for?`;
   };
 
   const features = [
@@ -393,7 +431,7 @@ export default function HomePage() {
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-3 w-3 bg-white"></span>
                 </span>
-                Welcome to Yorùbá Academy
+                Welcome to Ẹwà Èdè Yorùbá Academy
               </div>
               <h1 className="text-4xl lg:text-6xl font-bold mb-6 leading-tight text-white">
                 Learn the Beautiful <span className="text-[#e69d2a]">Yorùbá</span> Language
@@ -937,7 +975,7 @@ export default function HomePage() {
                 </div>
                 <div>
                   <h3 className="font-semibold">Bísọ̀lá</h3>
-                  <p className="text-xs opacity-90">Yoruba Learning Assistant</p>
+                  <p className="text-xs opacity-90">Ẹwà Èdè Virtual Assistant</p>
                 </div>
               </div>
               <button
@@ -977,7 +1015,7 @@ export default function HomePage() {
                   value={inputMessage}
                   onChange={(e) => setInputMessage(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                  placeholder="Ask me about Yoruba learning..."
+                  placeholder=""
                   className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-[#111827]"
                 />
                 <button

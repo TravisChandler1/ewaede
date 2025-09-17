@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Mail, Phone, MapPin, Send, MessageCircle, Users, BookOpen } from "lucide-react";
+import { MessageSquare } from "lucide-react";
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -66,9 +67,9 @@ export default function ContactPage() {
     {
       icon: Phone,
       title: "Phone Support",
-      details: "+1 (555) 123-YORUBA",
+      details: "+2348138534899",
       description: "Speak directly with our support team for urgent matters",
-      response: "Mon-Fri, 9 AM - 6 PM EST"
+      response: "Mon-Fri, 9 AM - 6 PM WAT"
     },
     {
       icon: MessageCircle,
@@ -76,6 +77,14 @@ export default function ContactPage() {
       details: "Available on website",
       description: "Chat with Bísọ̀lá, our AI assistant, or connect with human support",
       response: "24/7 availability"
+    },
+    {
+      icon: MessageSquare,
+      title: "WhatsApp Support",
+      details: "wa.me/2348120997786",
+      description: "Quick responses and direct communication through WhatsApp",
+      response: "Mon-Fri, 9 AM - 6 PM WAT",
+      whatsappLink: "https://wa.me/2348120997786?text=Hello%2C%20I%E2%80%99d%20like%20to%20learn%20more%20about%20your%20Yoruba%20classes"
     },
     {
       icon: MapPin,
@@ -143,14 +152,25 @@ export default function ContactPage() {
         <div className="max-w-7xl mx-auto px-6">
           <h2 className="text-3xl font-bold text-center mb-12">Get in Touch</h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
             {contactInfo.map((info, index) => (
-              <div key={index} className="bg-gray-50 border border-gray-200 rounded-xl p-6 text-center hover:shadow-lg transition-shadow duration-300">
+              <div key={index} className={`bg-gray-50 border border-gray-200 rounded-xl p-6 text-center hover:shadow-lg transition-shadow duration-300 ${info.whatsappLink ? 'cursor-pointer hover:bg-green-50 hover:border-green-200' : ''}`}>
                 <div className="flex justify-center mb-4">
-                  <info.icon size={32} className="text-[#111827]" />
+                  <info.icon size={32} className={`text-[#111827] ${info.whatsappLink ? 'text-green-600' : ''}`} />
                 </div>
                 <h3 className="text-lg font-semibold mb-2">{info.title}</h3>
-                <p className="text-[#111827] font-medium mb-2">{info.details}</p>
+                {info.whatsappLink ? (
+                  <a
+                    href={info.whatsappLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[#111827] font-medium mb-2 hover:text-green-600 transition-colors block"
+                  >
+                    {info.details}
+                  </a>
+                ) : (
+                  <p className="text-[#111827] font-medium mb-2">{info.details}</p>
+                )}
                 <p className="text-gray-600 text-sm mb-3">{info.description}</p>
                 <p className="text-xs text-gray-500">{info.response}</p>
               </div>

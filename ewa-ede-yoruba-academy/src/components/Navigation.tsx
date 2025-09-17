@@ -3,10 +3,12 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { ChevronDown, ChevronUp } from "lucide-react";
 
 export default function Navigation() {
   const [isServicesDropdownOpen, setIsServicesDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobileServicesOpen, setIsMobileServicesOpen] = useState(false);
 
   return (
     <>
@@ -114,21 +116,21 @@ export default function Navigation() {
           <div className="px-4 py-6 space-y-4">
             <Link
               href="/"
-              className="block text-white hover:text-[#e69d2a] transition-colors font-medium py-2"
+              className="block text-gray-900 hover:text-[#e69d2a] transition-colors font-medium py-2 border-b border-gray-200"
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Home
             </Link>
             <Link
               href="/services/yoruba-language-lessons"
-              className="block text-white hover:text-[#e69d2a] transition-colors font-medium py-2"
+              className="block text-gray-900 hover:text-[#e69d2a] transition-colors font-medium py-2 border-b border-gray-200"
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Pricing
             </Link>
             <Link
               href="#about"
-              className="block text-white hover:text-[#e69d2a] transition-colors font-medium py-2"
+              className="block text-gray-900 hover:text-[#e69d2a] transition-colors font-medium py-2 border-b border-gray-200"
               onClick={() => setIsMobileMenuOpen(false)}
             >
               About
@@ -136,49 +138,63 @@ export default function Navigation() {
 
             {/* Services Section */}
             <div className="py-2">
-              <div className="text-sm font-semibold text-gray-900 mb-2">Services</div>
-              <Link
-                href="/services/yoruba-language-lessons"
-                className="block text-white hover:text-[#e69d2a] transition-colors font-medium py-1 pl-4 text-sm"
-                onClick={() => setIsMobileMenuOpen(false)}
+              <button
+                onClick={() => setIsMobileServicesOpen(!isMobileServicesOpen)}
+                className="flex items-center justify-between w-full text-left text-sm font-semibold text-gray-900 mb-2 hover:text-[#e69d2a] transition-colors"
               >
-                Yoruba Language Lessons
-              </Link>
-              <Link
-                href="/services/localization"
-                className="block text-white hover:text-[#e69d2a] transition-colors font-medium py-1 pl-4 text-sm"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Localization Services
-              </Link>
-              <Link
-                href="/services/data-annotation"
-                className="block text-white hover:text-[#e69d2a] transition-colors font-medium py-1 pl-4 text-sm"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Data Annotation
-              </Link>
-              <Link
-                href="/services/cultural-education"
-                className="block text-white hover:text-[#e69d2a] transition-colors font-medium py-1 pl-4 text-sm"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Cultural Education & Curriculum Development
-              </Link>
-              <Link
-                href="/services/event-planning"
-                className="block text-white hover:text-[#e69d2a] transition-colors font-medium py-1 pl-4 text-sm"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Cultural Themed Event Planning
-              </Link>
-              <Link
-                href="/services/consulting"
-                className="block text-white hover:text-[#e69d2a] transition-colors font-medium py-1 pl-4 text-sm"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Consulting & Training
-              </Link>
+                <span>Services</span>
+                {isMobileServicesOpen ? (
+                  <ChevronUp size={16} className="text-gray-500" />
+                ) : (
+                  <ChevronDown size={16} className="text-gray-500" />
+                )}
+              </button>
+              {isMobileServicesOpen && (
+                <div className="ml-4 space-y-1">
+                  <Link
+                    href="/services/yoruba-language-lessons"
+                    className="block text-gray-900 hover:text-[#e69d2a] transition-colors font-medium py-1 pl-4 text-sm border-b border-gray-100"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Yoruba Language Lessons
+                  </Link>
+                  <Link
+                    href="/services/localization"
+                    className="block text-gray-900 hover:text-[#e69d2a] transition-colors font-medium py-1 pl-4 text-sm border-b border-gray-100"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Localization Services
+                  </Link>
+                  <Link
+                    href="/services/data-annotation"
+                    className="block text-gray-900 hover:text-[#e69d2a] transition-colors font-medium py-1 pl-4 text-sm border-b border-gray-100"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Data Annotation
+                  </Link>
+                  <Link
+                    href="/services/cultural-education"
+                    className="block text-gray-900 hover:text-[#e69d2a] transition-colors font-medium py-1 pl-4 text-sm border-b border-gray-100"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Cultural Education & Curriculum Development
+                  </Link>
+                  <Link
+                    href="/services/event-planning"
+                    className="block text-gray-900 hover:text-[#e69d2a] transition-colors font-medium py-1 pl-4 text-sm border-b border-gray-100"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Cultural Themed Event Planning
+                  </Link>
+                  <Link
+                    href="/services/consulting"
+                    className="block text-gray-900 hover:text-[#e69d2a] transition-colors font-medium py-1 pl-4 text-sm border-b border-gray-100"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Consulting & Training
+                  </Link>
+                </div>
+              )}
             </div>
 
             <div className="pt-4 border-t border-gray-200 space-y-3">

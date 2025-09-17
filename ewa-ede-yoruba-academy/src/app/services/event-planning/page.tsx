@@ -95,51 +95,53 @@ export default function EventPlanningPage() {
       </section>
 
       {/* Why Choose Us */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-3xl md:text-4xl font-bold mb-6 text-gray-800">
-                Why Choose Our Event Planning Services?
-              </h2>
-              <div className="space-y-4">
-                <div className="flex items-start">
-                  <div className="w-3 h-3 bg-[#111827] rounded-full mr-3 mt-2 flex-shrink-0"></div>
-                  <div>
-                    <h3 className="font-semibold mb-2">Cultural Authenticity</h3>
-                    <p className="text-gray-600">Deep understanding of Yoruba traditions and customs for authentic celebrations.</p>
+            <div className="bg-gray-100 p-8 rounded-xl">
+              <div className="backdrop-blur-md bg-white/70 border border-white/30 rounded-xl p-6 shadow-lg">
+                <h2 className="text-3xl md:text-4xl font-bold mb-6 text-gray-800">
+                  Why Choose Our Event Planning Services?
+                </h2>
+                <div className="space-y-4">
+                  <div className="flex items-start">
+                    <div className="w-3 h-3 bg-[#111827] rounded-full mr-3 mt-2 flex-shrink-0"></div>
+                    <div>
+                      <h3 className="font-semibold mb-2">Cultural Authenticity</h3>
+                      <p className="text-gray-600">Deep understanding of Yoruba traditions and customs for authentic celebrations.</p>
+                    </div>
                   </div>
-                </div>
-                <div className="flex items-start">
-                  <div className="w-3 h-3 bg-[#111827] rounded-full mr-3 mt-2 flex-shrink-0"></div>
-                  <div>
-                    <h3 className="font-semibold mb-2">Expert Coordination</h3>
-                    <p className="text-gray-600">Professional event management with attention to every cultural detail.</p>
+                  <div className="flex items-start">
+                    <div className="w-3 h-3 bg-[#111827] rounded-full mr-3 mt-2 flex-shrink-0"></div>
+                    <div>
+                      <h3 className="font-semibold mb-2">Expert Coordination</h3>
+                      <p className="text-gray-600">Professional event management with attention to every cultural detail.</p>
+                    </div>
                   </div>
-                </div>
-                <div className="flex items-start">
-                  <div className="w-3 h-3 bg-[#111827] rounded-full mr-3 mt-2 flex-shrink-0"></div>
-                  <div>
-                    <h3 className="font-semibold mb-2">Local Partnerships</h3>
-                    <p className="text-gray-600">Established relationships with artisans, performers, and cultural practitioners.</p>
+                  <div className="flex items-start">
+                    <div className="w-3 h-3 bg-[#111827] rounded-full mr-3 mt-2 flex-shrink-0"></div>
+                    <div>
+                      <h3 className="font-semibold mb-2">Local Partnerships</h3>
+                      <p className="text-gray-600">Established relationships with artisans, performers, and cultural practitioners.</p>
+                    </div>
                   </div>
-                </div>
-                <div className="flex items-start">
-                  <div className="w-3 h-3 bg-[#111827] rounded-full mr-3 mt-2 flex-shrink-0"></div>
-                  <div>
-                    <h3 className="font-semibold mb-2">Full-Service Planning</h3>
-                    <p className="text-gray-600">Complete event planning from concept to execution and follow-up.</p>
+                  <div className="flex items-start">
+                    <div className="w-3 h-3 bg-[#111827] rounded-full mr-3 mt-2 flex-shrink-0"></div>
+                    <div>
+                      <h3 className="font-semibold mb-2">Full-Service Planning</h3>
+                      <p className="text-gray-600">Complete event planning from concept to execution and follow-up.</p>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div className="relative">
+            <div className="bg-gray-100 p-8 rounded-xl relative">
               <Image
-                src="/event-planning.png"
+                src="/heroside.png"
                 alt="Cultural Event Planning Services"
                 width={500}
                 height={400}
-                className="rounded-lg shadow-lg"
+                className="rounded-lg shadow-lg w-full"
               />
             </div>
           </div>
@@ -167,13 +169,13 @@ export default function EventPlanningPage() {
               <h3 className="text-lg font-semibold mb-2 text-gray-800">WhatsApp</h3>
               <p className="text-gray-600 mb-4">Chat with our event planners</p>
               <a
-                href="https://wa.me/1234567890"
+                href="https://wa.me/2348120997786?text=Hello%2C%20I%E2%80%99d%20like%20to%20learn%20more%20about%20your%20Yoruba%20classes"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors"
               >
                 <MessageCircle className="w-4 h-4 mr-2" />
-                Message on WhatsApp
+                Send a DM
               </a>
             </div>
 
@@ -185,7 +187,7 @@ export default function EventPlanningPage() {
               <h3 className="text-lg font-semibold mb-2 text-gray-800">Phone Call</h3>
               <p className="text-gray-600 mb-4">Speak directly with our team</p>
               <a
-                href="tel:+1234567890"
+                href="tel:+2348138534899"
                 className="inline-flex items-center bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors"
               >
                 <Phone className="w-4 h-4 mr-2" />

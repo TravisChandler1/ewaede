@@ -134,8 +134,9 @@ export default function HelpCenterPage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-[#111827] to-[#7c3aed] text-white py-16">
-        <div className="max-w-7xl mx-auto px-6 text-center">
+      <section className="bg-cover bg-center text-white py-16 relative" style={{ backgroundImage: "url('/help.jpg')" }}>
+        <div className="absolute inset-0 bg-black/50"></div>
+        <div className="max-w-7xl mx-auto px-6 text-center relative z-10">
           <div className="flex justify-center mb-6">
             <MessageCircle size={64} className="text-white" />
           </div>

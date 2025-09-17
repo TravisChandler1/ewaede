@@ -325,13 +325,13 @@ export default function YorubaLanguageLessonsPage() {
               <h3 className="text-lg font-semibold mb-2 text-gray-800">WhatsApp</h3>
               <p className="text-gray-600 mb-4">Chat with Ìfẹ́olúwa directly for instant responses</p>
               <a
-                href="https://wa.me/1234567890"
+                href="https://wa.me/2348120997786?text=Hello%2C%20I%E2%80%99d%20like%20to%20learn%20more%20about%20your%20Yoruba%20classes"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors"
               >
                 <MessageCircle className="w-4 h-4 mr-2" />
-                Message on WhatsApp
+                Send a DM
               </a>
             </div>
 
@@ -343,7 +343,7 @@ export default function YorubaLanguageLessonsPage() {
               <h3 className="text-lg font-semibold mb-2 text-gray-800">Phone Call</h3>
               <p className="text-gray-600 mb-4">Speak directly with our enrollment coordinator</p>
               <a
-                href="tel:+1234567890"
+                href="tel:+2348138534899"
                 className="inline-flex items-center bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors"
               >
                 <Phone className="w-4 h-4 mr-2" />
