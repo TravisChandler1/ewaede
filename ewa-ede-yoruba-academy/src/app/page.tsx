@@ -210,8 +210,9 @@ export default function HomePage() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isServicesDropdownOpen, setIsServicesDropdownOpen] = useState(false);
   const [userName, setUserName] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
   const [messages, setMessages] = useState([
-    { id: 1, text: "Ẹ kaabo! I'm Bísọ̀lá, your Yoruba learning assistant. What's your name?", sender: 'bot', timestamp: new Date() }
+    { id: 1, text: "Ẹ kaabo! I'm admin@ewaedeyoruba.com, your Yoruba learning assistant. What's your name?", sender: 'bot', timestamp: new Date() }
   ]);
   const [inputMessage, setInputMessage] = useState('');
 
@@ -227,17 +228,19 @@ export default function HomePage() {
 
     setMessages(prev => [...prev, userMessage]);
     setInputMessage('');
+    setIsTyping(true);
 
-    // Simulate bot response
+    // Simulate bot response with typing effect
     setTimeout(() => {
       const botResponse = getBotResponse(inputMessage);
+      setIsTyping(false);
       setMessages(prev => [...prev, {
         id: prev.length + 1,
         text: botResponse,
         sender: 'bot',
         timestamp: new Date()
       }]);
-    }, 1000);
+    }, 2000); // Increased delay for typing effect
   };
 
   const getBotResponse = (userInput: string) => {
@@ -246,7 +249,7 @@ export default function HomePage() {
     // If we don't have the user's name yet, treat this as their name
     if (!userName) {
       setUserName(userInput.trim());
-      return `Ẹ kaabo ${userInput.trim()}! 🎉 I'm Bísọ̀lá, your Ẹwà Èdè Virtual Assistant. How can I help you today?`;
+      return `Ẹ kaabo ${userInput.trim()}! 🎉 I'm admin@ewaedeyoruba.com, your Ẹwà Èdè Virtual Assistant. How can I help you today?`;
     }
 
     // Greeting responses
@@ -285,7 +288,7 @@ export default function HomePage() {
 
     // Contact and support responses
     if (input.includes('contact') || input.includes('help') || input.includes('support') || input.includes('question')) {
-      return `I'm here to help, ${userName}! You can reach our support team through the contact page, email us at support@yorubaacademy.com, or use the contact form on our website.`;
+      return `I'm here to help, ${userName}! You can reach our support team through the contact page, email us at admin@ewaedeyoruba.com, or use the contact form on our website.`;
     }
 
     // Location and accessibility responses
@@ -770,7 +773,13 @@ export default function HomePage() {
             {/* Blog Post 1 */}
             <article className="bg-gray-50 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
               <div className="h-48 bg-gradient-to-br from-[#111827] to-[#7c3aed] flex items-center justify-center">
-                <BookOpen size={48} className="text-white" />
+                <Image
+                  src="/blog-1.png"
+                  alt="Yoruba Proverbs"
+                  width={400}
+                  height={192}
+                  className="w-full h-full object-cover"
+                />
               </div>
               <div className="p-6">
                 <div className="text-sm text-[#e69d2a] font-medium mb-2">Yoruba Language</div>
@@ -824,10 +833,10 @@ export default function HomePage() {
             <div className="bg-[#000080] text-white p-4 rounded-t-lg flex items-center justify-between">
               <div className="flex items-center">
                 <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center mr-3">
-                  <span className="text-[#111827] font-bold text-sm">Bí</span>
+                  <span className="text-[#111827] font-bold text-xs">@</span>
                 </div>
                 <div>
-                  <h3 className="font-semibold">Bísọ̀lá</h3>
+                  <h3 className="font-semibold text-sm">admin@ewaedeyoruba.com</h3>
                   <p className="text-xs opacity-90">Ẹwà Èdè Virtual Assistant</p>
                 </div>
               </div>
@@ -858,6 +867,22 @@ export default function HomePage() {
                   </div>
                 </div>
               ))}
+
+              {/* Typing Indicator */}
+              {isTyping && (
+                <div className="flex justify-start">
+                  <div className="bg-gray-100 text-gray-800 px-3 py-2 rounded-lg text-sm">
+                    <div className="flex items-center space-x-1">
+                      <div className="flex space-x-1">
+                        <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce"></div>
+                        <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                        <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                      </div>
+                      <span className="text-xs text-gray-500 ml-2">admin@ewaedeyoruba.com is typing...</span>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Input */}

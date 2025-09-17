@@ -51,7 +51,7 @@ export default function OjudeOba2025BlogPost() {
         {/* Featured Image */}
         <div className="mb-12">
           <Image
-            src="/blog-2.jpg"
+            src="/blog-1.png"
             alt="Ojude Oba Festival"
             width={800}
             height={400}
