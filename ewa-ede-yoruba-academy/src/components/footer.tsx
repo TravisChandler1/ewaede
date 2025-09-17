@@ -27,16 +27,11 @@ export default function Footer() {
             <ul className="space-y-2 text-sm text-gray-300">
               <li><Link href="/courses" className="text-gray-300 hover:text-[#e69d2a] transition-colors">Courses</Link></li>
               <li><Link href="/live-sessions" className="text-gray-300 hover:text-[#e69d2a] transition-colors">Live Sessions</Link></li>
-              <li><Link href="/e-library" className="text-gray-300 hover:text-[#e69d2a] transition-colors">E-Library</Link></li>
-              <li><Link href="/book-club" className="text-gray-300 hover:text-[#e69d2a] transition-colors">Book Club</Link></li>
             </ul>
           </div>
           <div>
             <h3 className="font-semibold mb-4 text-white">Community</h3>
             <ul className="space-y-2 text-sm text-gray-300">
-              <li><Link href="/learning-groups" className="text-gray-300 hover:text-[#e69d2a] transition-colors">Learning Groups</Link></li>
-              <li><Link href="/forums" className="text-gray-300 hover:text-[#e69d2a] transition-colors">Forums</Link></li>
-              <li><Link href="/events" className="text-gray-300 hover:text-[#e69d2a] transition-colors">Events</Link></li>
               <li><Link href="/teachers" className="text-gray-300 hover:text-[#e69d2a] transition-colors">Teachers</Link></li>
             </ul>
           </div>
