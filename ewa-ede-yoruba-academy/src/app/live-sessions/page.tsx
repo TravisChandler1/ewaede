@@ -37,35 +37,45 @@ export default function LiveSessionsPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="bg-cover bg-center text-white py-16 relative" style={{ backgroundImage: "url('/learn.jpg')" }}>
-        <div className="absolute inset-0 bg-black/50"></div>
-        <div className="max-w-7xl mx-auto px-6 text-center relative z-10">
-          <div className="flex justify-center mb-6">
-            <Video size={64} className="text-white" />
-          </div>
-          <h1 className="text-4xl lg:text-5xl font-bold mb-4">
-            Live Sessions
-          </h1>
-          <p className="text-xl text-white/90 max-w-2xl mx-auto mb-8">
-            Join our interactive live sessions with experienced native Yoruba speakers. Learn through real-time conversations, cultural immersion, and personalized instruction.
-          </p>
+      <div className="relative py-16 md:py-24 overflow-hidden">
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{
+            backgroundImage: "url('/aboutus.jpg')",
+          }}
+        ></div>
+        <div className="absolute inset-0 bg-black/60"></div>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="#sessions"
-              className="bg-white text-[#111827] px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
-            >
-              View Session Types
-            </Link>
-            <Link
-              href="/contact"
-              className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-[#111827] transition-colors"
-            >
-              Book a Session
-            </Link>
+        <div className="relative z-10 max-w-7xl mx-auto px-6">
+          {/* Glass Card */}
+          <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl p-8 md:p-12 shadow-2xl max-w-4xl mx-auto text-center">
+            <div className="flex justify-center mb-6">
+              <Video size={64} className="text-white" />
+            </div>
+            <h1 className="text-4xl lg:text-5xl font-bold mb-4 text-white">
+              Live Sessions
+            </h1>
+            <p className="text-xl text-white/90 max-w-2xl mx-auto mb-8">
+              Join our interactive live sessions with experienced native Yoruba speakers. Learn through real-time conversations, cultural immersion, and personalized instruction.
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link
+                href="#sessions"
+                className="bg-white text-[#111827] px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+              >
+                View Session Types
+              </Link>
+              <Link
+                href="/contact"
+                className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-[#111827] transition-colors"
+              >
+                Book a Session
+              </Link>
+            </div>
           </div>
         </div>
-      </section>
+      </div>
 
       {/* Session Types Section */}
       <section id="sessions" className="py-20 bg-gray-50">

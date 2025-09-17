@@ -6,8 +6,16 @@ export default function YorubaProverbsBlogPost() {
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
-      <div className="bg-gradient-to-r from-[#111827] to-[#7c3aed] text-white py-16">
-        <div className="max-w-4xl mx-auto px-6">
+      <div className="relative py-16 md:py-24 overflow-hidden">
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{
+            backgroundImage: "url('/aboutus.jpg')",
+          }}
+        ></div>
+        <div className="absolute inset-0 bg-black/60"></div>
+
+        <div className="relative z-10 max-w-4xl mx-auto px-6">
           <Link
             href="/"
             className="inline-flex items-center text-white/80 hover:text-white mb-8 transition-colors"
@@ -16,11 +24,12 @@ export default function YorubaProverbsBlogPost() {
             Back to Home
           </Link>
 
-          <div className="text-center">
+          {/* Glass Card */}
+          <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl p-8 md:p-12 shadow-2xl max-w-3xl mx-auto text-center">
             <div className="inline-block px-4 py-2 bg-white/10 rounded-full text-sm font-medium mb-6">
               Yoruba Language
             </div>
-            <h1 className="text-4xl lg:text-5xl font-bold mb-6">
+            <h1 className="text-4xl lg:text-5xl font-bold mb-6 text-white">
               The Power of Yoruba Proverbs in Modern Life
             </h1>
             <div className="flex items-center justify-center space-x-6 text-white/80">
