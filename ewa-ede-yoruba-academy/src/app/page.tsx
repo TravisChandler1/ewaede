@@ -766,7 +766,7 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 gap-8 max-w-2xl mx-auto">
             {/* Blog Post 1 */}
             <article className="bg-gray-50 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
               <div className="h-48 bg-gradient-to-br from-[#111827] to-[#7c3aed] flex items-center justify-center">
@@ -781,26 +781,6 @@ export default function HomePage() {
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-500">March 15, 2024</span>
                   <Link href="/blog/yoruba-proverbs-modern-life" className="text-[#111827] font-medium text-sm hover:text-[#3b35c7] transition-colors">
-                    Read More →
-                  </Link>
-                </div>
-              </div>
-            </article>
-
-            {/* Blog Post 2 */}
-            <article className="bg-gray-50 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
-              <div className="h-48 bg-gradient-to-br from-[#e69d2a] to-[#d48a1f] flex items-center justify-center">
-                <Users size={48} className="text-white" />
-              </div>
-              <div className="p-6">
-                <div className="text-sm text-[#111827] font-medium mb-2">Cultural Heritage</div>
-                <h3 className="text-xl font-bold mb-3">Durbar Festival: Celebrating Yoruba Equestrian Tradition</h3>
-                <p className="text-gray-600 mb-4">
-                  The Durbar Festival represents the pinnacle of Yoruba cultural celebration, showcasing the region's rich equestrian heritage and the enduring legacy of traditional horsemanship in Nigerian culture.
-                </p>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-500">March 10, 2024</span>
-                  <Link href="/blog/durbar-festival-yoruba-tradition" className="text-[#111827] font-medium text-sm hover:text-[#3b35c7] transition-colors">
                     Read More →
                   </Link>
                 </div>
