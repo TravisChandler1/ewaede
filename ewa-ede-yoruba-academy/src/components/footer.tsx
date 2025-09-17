@@ -46,12 +46,6 @@ export default function Footer() {
             </ul>
           </div>
           <div>
-            <h3 className="font-semibold mb-4 text-white">Community</h3>
-            <ul className="space-y-2 text-sm text-gray-300">
-              <li><Link href="/teachers" className="text-gray-300 hover:text-[#e69d2a] transition-colors">Teachers</Link></li>
-            </ul>
-          </div>
-          <div>
             <h3 className="font-semibold mb-4 text-white">Support</h3>
             <ul className="space-y-2 text-sm text-gray-300">
               <li><Link href="/help" className="text-gray-300 hover:text-[#e69d2a] transition-colors">Help Center</Link></li>
@@ -96,7 +90,7 @@ export default function Footer() {
                 Thanks for exploring! Check out my GitHub profile for more projects.
               </p>
               <a
-                href="https://github.com/your-github-username"
+                href="https://github.com/TravisChandler1"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors"

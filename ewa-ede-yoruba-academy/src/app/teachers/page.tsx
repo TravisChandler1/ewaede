@@ -9,7 +9,7 @@ export default function TeachersPage() {
       title: "Senior Yoruba Instructor",
       experience: "15 years",
       specialization: "Grammar & Literature",
-      students: 450,
+      students: 120,
       rating: 4.9,
       bio: "Adunni is a native Yoruba speaker with extensive experience teaching Yoruba grammar and literature. She holds a Master's degree in Yoruba Language and has published several academic papers on Yoruba linguistics.",
       achievements: ["Published Author", "Master's Degree", "15+ Years Experience"]
@@ -19,7 +19,7 @@ export default function TeachersPage() {
       title: "Cultural Education Specialist",
       experience: "12 years",
       specialization: "Culture & Traditions",
-      students: 380,
+      students: 110,
       rating: 4.8,
       bio: "Kemi specializes in teaching Yoruba cultural traditions, festivals, and social customs. Her classes combine language learning with cultural immersion, making learning both educational and enjoyable.",
       achievements: ["Cultural Expert", "Festival Organizer", "Community Leader"]
@@ -29,7 +29,7 @@ export default function TeachersPage() {
       title: "Conversation Coach",
       experience: "10 years",
       specialization: "Speaking & Pronunciation",
-      students: 320,
+      students: 95,
       rating: 4.9,
       bio: "Tunde focuses on developing conversational skills and proper pronunciation. His interactive teaching methods help students gain confidence in speaking Yoruba fluently and naturally.",
       achievements: ["Pronunciation Specialist", "Conversation Expert", "Student Favorite"]
@@ -39,7 +39,7 @@ export default function TeachersPage() {
       title: "Beginners Specialist",
       experience: "8 years",
       specialization: "Foundation Courses",
-      students: 290,
+      students: 85,
       rating: 4.8,
       bio: "Funmi has a passion for teaching beginners and making Yoruba language accessible to everyone. Her patient and encouraging approach helps new learners build strong foundations.",
       achievements: ["Beginners Expert", "Patient Teacher", "Motivational Coach"]
@@ -49,7 +49,7 @@ export default function TeachersPage() {
       title: "Advanced Studies Instructor",
       experience: "14 years",
       specialization: "Advanced Grammar & Literature",
-      students: 275,
+      students: 80,
       rating: 4.9,
       bio: "Gbenga teaches advanced Yoruba grammar, literature analysis, and academic writing. His students often go on to pursue higher education in Yoruba studies and related fields.",
       achievements: ["Academic Specialist", "Research Mentor", "Advanced Expert"]
@@ -59,7 +59,7 @@ export default function TeachersPage() {
       title: "Online Learning Coordinator",
       experience: "9 years",
       specialization: "Digital Education",
-      students: 410,
+      students: 105,
       rating: 4.7,
       bio: "Ifeoluwa specializes in online teaching methodologies and digital learning tools. She ensures that all students receive high-quality education regardless of their location.",
       achievements: ["Digital Education Expert", "Online Coordinator", "Tech-Savvy Teacher"]

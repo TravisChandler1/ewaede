@@ -50,9 +50,13 @@ export default function YorubaProverbsBlogPost() {
       <article className="max-w-4xl mx-auto px-6 py-16">
         {/* Featured Image */}
         <div className="mb-12">
-          <div className="h-96 bg-gradient-to-br from-[#111827] to-[#7c3aed] rounded-xl flex items-center justify-center">
-            <BookOpen size={80} className="text-white" />
-          </div>
+          <Image
+            src="/blog-1.png"
+            alt="Yoruba Proverbs"
+            width={800}
+            height={400}
+            className="w-full h-96 object-cover rounded-xl"
+          />
         </div>
 
         {/* Introduction */}
@@ -141,12 +145,12 @@ export default function YorubaProverbsBlogPost() {
         <div className="border-t border-gray-200 pt-12">
           <h3 className="text-2xl font-bold text-gray-800 mb-8">Related Articles</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Link href="/blog/durbar-festival-yoruba-tradition" className="group">
+            <Link href="/blog/ojude-oba-2025" className="group">
               <div className="bg-gray-50 rounded-lg p-6 hover:shadow-md transition-shadow">
                 <h4 className="font-semibold text-gray-800 group-hover:text-[#111827] mb-2">
-                  Durbar Festival: Celebrating Yoruba Equestrian Tradition
+                  Ojude Oba 2025: Celebrating Yoruba Royal Heritage
                 </h4>
-                <p className="text-gray-600 text-sm">Explore the rich equestrian heritage of Yoruba culture...</p>
+                <p className="text-gray-600 text-sm">Experience the grandeur of this annual cultural celebration...</p>
               </div>
             </Link>
             <Link href="/about" className="group">

@@ -105,8 +105,8 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={dancingScript.variable}>
       <head>
-        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
-        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+        <link rel="icon" href="/logo.png" type="image/png" />
+        <link rel="shortcut icon" href="/logo.png" type="image/png" />
         <link rel="apple-touch-icon" href="/logo.png" />
       </head>
       <body className="font-sans antialiased min-h-screen bg-background text-foreground pb-16">
