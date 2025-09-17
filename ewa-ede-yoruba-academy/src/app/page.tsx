@@ -38,7 +38,7 @@ function StudentCounter() {
   }, [isVisible]);
 
   const animateCounter = () => {
-    const target = 500;
+    const target = 100;
     const duration = 2000; // 2 seconds
     const increment = target / (duration / 16); // 60fps
     let current = 0;
@@ -439,18 +439,6 @@ export default function HomePage() {
               <p className="text-xl lg:text-2xl text-white/90 mb-8 max-w-3xl">
                 Immerse yourself in the rich culture and traditions of the Yoruba people through our interactive language programs. From greetings to proverbs, we make learning Yoruba engaging and meaningful.
               </p>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl">
-                {[
-                  { text: 'Personalized Learning' },
-                  { text: 'Native Teachers' },
-                  { text: 'Cultural Immersion' },
-                  { text: 'Flexible Schedule' }
-                ].map((item, i) => (
-                  <div key={i} className="bg-white/10 backdrop-blur-sm border border-[#e69d2a] p-4 rounded-lg hover:transform hover:-translate-y-2 transition-all duration-300 hover:shadow-lg hover:shadow-white/20">
-                    <p className="text-white text-sm">{item.text}</p>
-                  </div>
-                ))}
-              </div>
             </div>
 
             {/* Right Column - Image (1/3 width) */}
