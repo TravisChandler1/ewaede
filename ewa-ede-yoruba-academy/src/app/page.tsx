@@ -664,63 +664,8 @@ export default function HomePage() {
               ))}
             </div>
 
-            {/* Right Column: Beginner */}
+            {/* Right Column: See More Options */}
             <div className="space-y-6">
-              {/* Beginner Card */}
-              {levels.filter(level => level.name === "Beginner").map((level, index) => (
-                <div key={index} className={`relative bg-white border rounded-xl p-6 max-w-md mx-auto min-h-[400px] flex flex-col group hover:transform hover:-translate-y-2 transition-all duration-300 hover:shadow-xl ${level.popular ? 'border-[#e69d2a] ring-1 ring-[#e69d2a]/20' : 'border-gray-200'}`}>
-                  {level.popular && (
-                    <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                      <span className="bg-[#e69d2a] text-black px-3 py-1 text-sm rounded-full">
-                        Most Popular
-                      </span>
-                    </div>
-                  )}
-
-                  {/* Animated Study Icon */}
-                  <div className="flex justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-                    <Lightbulb size={48} className="text-[#e69d2a] group-hover:text-[#111827] animate-pulse transition-colors duration-300" />
-                  </div>
-
-                  <div className="text-center mb-6">
-                    <h3 className="text-xl font-bold mb-3">
-                    {level.name}
-                  </h3>
-                    <div className="mb-3">
-                      <p className="text-sm text-gray-600 leading-relaxed">{level.duration}</p>
-                    </div>
-                    <div className="flex flex-col items-center space-y-1 mb-4">
-                      <div className="flex items-baseline justify-center">
-                        <span className="text-2xl font-bold">{level.fullPrice}</span>
-                        <span className="text-gray-600 ml-1 text-xs">full course</span>
-                      </div>
-                      <div className="flex items-baseline justify-center">
-                        <span className="text-xl font-semibold text-[#a78bfa]">{level.flexiblePrice}</span>
-                        <span className="text-gray-600 ml-1 text-xs">per class</span>
-                      </div>
-                    </div>
-                    <p className="text-sm text-gray-600 mt-2 px-2 leading-relaxed">{level.description}</p>
-                  </div>
-
-                  <ul className="space-y-2 mb-6 flex-grow">
-                    {level.features.map((feature, fIndex) => (
-                      <li key={fIndex} className="flex items-start">
-                        <Star size={14} className="text-[#10b981] mr-2 mt-0.5 flex-shrink-0" />
-                        <span className="text-gray-600 text-xs leading-relaxed">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  <div className="mt-auto">
-                    <a href="/contact" className="block w-full">
-                      <button className="w-full bg-[#111827] hover:bg-[#3b35c7] text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200 text-sm">
-                        Contact Us
-                      </button>
-                    </a>
-                  </div>
-                </div>
-              ))}
-
               {/* See More Button */}
               <div className="bg-white border border-gray-200 rounded-xl p-6 max-w-md mx-auto w-full flex flex-col justify-center items-center min-h-[400px]">
                 <div className="text-center">

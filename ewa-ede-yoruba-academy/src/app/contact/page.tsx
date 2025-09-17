@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Mail, Phone, MapPin, Send, MessageCircle, Users, BookOpen } from "lucide-react";
+import { Mail, Phone, Send, MessageCircle, Users, BookOpen } from "lucide-react";
 import { MessageSquare } from "lucide-react";
 
 export default function ContactPage() {
@@ -60,7 +60,7 @@ export default function ContactPage() {
     {
       icon: Mail,
       title: "Email Support",
-      details: "support@yorubaacademy.com",
+      details: "admin@ewaedeyoruba.com",
       description: "Get help with technical issues, account questions, and general inquiries",
       response: "Within 24 hours"
     },
@@ -85,13 +85,6 @@ export default function ContactPage() {
       description: "Quick responses and direct communication through WhatsApp",
       response: "Mon-Fri, 9 AM - 6 PM WAT",
       whatsappLink: "https://wa.me/2348120997786?text=Hello%2C%20I%E2%80%99d%20like%20to%20learn%20more%20about%20your%20Yoruba%20classes"
-    },
-    {
-      icon: MapPin,
-      title: "Office Address",
-      details: "123 Yoruba Cultural Center, Lagos, Nigeria",
-      description: "Visit our physical location for in-person support",
-      response: "By appointment only"
     }
   ];
 

@@ -1,133 +1,293 @@
-import { Metadata } from 'next';
-import Link from 'next/link';
-import Image from 'next/image';
-import { Users, Clock, ArrowRight } from 'lucide-react';
+import Link from "next/link";
+import Image from "next/image";
+import { BookOpen, Users, Video, Award, Star, MessageCircle, Phone, Mail, ChevronRight } from "lucide-react";
 
-interface Course {
-  id: string;
-  title: string;
-  description: string;
-  thumbnail?: string;
-  duration: number;
-  level: string;
-  price: number;
-  instructor?: {
-    name: string;
-  };
-  teacher?: {
-    name: string;
-  };
-  _count?: {
-    enrollments: number;
-  };
-}
-
-export const metadata: Metadata = {
-  title: 'Browse Courses - Ẹwà Èdè Yorùbá Academy',
-  description: 'Explore our collection of Yoruba language courses',
-};
-
-export const revalidate = 60; // Revalidate every 60 seconds
-
-async function getCourses() {
-  try {
-    // Use relative URL for internal API calls during SSR
-    const apiUrl = process.env.VERCEL_URL
-      ? `https://${process.env.VERCEL_URL}/api/courses`
-      : process.env.NEXT_PUBLIC_APP_URL
-      ? `${process.env.NEXT_PUBLIC_APP_URL}/api/courses`
-      : 'http://localhost:3000/api/courses';
-      
-    const res = await fetch(apiUrl, {
-      next: { revalidate: 60 },
-    });
-
-    if (!res.ok) {
-      throw new Error('Failed to fetch courses');
+export default function CoursesPage() {
+  const courseLevels = [
+    {
+      name: "Novice",
+      duration: "15 weeks | once weekly",
+      fullPrice: "$220",
+      flexiblePrice: "$15",
+      period: "(full course package) / (flexible per-class option)",
+      description: "Learning the basics of the Yorùbá Language, how to do simple greetings, introduction of yourself, talk about things in Yorùbá.",
+      features: ["Basic alphabet and pronunciation", "Simple greetings and expressions", "Cultural introduction", "Community access"]
+    },
+    {
+      name: "Beginner",
+      duration: "26 weeks | once weekly",
+      fullPrice: "$390",
+      flexiblePrice: "$15",
+      period: "(full course package) / (flexible per-class option)",
+      description: "You know a bit of Yorùbá Language, but want to get better, building vocabulary and simple sentences.",
+      features: ["Grammar fundamentals", "Vocabulary building", "Basic conversations", "Group learning sessions", "E-library access"]
+    },
+    {
+      name: "Intermediate",
+      duration: "20 weeks | once weekly",
+      fullPrice: "$300",
+      flexiblePrice: "$15",
+      period: "(full course package) / (flexible per-class option)",
+      description: "You need to boost your speaking, you feel stuck, but you know some words, can form a bit of simple sentences and statements.",
+      features: ["Intermediate grammar structures", "Vocabulary expansion", "Conversation practice", "Pronunciation improvement", "Cultural immersion"]
+    },
+    {
+      name: "Advanced",
+      duration: "20 weeks | once weekly",
+      fullPrice: "$300",
+      flexiblePrice: "$15",
+      period: "(full course package) / (flexible per-class option)",
+      description: "You need to boost your speaking, you feel stuck, but you know some words, can form a bit of simple sentences and statements.",
+      features: ["Complex grammar structures", "Advanced vocabulary", "Cultural context lessons", "Live teacher sessions", "Book club access"],
+      popular: true
+    },
+    {
+      name: "Individual",
+      duration: "24 weeks | once weekly",
+      fullPrice: "$480",
+      flexiblePrice: "$20",
+      period: "(full course package) / (flexible per-class option)",
+      description: "One on one lesson with the teacher, personalized instruction.",
+      features: ["Personalized one-on-one sessions", "Customized learning pace", "Dedicated teacher attention", "Flexible scheduling", "All features included"]
     }
-
-    return res.json();
-  } catch (error) {
-    // Return empty array if fetch fails (e.g., during build time)
-    console.warn('Failed to fetch courses:', error);
-    return [];
-  }
-}
-
-export default async function CoursesPage() {
-  const courses = await getCourses();
+  ];
 
   return (
-    <div className="py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Explore Our Courses
+    <div className="min-h-screen bg-white">
+      {/* Hero Section */}
+      <section className="bg-cover bg-center text-white py-16 relative" style={{ backgroundImage: "url('/learn.jpg')" }}>
+        <div className="absolute inset-0 bg-black/50"></div>
+        <div className="max-w-7xl mx-auto px-6 text-center relative z-10">
+          <div className="flex justify-center mb-6">
+            <BookOpen size={64} className="text-white" />
+          </div>
+          <h1 className="text-4xl lg:text-5xl font-bold mb-4">
+            Our Courses
           </h1>
-          <p className="text-xl text-gray-600">
-            Start your journey to mastering the Yoruba language today
+          <p className="text-xl text-white/90 max-w-2xl mx-auto mb-8">
+            Discover our comprehensive Yoruba language courses designed to take you from beginner to fluent speaker through structured, engaging learning experiences.
           </p>
-        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {courses.map((course: Course) => (
-            <div
-              key={course.id}
-              className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              href="#levels"
+              className="bg-white text-[#111827] px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
             >
-              <div className="h-48 bg-gray-200 relative">
-                {course.thumbnail && (
-                  <Image
-                    src={course.thumbnail}
-                    alt={course.title}
-                    fill
-                    className="object-cover"
-                  />
-                )}
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
-                  <h3 className="text-xl font-bold text-white">{course.title}</h3>
-                  <p className="text-gray-200 text-sm mt-1">
-                    {course.instructor?.name || course.teacher?.name}
-                  </p>
-                </div>
-              </div>
-              
-              <div className="p-6">
-                <p className="text-gray-600 mb-4 line-clamp-3">
-                  {course.description}
-                </p>
-                
-                <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
-                  <div className="flex items-center">
-                    <Users className="w-4 h-4 mr-1" />
-                    <span>{course._count?.enrollments || 0} students</span>
-                  </div>
-                  <div className="flex items-center">
-                    <Clock className="w-4 h-4 mr-1" />
-                    <span>{course.duration} weeks</span>
-                  </div>
-                  <div className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
-                    {course.level}
-                  </div>
-                </div>
-                
-                <div className="flex items-center justify-between mt-6">
-                  <span className="text-2xl font-bold text-gray-900">
-                    ${course.price?.toFixed(2) || 'Free'}
-                  </span>
-                  <Link
-                    href={`/courses/${course.id}`}
-                    className="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium"
-                  >
-                    View Details
-                    <ArrowRight className="w-4 h-4 ml-1" />
-                  </Link>
-                </div>
-              </div>
-            </div>
-          ))}
+              View Course Levels
+            </Link>
+            <Link
+              href="/contact"
+              className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-[#111827] transition-colors"
+            >
+              Get Started Today
+            </Link>
+          </div>
         </div>
-      </div>
+      </section>
+
+      {/* Course Levels Section */}
+      <section id="levels" className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-800">
+              Choose Your Learning Path
+            </h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Select the level that matches your current knowledge and goals. All levels include both individual and group learning options.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 max-w-6xl mx-auto">
+            {/* Left Column: Novice, Beginner, Intermediate */}
+            <div className="space-y-6">
+              {courseLevels.filter(level => ["Novice", "Beginner", "Intermediate"].includes(level.name)).map((level, index) => (
+                <div key={index} className={`relative bg-white border rounded-xl p-6 max-w-md mx-auto min-h-[400px] flex flex-col group hover:transform hover:-translate-y-2 transition-all duration-300 hover:shadow-xl ${level.popular ? 'border-[#e69d2a] ring-1 ring-[#e69d2a]/20' : 'border-gray-200'}`}>
+                  {level.popular && (
+                    <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                      <span className="bg-[#e69d2a] text-black px-3 py-1 text-sm rounded-full">
+                        Most Popular
+                      </span>
+                    </div>
+                  )}
+
+                  {level.name === "Novice" && (
+                    <div className="absolute -top-2 -left-2 z-10">
+                      <span className="bg-[#e69d2a] text-white text-xs px-3 py-1 rounded-full shadow-md">
+                        Perfect for starters
+                      </span>
+                    </div>
+                  )}
+
+                  <div className="text-center mb-6">
+                    <h3 className="text-xl font-bold mb-3">
+                      {level.name}
+                    </h3>
+                    <div className="mb-3">
+                      <p className="text-sm text-gray-600 leading-relaxed">{level.duration}</p>
+                    </div>
+                    <div className="flex flex-col items-center space-y-1 mb-4">
+                      <div className="flex items-baseline justify-center">
+                        <span className="text-2xl font-bold">{level.fullPrice}</span>
+                        <span className="text-gray-600 ml-1 text-xs">full course</span>
+                      </div>
+                      <div className="flex items-baseline justify-center">
+                        <span className="text-xl font-semibold text-[#a78bfa]">{level.flexiblePrice}</span>
+                        <span className="text-gray-600 ml-1 text-xs">per class</span>
+                      </div>
+                    </div>
+                    <p className="text-sm text-gray-600 mt-2 px-2 leading-relaxed bg-[#e69d2a]/10 rounded-md py-2">{level.description}</p>
+                  </div>
+
+                  <ul className="space-y-2 mb-6 flex-grow">
+                    {level.features.map((feature, fIndex) => (
+                      <li key={fIndex} className="flex items-start">
+                        <Star size={14} className="text-[#10b981] mr-2 mt-0.5 flex-shrink-0" />
+                        <span className="text-gray-600 text-xs leading-relaxed">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <div className="mt-auto">
+                    <Link href="/services/yoruba-language-lessons" className="block w-full">
+                      <button className="w-full bg-[#111827] hover:bg-[#3b35c7] text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200 text-sm">
+                        Learn More
+                      </button>
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Right Column: Advanced, Individual */}
+            <div className="space-y-6">
+              {courseLevels.filter(level => ["Advanced", "Individual"].includes(level.name)).map((level, index) => (
+                <div key={index} className={`relative bg-white border rounded-xl p-6 max-w-md mx-auto min-h-[400px] flex flex-col group hover:transform hover:-translate-y-2 transition-all duration-300 hover:shadow-xl ${level.popular ? 'border-[#e69d2a] ring-1 ring-[#e69d2a]/20' : 'border-gray-200'}`}>
+                  {level.popular && (
+                    <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                      <span className="bg-[#e69d2a] text-black px-3 py-1 text-sm rounded-full">
+                        Most Popular
+                      </span>
+                    </div>
+                  )}
+
+                  <div className="text-center mb-6">
+                    <h3 className="text-xl font-bold mb-3">
+                      {level.name}
+                    </h3>
+                    <div className="mb-3">
+                      <p className="text-sm text-gray-600 leading-relaxed">{level.duration}</p>
+                    </div>
+                    <div className="flex flex-col items-center space-y-1 mb-4">
+                      <div className="flex items-baseline justify-center">
+                        <span className="text-2xl font-bold">{level.fullPrice}</span>
+                        <span className="text-gray-600 ml-1 text-xs">full course</span>
+                      </div>
+                      <div className="flex items-baseline justify-center">
+                        <span className="text-xl font-semibold text-[#a78bfa]">{level.flexiblePrice}</span>
+                        <span className="text-gray-600 ml-1 text-xs">per class</span>
+                      </div>
+                    </div>
+                    <p className="text-sm text-gray-600 mt-2 px-2 leading-relaxed">{level.description}</p>
+                  </div>
+
+                  <ul className="space-y-2 mb-6 flex-grow">
+                    {level.features.map((feature, fIndex) => (
+                      <li key={fIndex} className="flex items-start">
+                        <Star size={14} className="text-[#10b981] mr-2 mt-0.5 flex-shrink-0" />
+                        <span className="text-gray-600 text-xs leading-relaxed">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <div className="mt-auto">
+                    <Link href="/services/yoruba-language-lessons" className="block w-full">
+                      <button className="w-full bg-[#111827] hover:bg-[#3b35c7] text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200 text-sm">
+                        Learn More
+                      </button>
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-800">
+              Ready to Start Your Yoruba Journey?
+            </h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-8">
+              Contact us today to enroll in any of our courses and begin your journey to mastering the beautiful Yoruba language.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+            {/* WhatsApp Card */}
+            <div className="bg-green-50 border border-green-200 rounded-lg p-6 text-center hover:shadow-lg transition-shadow">
+              <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <MessageCircle className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-lg font-semibold mb-2 text-gray-800">WhatsApp</h3>
+              <p className="text-gray-600 mb-4">Chat with our enrollment team</p>
+              <a
+                href="https://wa.me/2348120997786?text=Hello%2C%20I%E2%80%99d%20like%20to%20learn%20more%20about%20your%20Yoruba%20classes"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors"
+              >
+                <MessageCircle className="w-4 h-4 mr-2" />
+                Send a DM
+              </a>
+            </div>
+
+            {/* Phone Card */}
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 text-center hover:shadow-lg transition-shadow">
+              <div className="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Phone className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-lg font-semibold mb-2 text-gray-800">Phone Call</h3>
+              <p className="text-gray-600 mb-4">Speak directly with our team</p>
+              <a
+                href="tel:+2348138534899"
+                className="inline-flex items-center bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors"
+              >
+                <Phone className="w-4 h-4 mr-2" />
+                Call Now
+              </a>
+            </div>
+
+            {/* Email Card */}
+            <div className="bg-purple-50 border border-purple-200 rounded-lg p-6 text-center hover:shadow-lg transition-shadow">
+              <div className="w-16 h-16 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Mail className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-lg font-semibold mb-2 text-gray-800">Email</h3>
+              <p className="text-gray-600 mb-4">Send detailed inquiries</p>
+              <a
+                href="mailto:admin@ewaedeyoruba.com"
+                className="inline-flex items-center bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg transition-colors"
+              >
+                <Mail className="w-4 h-4 mr-2" />
+                Send Email
+              </a>
+            </div>
+          </div>
+
+          <div className="text-center mt-12">
+            <Link
+              href="/contact"
+              className="inline-flex items-center bg-[#111827] hover:bg-[#3b35c7] text-white px-6 py-3 rounded-lg transition-colors"
+            >
+              Visit Full Contact Page
+              <ChevronRight className="w-4 h-4 ml-2" />
+            </Link>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
