@@ -174,13 +174,17 @@ export default function AboutPage() {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
                   <div className="lg:col-span-1">
                     <div className="relative">
-                      <Image
-                        src="/ewaede.jpg"
-                        alt="Ìfẹ́olúwa Elúfisan - Founder of Yorùbá Academy"
-                        width={300}
-                        height={300}
-                        className="rounded-xl shadow-lg mx-auto"
-                      />
+                      <div className="relative inline-block">
+                        <div className="absolute inset-0 rounded-xl border-4 border-[#e69d2a] opacity-75 animate-pulse"></div>
+                        <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#e69d2a]/20 to-[#f59e0b]/20 blur-xl animate-pulse"></div>
+                        <Image
+                          src="/ewaede.jpg"
+                          alt="Ìfẹ́olúwa Elúfisan - Founder of Yorùbá Academy"
+                          width={300}
+                          height={300}
+                          className="relative rounded-xl shadow-2xl mx-auto border-4 border-[#e69d2a] founder-glow hover:scale-105 transition-all duration-500 hover:shadow-[#e69d2a]/50 hover:shadow-2xl"
+                        />
+                      </div>
                     </div>
                   </div>
                   <div className="lg:col-span-2 text-left">

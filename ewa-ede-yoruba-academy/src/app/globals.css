@@ -325,3 +325,17 @@ html {
   outline: none;
   box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.3);
 }
+
+/* Founder Image Glow Animation */
+@keyframes founder-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(230, 157, 42, 0.3), 0 0 40px rgba(230, 157, 42, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(230, 157, 42, 0.5), 0 0 60px rgba(230, 157, 42, 0.3);
+  }
+}
+
+.founder-glow {
+  animation: founder-glow 3s ease-in-out infinite;
+}
