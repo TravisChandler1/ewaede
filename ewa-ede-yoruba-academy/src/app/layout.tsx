@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/footer";
 import BottomTabs from "@/components/BottomTabs";
+import DisableRightClick from "@/components/DisableRightClick";
 import { SessionProvider } from "next-auth/react";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import { Suspense } from "react";
@@ -84,6 +85,7 @@ function Providers({ children }: { children: React.ReactNode }) {
         disableTransitionOnChange
       >
         <ErrorBoundary>
+          <DisableRightClick />
           <Navigation />
           {children}
           <Footer />
@@ -108,6 +110,10 @@ export default function RootLayout({
         <link rel="icon" href="/logo.png" type="image/png" />
         <link rel="shortcut icon" href="/logo.png" type="image/png" />
         <link rel="apple-touch-icon" href="/logo.png" />
+        <meta httpEquiv="X-Frame-Options" content="DENY" />
+        <meta httpEquiv="X-Content-Type-Options" content="nosniff" />
+        <meta httpEquiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
       </head>
       <body className="font-sans antialiased min-h-screen bg-background text-foreground pb-16">
         <Providers>{children}</Providers>
