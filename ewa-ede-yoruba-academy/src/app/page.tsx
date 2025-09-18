@@ -212,7 +212,7 @@ export default function HomePage() {
   const [userName, setUserName] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [messages, setMessages] = useState([
-    { id: 1, text: "Ẹ kaabo! I'm admin@ewaedeyoruba.com, your Yoruba learning assistant. What's your name?", sender: 'bot', timestamp: new Date() }
+    { id: 1, text: "Ẹ kaabo! I'm Bísọlá, your Yoruba learning assistant. What's your name?", sender: 'bot', timestamp: new Date() }
   ]);
   const [inputMessage, setInputMessage] = useState('');
 
@@ -249,7 +249,7 @@ export default function HomePage() {
     // If we don't have the user's name yet, treat this as their name
     if (!userName) {
       setUserName(userInput.trim());
-      return `Ẹ kaabo ${userInput.trim()}! 🎉 I'm admin@ewaedeyoruba.com, your Ẹwà Èdè Virtual Assistant. How can I help you today?`;
+      return `Ẹ kaabo ${userInput.trim()}! 🎉 I'm Bísọlá, your Ẹwà Èdè Virtual Assistant. How can I help you today?`;
     }
 
     // Greeting responses
@@ -821,7 +821,7 @@ export default function HomePage() {
           <button
             onClick={() => setIsChatOpen(true)}
             className="bg-[#000080] hover:bg-[#000066] text-white p-4 rounded-full shadow-lg transition-all duration-300 hover:scale-110 animate-bounce"
-            aria-label="Open chat with Bisola"
+            aria-label="Open chat with Bísọlá"
           >
             <MessageCircle size={24} />
           </button>
@@ -836,7 +836,7 @@ export default function HomePage() {
                   <span className="text-[#111827] font-bold text-xs">@</span>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-sm">admin@ewaedeyoruba.com</h3>
+                  <h3 className="font-semibold text-sm">Bísọlá</h3>
                   <p className="text-xs opacity-90">Ẹwà Èdè Virtual Assistant</p>
                 </div>
               </div>
@@ -878,7 +878,7 @@ export default function HomePage() {
                         <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
                         <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
                       </div>
-                      <span className="text-xs text-gray-500 ml-2">admin@ewaedeyoruba.com is typing...</span>
+                      <span className="text-xs text-gray-500 ml-2">Bísọlá is typing...</span>
                     </div>
                   </div>
                 </div>
