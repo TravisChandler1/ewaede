@@ -108,30 +108,6 @@ export default function HelpCenterPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Navigation */}
-      <nav className="bg-white border-b-2 border-[#111827] shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <Link href="/" className="flex items-center">
-                <Image
-                  src="/logo.png"
-                  alt="Ẹwà Èdè Yorùbá Academy"
-                  width={160}
-                  height={160}
-                  className="h-10 w-auto"
-                  quality={100}
-                />
-              </Link>
-            </div>
-            <div className="hidden md:flex items-center space-x-6">
-              <Link href="/" className="text-gray-700 hover:text-[#111827] transition-colors font-medium">Home</Link>
-              <Link href="#faq" className="text-gray-700 hover:text-[#111827] transition-colors font-medium">FAQ</Link>
-              <Link href="/contact" className="text-gray-700 hover:text-[#111827] transition-colors font-medium">Contact</Link>
-            </div>
-          </div>
-        </div>
-      </nav>
 
       {/* Hero Section */}
       <section className="bg-cover bg-center text-white py-16 relative" style={{ backgroundImage: "url('/help.jpg')" }}>
@@ -256,7 +232,7 @@ export default function HelpCenterPage() {
               className="border-2 border-[#111827] text-[#111827] hover:bg-[#111827] hover:text-white px-8 py-4 rounded-lg font-semibold transition-colors duration-200 flex items-center justify-center"
             >
               <MessageCircle size={20} className="mr-2" />
-              Chat with Bísọ̀lá
+              Chat with Bísọlá
             </button>
           </div>
         </div>

@@ -58,7 +58,7 @@ export default function Footer() {
           </div>
         </div>
         <div className="border-t border-gray-600 mt-6 pt-6 text-center text-gray-400 text-sm">
-          <p>&copy; 2025 Ẹwà Èdè Yorùbá Academy. All rights reserved.</p>
+          <p>Copyright &copy; 2025 Ẹwà Èdè Yorùbá Academy. All rights reserved.</p>
           <div className="mt-4 flex justify-center">
             <button
               onClick={handleBookClick}

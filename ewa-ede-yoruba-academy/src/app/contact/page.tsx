@@ -75,7 +75,7 @@ export default function ContactPage() {
       icon: MessageCircle,
       title: "Live Chat",
       details: "Available on website",
-      description: "Chat with Bísọ̀lá, our AI assistant, or connect with human support",
+      description: "Chat with Bísọlá, our AI assistant, or connect with human support",
       response: "24/7 availability"
     },
     {

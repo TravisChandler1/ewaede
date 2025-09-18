@@ -261,9 +261,8 @@ export default function PrivacyPolicyPage() {
                 If you have any questions about this Privacy Policy or our data practices, please contact us:
               </p>
               <div className="bg-gray-50 rounded-lg p-4">
-                <p className="text-gray-700"><strong>Email:</strong> privacy@yorubaacademy.com</p>
-                <p className="text-gray-700"><strong>Address:</strong> 123 Yoruba Cultural Center, Lagos, Nigeria</p>
-                <p className="text-gray-700"><strong>Phone:</strong> +1 (555) 123-YORUBA</p>
+                <p className="text-gray-700"><strong>Email:</strong> admin@ewaedeyoruba.com</p>
+                <p className="text-gray-700"><strong>Phone:</strong> +234 8138534899</p>
               </div>
             </div>
           </div>
