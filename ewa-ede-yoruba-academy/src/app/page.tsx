@@ -2,7 +2,10 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { BookOpen, Users, Video, Library, Award, Star, Mail, GraduationCap, Brain, Lightbulb, MessageCircle, X, Send, ChevronRight } from "lucide-react";
+import { BookOpen, Users, Video, Library, Award, Star, Mail, GraduationCap, Brain, Lightbulb, MessageCircle, X, Send, ChevronRight, ArrowUp } from "lucide-react";
+import ProgressiveImage from "@/components/ui/progressive-image";
+import { CardSkeleton, TextSkeleton } from "@/components/ui/skeleton";
+import { useSmoothScroll } from "@/hooks/useSmoothScroll";
 
 interface NewsletterResponse {
   message?: string;
@@ -206,6 +209,7 @@ function Newsletter() {
 }
 
 export default function HomePage() {
+  const { scrollToSection } = useSmoothScroll();
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isServicesDropdownOpen, setIsServicesDropdownOpen] = useState(false);
@@ -215,6 +219,10 @@ export default function HomePage() {
     { id: 1, text: "Ẹ kaabo! I'm Bísọlá, your Yoruba learning assistant. What's your name?", sender: 'bot', timestamp: new Date() }
   ]);
   const [inputMessage, setInputMessage] = useState('');
+
+  const handleNavClick = (sectionId: string) => {
+    scrollToSection(sectionId);
+  };
 
   const handleSendMessage = () => {
     if (!inputMessage.trim()) return;
@@ -442,18 +450,34 @@ export default function HomePage() {
               <p className="text-xl lg:text-2xl text-white/90 mb-8 max-w-3xl">
                 Immerse yourself in the rich culture and traditions of the Yoruba people through our interactive language programs. From greetings to proverbs, we make learning Yoruba engaging and meaningful.
               </p>
+
+              {/* Call to Action Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4 mb-8">
+                <button
+                  onClick={() => handleNavClick('features')}
+                  className="bg-[#e69d2a] hover:bg-[#d48a1f] text-white px-8 py-4 rounded-lg font-semibold transition-all duration-300 hover:transform hover:-translate-y-1 hover:shadow-lg btn-ripple"
+                >
+                  Get Started
+                </button>
+                <button
+                  onClick={() => handleNavClick('pricing')}
+                  className="border-2 border-white text-white hover:bg-white hover:text-black px-8 py-4 rounded-lg font-semibold transition-all duration-300 hover:transform hover:-translate-y-1"
+                >
+                  View Pricing
+                </button>
+              </div>
             </div>
 
             {/* Right Column - Image (1/3 width) */}
             <div className="md:col-span-1 flex justify-center md:justify-end relative">
               <div className="absolute inset-0 backdrop-blur-sm bg-black/20 rounded-xl"></div>
               <div className="relative z-10">
-                <Image
+                <ProgressiveImage
                   src="/heroside.png"
                   alt="Yoruba Learning Experience"
                   width={400}
                   height={300}
-                  className="w-full max-w-sm h-auto rounded-xl shadow-2xl transform hover:scale-105 transition-transform duration-300"
+                  className="w-full max-w-sm h-auto rounded-xl shadow-2xl transform hover:scale-105 transition-transform duration-300 hover-tilt"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-xl"></div>
               </div>
@@ -479,10 +503,10 @@ export default function HomePage() {
             {/* Top row with 3 cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {features.slice(0, 3).map((feature, index) => (
-                <div key={index} className="bg-white border border-gray-200 rounded-xl p-6 hover:border-[#e69d2a]/30 transition-all duration-500 hover:transform hover:-translate-y-2 animate-fade-in-up animate-float" style={{ animationDelay: `${index * 0.1}s` }}>
-                  <feature.icon size={48} className="text-[#e69d2a] mb-4" />
-                  <h3 className="text-xl font-semibold mb-3">{feature.title}</h3>
-                  <p className="text-gray-600">{feature.description}</p>
+                <div key={index} className="bg-white border border-gray-200 rounded-xl p-6 hover:border-[#e69d2a]/30 transition-all duration-500 hover:transform hover:-translate-y-2 animate-fade-in-up animate-float hover-glow focus-ring cursor-pointer group" style={{ animationDelay: `${index * 0.1}s` }}>
+                  <feature.icon size={48} className="text-[#e69d2a] mb-4 icon-bounce group-hover:text-[#d48a1f]" />
+                  <h3 className="text-xl font-semibold mb-3 group-hover:text-[#e69d2a] transition-colors duration-300">{feature.title}</h3>
+                  <p className="text-gray-600 group-hover:text-gray-800 transition-colors duration-300">{feature.description}</p>
                 </div>
               ))}
             </div>
@@ -490,10 +514,10 @@ export default function HomePage() {
             {/* Bottom row with 2 centered cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-2xl mx-auto">
               {features.slice(3, 5).map((feature, index) => (
-                <div key={index + 3} className="bg-white border border-gray-200 rounded-xl p-6 hover:border-[#e69d2a]/30 transition-all duration-500 hover:transform hover:-translate-y-2 animate-fade-in-up animate-float" style={{ animationDelay: `${(index + 3) * 0.1}s` }}>
-                  <feature.icon size={48} className="text-[#e69d2a] mb-4" />
-                  <h3 className="text-xl font-semibold mb-3">{feature.title}</h3>
-                  <p className="text-gray-600">{feature.description}</p>
+                <div key={index + 3} className="bg-white border border-gray-200 rounded-xl p-6 hover:border-[#e69d2a]/30 transition-all duration-500 hover:transform hover:-translate-y-2 animate-fade-in-up animate-float hover-glow focus-ring cursor-pointer group" style={{ animationDelay: `${(index + 3) * 0.1}s` }}>
+                  <feature.icon size={48} className="text-[#e69d2a] mb-4 icon-bounce group-hover:text-[#d48a1f]" />
+                  <h3 className="text-xl font-semibold mb-3 group-hover:text-[#e69d2a] transition-colors duration-300">{feature.title}</h3>
+                  <p className="text-gray-600 group-hover:text-gray-800 transition-colors duration-300">{feature.description}</p>
                 </div>
               ))}
             </div>
@@ -535,19 +559,19 @@ export default function HomePage() {
                 image: '/culture.png'
               }
             ].map((item, i) => (
-              <div key={i} className="bg-white border border-gray-200 rounded-xl p-6 hover:border-[#e69d2a]/30 transition-all duration-500 group hover:transform hover:-translate-y-2 animate-fade-in-up" style={{ animationDelay: `${i * 0.2}s` }}>
-                <div className="mb-6">
-                  <Image
+              <div key={i} className="bg-white border border-gray-200 rounded-xl p-6 hover:border-[#e69d2a]/30 transition-all duration-500 group hover:transform hover:-translate-y-2 animate-fade-in-up hover-glow focus-ring cursor-pointer" style={{ animationDelay: `${i * 0.2}s` }}>
+                <div className="mb-6 overflow-hidden rounded-lg">
+                  <ProgressiveImage
                     src={item.image}
                     alt={item.title}
                     width={400}
                     height={240}
-                    className="w-full h-32 object-cover rounded-lg"
+                    className="w-full h-32 object-cover rounded-lg group-hover:scale-110 transition-transform duration-500"
                     quality={100}
                   />
                 </div>
-                <h3 className="text-xl font-bold mb-2">{item.title}</h3>
-                <p className="text-gray-600">{item.desc}</p>
+                <h3 className="text-xl font-bold mb-2 group-hover:text-[#e69d2a] transition-colors duration-300">{item.title}</h3>
+                <p className="text-gray-600 group-hover:text-gray-800 transition-colors duration-300">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -814,6 +838,15 @@ export default function HomePage() {
 
       {/* Newsletter Section */}
       <Newsletter />
+
+      {/* Scroll to Top Button */}
+      <button
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        className="fixed bottom-24 right-6 bg-[#e69d2a] hover:bg-[#d48a1f] text-white p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-40"
+        aria-label="Scroll to top"
+      >
+        <ArrowUp size={20} />
+      </button>
 
       {/* Chat Widget */}
       <div className="fixed bottom-20 right-6 z-50">
